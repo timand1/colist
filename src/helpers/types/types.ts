@@ -3,3 +3,20 @@ export type Shoppinglist = {
     amount : number
     comment? : string
 }
+
+export type ToDoList = {
+    todo : string
+    comment? : string
+}
+
+export type TopList = {
+    item : string
+    placement : number
+}
+
+export type List = {
+    author : string
+    id : string
+    list : Shoppinglist[] | ToDoList[] | TopList[]
+    users : string[]
+}
