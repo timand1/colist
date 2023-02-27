@@ -1,6 +1,6 @@
 <script setup lang="ts">import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import { onBeforeMount } from 'vue';
-
+import Button from '@/components/button/button.vue';
 
 const auth = getAuth()
 
