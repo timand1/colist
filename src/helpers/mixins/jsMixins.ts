@@ -1,4 +1,4 @@
-export const buttonVariants = ['primary', 'success', 'danger'];
+export const buttonVariants = ['primary', 'success', 'danger', 'ghost'];
 
 export const defaultVariantMixin = (variants: string[]) => ({
     variant: variants,

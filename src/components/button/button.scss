@@ -1,17 +1,54 @@
 @use "@/styles/colors.scss";
+@use "@/styles/variables.scss";
+
+.button {
+    all: unset;
+    border-radius: variables.$radius-s; 
+    width: fit-content;
+    padding: 8px 16px;
+    transition: variables.$transition-time;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px colors.$secondary-font;
+}
 
 @each $name,
 $bg in colors.$button-bg-colors {
     .button--#{$name} {
-        width: fit-content;
-        padding: 8px 16px;
         background-color: $bg;
-        border-radius: 10px;
+        color: colors.$primary-font-dark;
+        @if (str-index($name, "ghost")) {
+            color: colors.$primary-font;
+        }
+        &:hover {
+            color: colors.$primary-font-dark;
+            background-color: map-get(colors.$button-hover-colors, $name);
+            box-shadow: 1px 1px 2px colors.$secondary-font;
+        }
     }
     .button--#{$name}__outline {
-        outline: $bg;
-        outline-width: 1px;
+        outline: 1px solid $bg;
         outline-offset: -1px;
         background-color: transparent;
+        &:hover {
+            color: colors.$primary-font-dark;
+            background-color: map-get(colors.$button-bg-colors, $name);
+            box-shadow: 1px 1px 2px colors.$secondary-font;
+        }
+    }
+}
+
+@each $name,
+$bg in colors.$button-outline-colors {
+    .button--#{$name}__outline {
+        outline: 1px solid $bg;
+        outline-offset: -1px;
+        background-color: transparent;
+        &:hover {
+            color: colors.$primary-font-dark;
+            @if (str-index($name, "ghost")) {
+                color: colors.$primary-font;
+            }
+            background-color: map-get(colors.$button-bg-colors, $name);
+        }
     }
 }

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, type Ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { buttonVariants, defaultVariantMixin } from '@/helpers/mixins/jsMixins';
 
 type ButtonProps = {
     text?: string
     variant?: string
-    outline: boolean
-
+    outline?: boolean
 };
+
 const props = withDefaults(defineProps<ButtonProps>(), {
     text: 'Text',
     variant: 'primary',
