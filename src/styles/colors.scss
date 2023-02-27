@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $primary-bg: #DBDFE8;
 $secondary-bg: #F0F0F0;
 $primary-accent: #51355A;
@@ -11,7 +13,19 @@ $primary-accent-dark: #4D3256;
 
 $primary-font-dark: #FFFFFFFA;
 
-// Button
 $success: #55C284;
 $danger: #DC3545;
 $primary: #00B0D4;
+
+// Button
+$button-bg-colors: (
+  primary: $primary,
+  danger: $danger,
+  success: $success,
+);
+
+$button-hover-colors: (
+    primary: darken($primary, 20%),
+    danger: darken($danger, 20%),
+    success: darken($success, 20%)
+);

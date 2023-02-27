@@ -1,0 +1,17 @@
+@use "@/styles/colors.scss";
+
+@each $name,
+$bg in colors.$button-bg-colors {
+    .button--#{$name} {
+        width: fit-content;
+        padding: 8px 16px;
+        background-color: $bg;
+        border-radius: 10px;
+    }
+    .button--#{$name}__outline {
+        outline: $bg;
+        outline-width: 1px;
+        outline-offset: -1px;
+        background-color: transparent;
+    }
+}
