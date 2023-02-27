@@ -1,26 +1,28 @@
-<script setup lang="ts">import { getAuth, onAuthStateChanged } from '@firebase/auth';
-import { onBeforeMount } from 'vue';
-import Button from '@/components/button/button.vue';
+<script setup lang="ts">
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
+import { onBeforeMount, ref, watchEffect } from 'vue';
+import { RouterView, useRouter } from 'vue-router';
 
+const router = useRouter()
 const auth = getAuth()
+const isAuthenticated = ref(false)
 
 onBeforeMount(() => {
-    onAuthStateChanged(auth, (user) => {
-      // logged in
-      if (user) {
-        const uid = user.uid;
-        // redirect to home
-      // not logged in
-      } else {
-        // redirect to login
-      }
-    });
+  onAuthStateChanged(auth, (user) => {
+    isAuthenticated.value = !!user
+  })
+  if (isAuthenticated.value) {
+    console.log('Logged in');
+    
+  } else {
+    console.log('Not Logged In');
+    router.push('/login')
+  }
 })
+
 </script>
 <template>
-  <div>
-
-  </div>
+  <RouterView />
 </template>
 
 <style lang="scss" scoped>

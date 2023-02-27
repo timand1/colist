@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Button from "@/components/button/button.vue";
 import { getAuth, GoogleAuthProvider, signInWithPopup  } from "firebase/auth";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '@/firebase';
@@ -51,7 +52,7 @@ const signInWithGoogle = () => {
 
 <template>
   <div>
-    <button @click="signInWithGoogle"></button>
+    <Button text="Sign in With Google" variant="ghost" outline @click="signInWithGoogle"></Button>
     <p v-if="errorRef">Something went wrong... Try again</p>
   </div>
 </template>

@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
+import { App } from 'vue'
 
 const firebaseConfig = {
   apiKey: "AIzaSyBIVMveu2uWMXO5hCz9N6oDnzf6naA86y8",
@@ -14,7 +14,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app)
-export const storage = getStorage();
-export const db = getFirestore()
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp)
+const db = getFirestore()
+
+const FirebasePlugin = {
+  install: (app: App) => {
+    app.config.globalProperties.$firebase = firebaseApp
+  }
+}
+export { firebaseApp, auth, db, FirebasePlugin }
+
