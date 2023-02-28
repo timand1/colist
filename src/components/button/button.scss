@@ -9,6 +9,7 @@
     transition: variables.$transition-time;
     cursor: pointer;
     box-shadow: 2px 2px 4px colors.$secondary-font;
+    text-align: center;
 }
 
 @each $name,
