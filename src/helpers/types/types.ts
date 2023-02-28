@@ -9,7 +9,7 @@ export type ToDoList = {
     comment? : string
 }
 
-export type TopList = {
+export type NumberedList = {
     item : string
     placement : number
 }
@@ -18,6 +18,6 @@ export type List = {
     author : string
     name : string
     id : string
-    list : Shoppinglist[] | ToDoList[] | TopList[]
+    list : Shoppinglist[] | ToDoList[] | NumberedList[] | []
     users : string[]
 }

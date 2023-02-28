@@ -6,9 +6,9 @@ import router from '@/router';
 import { doc, getDoc } from "firebase/firestore";
 import { onBeforeMount, onMounted, ref } from 'vue';
 
-const listId = getActiveListId()
 const list = ref()
-onMounted(async () => {
+onBeforeMount(async () => {
+  const listId = getActiveListId()
   !listId ? router.push('/') : null
   const docRef = doc(db, "lists", listId ? listId : '');
   const docSnap = await getDoc(docRef);
@@ -29,8 +29,8 @@ onMounted(async () => {
 <template>
   <div class="list">
     <Navbar param="list" />
-    <h2>{{ list.name }}</h2>
-    <p>{{ list.author }}</p>
+    <h2>{{ list?.name }}</h2>
+    <p>{{ list?.author }}</p>
   </div>
 </template>
 

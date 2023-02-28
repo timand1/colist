@@ -34,7 +34,7 @@ const createNewList: () => Promise<void> = async () => {
       name: listname.value,
       id : uniqueId,
       list: [],
-      users: [],
+      users: [auth.currentUser?.uid],
       type: listtype.value
     })
     setActiveListId(uniqueId)
