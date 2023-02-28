@@ -1,0 +1,85 @@
+@use '@/styles/colors';
+
+.login-sidepanel {
+    display: none;
+}
+
+@media screen and (min-width: 786px) {
+    .login-sidepanel {
+        background-color: colors.$primary-accent;
+        border-bottom-left-radius: 8px;
+        border-top-left-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 3em;
+        padding: 3em;
+        flex: 1;
+        h2 {
+            font-size: 24px;
+            color: colors.$primary-font-dark;
+        }
+        .thoughtbubble {
+            padding: 1em;
+            border-radius: 28px;
+            background-color: colors.$primary-font-dark;
+            position: relative;
+            width: 40%;
+            p {
+                color: colors.$primary-font;
+            }
+            &:before {
+                position: absolute;
+                content: '';
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background-color: colors.$primary-font-dark;
+            }
+            &:after {
+                position: absolute;
+                content: '';
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: colors.$primary-font-dark;
+            }
+        }
+        .thoughtbubble--left {
+            align-self: flex-start;
+            &:before {
+                bottom: -2rem;
+                left: -1rem;
+            }
+            &:after {
+                bottom: -4rem;
+                left: -2rem;
+            }
+            
+        }
+        .thoughtbubble--right {
+            align-self: flex-end;
+            &:before {
+                bottom: -2rem;
+                right: -1rem;
+            }
+            &:after {
+                bottom: -4rem;
+                right: -2rem;
+            }
+        }
+        .tagline {
+            text-align: center;
+            width: 80%;
+            h1 {
+                font-size: 32px;
+                color: colors.$primary-font-dark;
+            }
+            p {
+                font-size: 20px;
+                color : colors.$gray-font;
+            }
+        }
+    }
+}

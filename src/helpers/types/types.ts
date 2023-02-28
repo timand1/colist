@@ -16,6 +16,7 @@ export type TopList = {
 
 export type List = {
     author : string
+    name : string
     id : string
     list : Shoppinglist[] | ToDoList[] | TopList[]
     users : string[]
