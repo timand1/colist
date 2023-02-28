@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { listTypes } from '@/helpers/mixins/jsMixins';
 import Button from '@/components/button/button.vue';
-import useDetectOutsideClick from '@/composables/clickOutsideComponent';
 import { setActiveListId } from '@/composables/activeList';
 import { doc, setDoc } from "firebase/firestore"; 
 import { auth, db } from '@/firebase';
@@ -13,9 +12,8 @@ type AddItemProps = {
   displayOverlay: boolean
 };
 
-const props = withDefaults(defineProps<AddItemProps>(), {
+const props = defineProps<AddItemProps>()
 
-});
 
 const emit = defineEmits(['click']);
 
@@ -27,32 +25,25 @@ const router = useRouter()
 
 const createNewList: () => Promise<void> = async () => {
   
-  const newList = {
-    author : auth.currentUser?.displayName,
-    name: listname.value,
-    id : crypto.randomUUID(),
-    list: [],
-    users: []
-  }
+  const uniqueId = crypto.randomUUID()
   console.log(listname.value?.length );
   
   if(listname.value?.length > 2 && listtype.value?.length > 0) {
-    await setDoc(doc(db, "lists", newList.id), {
-      newList
+    await setDoc(doc(db, "lists", uniqueId), {
+      author : auth.currentUser?.displayName,
+      name: listname.value,
+      id : uniqueId,
+      list: [],
+      users: [],
+      type: listtype.value
     })
-    setActiveListId(newList.id)
+    setActiveListId(uniqueId)
     router.push(`/list`)
   } else {
     console.log('wtf dude');
     
   }
 }
-
-useDetectOutsideClick(addItemRef, () => { 
-  props.displayOverlay ?
-  emit('click')
-  : null
-})
 
 </script>
 

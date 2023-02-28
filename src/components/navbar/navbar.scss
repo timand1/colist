@@ -1,0 +1,17 @@
+@use '@/styles/colors';
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: colors.$primary-accent;
+    width: 100%;
+    padding: 1em 2em;
+    img {
+        max-height: 25px;
+    }
+}

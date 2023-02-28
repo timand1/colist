@@ -2,34 +2,33 @@
 import LoginSidepanel from "@/components/login-sidepanel/login-sidepanel.vue";
 import Button from "@/components/button/button.vue";
 import logo from "@/assets/logo.svg";
-import { getAuth, GoogleAuthProvider, signInWithPopup  } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence   } from "firebase/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const auth = getAuth();
 const errorRef = ref<boolean>(false)
 const router = useRouter()
+const provider = new GoogleAuthProvider();
 
 const signInWithGoogle = () => {
     errorRef.value ? errorRef.value = false : null
+    setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    // sign in the user with Google Sign-In
+    return signInWithPopup(auth, provider);
+  })
+  .then((result) => {
+    // handle the successful sign-in
+    router.push('/')
+    console.log("User signed in:", result.user.displayName);
+  })
+  .catch((error) => {
+    // handle sign-in errors
+    errorRef.value = !errorRef.value
+    console.log("Error signing in:", error.message);
+  });
 
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-    .then(async (result) => {
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = credential?.accessToken;
-      const user = result.user;
-
-      router.push('/')
-    }).catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;      
-      // The email of the user's account used.
-      const email = error.customData.email;
-      // The AuthCredential type that was used.
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      errorRef.value = !errorRef.value
-      });
   }
 
 </script>

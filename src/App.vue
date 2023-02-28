@@ -8,6 +8,7 @@ const auth = getAuth()
 const isAuthenticated = ref(false)
 
 onBeforeMount(() => {
+  console.log(auth.currentUser?.displayName);
   
   onAuthStateChanged(auth, (user) => {
     isAuthenticated.value = !!user
@@ -24,13 +25,14 @@ onBeforeMount(() => {
 watchEffect(() => {
   console.log(auth.currentUser);
   onAuthStateChanged(auth, (user) => {
-    isAuthenticated.value = !!user
   })
   if (isAuthenticated.value) {
+    isAuthenticated.value = true;
     console.log('Logged in');
     
   } else {
     console.log('Not Logged In');
+    isAuthenticated.value = false;
     router.push('/login')
   }
 })
