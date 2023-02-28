@@ -1,12 +1,14 @@
 <script setup lang="ts">
+import LoginSidepanel from "@/components/login-sidepanel/login-sidepanel.vue";
 import Button from "@/components/button/button.vue";
+import logo from "@/assets/logo.svg";
 import { getAuth, GoogleAuthProvider, signInWithPopup  } from "firebase/auth";
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '@/firebase';
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const auth = getAuth();
 const errorRef = ref<boolean>(false)
+const router = useRouter()
 
 const signInWithGoogle = () => {
     errorRef.value ? errorRef.value = false : null
@@ -14,29 +16,11 @@ const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
     .then(async (result) => {
-      // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
-      // The signed-in user info.
       const user = result.user;
-      const docRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(docRef);
-      
-      // ----- NOT SURE IF NEEDED, NEED TEST WITHOUT ----
-      // If first time logging in with google, create a user and empty userChats
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-      } else {
-        await setDoc(doc(db, "users", user.uid), {
-          uid: user.uid,
-          displayName : user.displayName,
-          email : user.email,
-          photoURL: user.photoURL,
-        });
-      }
 
-      // redirect home
-      
+      router.push('/')
     }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;      
@@ -51,12 +35,19 @@ const signInWithGoogle = () => {
 </script>
 
 <template>
-  <div>
-    <Button text="Sign in With Google" variant="ghost" outline @click="signInWithGoogle"></Button>
-    <p v-if="errorRef">Something went wrong... Try again</p>
-  </div>
+  <section class="login__container">
+    <LoginSidepanel />
+    <section class="login">
+      <div class="logo-container">
+        <img :src="logo" alt="">
+        <h2>CoList</h2>
+      </div>
+        <Button text="Sign in With Google" variant="ghost" outline @click="signInWithGoogle"></Button>
+      <p v-if="errorRef">Something went wrong... Try again</p>
+    </section>
+  </section>
 </template>
 
 <style lang="scss" scoped>
-
+    @import '@/views/login/login.scss';
 </style>

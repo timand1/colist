@@ -1,0 +1,14 @@
+@use '@/styles/colors';
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: colors.$primary-bg;
+    #app {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+}

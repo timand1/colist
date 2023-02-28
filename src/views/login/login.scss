@@ -1,0 +1,35 @@
+@use '@/styles/colors';
+
+.login__container {
+    background-color: colors.$secondary-bg;
+    height: 80vh;
+    margin-top: 10vh;
+    border-radius: 8px;
+    .login {
+        padding: 3em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            h2 {
+                font-size: 48px;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 786px) {
+    .login__container {
+        border-radius: none;
+        display: flex;
+        .login {
+            border-bottom-right-radius: 8px;
+            border-top-right-radius: 8px;
+            flex: 1;
+        }
+    }
+}
