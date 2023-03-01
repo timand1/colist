@@ -8,6 +8,7 @@ import { doc, getDocs, onSnapshot, collection, query, where, updateDoc, deleteFi
 import { type List } from '@/helpers/types/types'
 import { setActiveListId } from '@/composables/activeList';
 import router from '@/router';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const auth = getAuth()
 const addOverlay = ref<boolean>(false)
@@ -93,11 +94,13 @@ const goToList: (listId: string) => void = (listId) => {
   router.push('/list')
 }
 
-const deleteList: (listId: string) => Promise<void> = async (listId) => {
+const deleteList: (listId: string, e:Event) => Promise<void> = async (listId, e) => {
+  e.stopPropagation()
   await deleteDoc(doc(db, 'lists', listId))
 }
 
-const removeUser: (listId: string, users: string[]) => Promise<void> = async (listId, users) => {
+const removeUser: (listId: string, users: string[], e : Event) => Promise<void> = async (listId, users, e) => {
+  e.stopPropagation()
   const listRef = doc(db, "lists", listId);  
   const listDoc = await getDoc(listRef);
   if (listDoc.exists()) {
@@ -130,13 +133,15 @@ const handleOverlasy: (e:Event) => void = (e) => {
     <Navbar param="home" @click=" handleOverlasy" />
     <div class="lists--container" v-if="!loader">
     <h2>{{ auth.currentUser?.displayName }}</h2>
-    <button @click="handleOverlay" >TEST OVERLAY</button>
     <section class="list--container">
     <div v-for="list in lists" @click="goToList(list.id)" class="list">
-      <p>{{ list.name }}</p>
-      <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
-      <button v-if="list.author == auth.currentUser?.displayName" @click="deleteList(list.id)">DEL</button>
-      <button v-else @click="removeUser(list.id, list.users)">Leave</button>
+      <div class="list--info">
+        <h2>{{ list.name }}</h2>
+        <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
+        <p>{{ list.type }}</p>
+      </div>
+      <div class="list--remove" v-if="list.author == auth.currentUser?.displayName" @click="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
+      <div class="list--remove" v-else @click="removeUser(list.id, list.users, $event)" ><p>Leave</p></div>
     </div>
     </section>
   </div>

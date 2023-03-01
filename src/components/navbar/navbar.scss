@@ -14,4 +14,9 @@
     img {
         max-height: 25px;
     }
+    svg {
+        color: colors.$primary-font-dark;
+        font-size: 22px;
+        cursor: pointer;
+    }
 }

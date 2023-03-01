@@ -3,6 +3,8 @@ import Button from '../button/button.vue';
 import logoLight from '@/assets/logo-light.svg'
 import { useRouter } from 'vue-router';
 import { getAuth, signOut } from 'firebase/auth';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
 type NavProps = {
     param : string
 }
@@ -29,7 +31,7 @@ const handleSignOut = () => {
     <img :src="logoLight" alt="CoList Logo" @click="router.push('/')">
     <button @click="handleSignOut">Logga ut</button>
     <Button v-if="props.param == 'list'" text="Share" variant="primary" @click="handleShareList" />
-    <p v-if="props.param == 'home'" @click="emit('click')">LÄGG TILL</p>
+    <font-awesome-icon v-if="props.param == 'home'" icon="plus" @click="emit('click')" />
     <p v-else>USER MENU</p>
   </nav>
 </template>

@@ -2,10 +2,11 @@
 
 .login__container {
     background-color: colors.$secondary-bg;
-    height: 80vh;
-    margin-top: 10vh;
+    height: calc(100vh - 2em);
+    margin: 1em;
     border-radius: 8px;
     .login {
+        height: 100%;
         padding: 3em;
         display: flex;
         flex-direction: column;
@@ -17,6 +18,7 @@
             gap: 20px;
             h2 {
                 font-size: 48px;
+                font-family: 'Handlee', cursive;
             }
         }
     }
@@ -26,7 +28,10 @@
     .login__container {
         border-radius: none;
         display: flex;
+        margin-top: 10vh;
+        height: 80vh;
         .login {
+            padding: 5em;
             border-bottom-right-radius: 8px;
             border-top-right-radius: 8px;
             flex: 1;

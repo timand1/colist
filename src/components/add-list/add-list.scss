@@ -14,11 +14,49 @@
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
+        gap: 20px;
         width: calc(100% - 2em);
-        height: 30%;
+        height: 35%;
         background-color: colors.$primary-bg;
         padding: 2em;
         border-radius: 12px;
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+            input, select {
+                all: unset;
+                outline: 1px solid colors.$gray-font;
+                outline-offset: -1;
+                border-radius: 4px;
+                padding: 10px 12px;
+                font-size: 18px;
+                &:focus {
+                    outline-color: colors.$primary;
+                }
+            }
+            label {
+                pointer-events: none;
+                position: absolute;
+                top: calc(50% - 7px);
+                left: 10px;
+                font-size: 14px;
+                transition: all 150ms;
+            }
+            
+            input:focus ~ label, input:not(:placeholder-shown) ~label, select:focus ~ label, select:valid ~ label {
+                font-size: 14px;
+                padding: 4px 4px 0 4px;
+                background-color: colors.$primary-bg;
+                top: -12px;
+                z-index: 1;
+            }
+        
+            input:focus ~svg {
+                color: colors.$secondary-bg;                             
+            } 
+        }
         .button-container {
             display: flex;
             width: 100%;
@@ -28,5 +66,11 @@
                 flex: 1;
             }
         }
+    }
+}
+
+@media screen and (min-width: 786px) {
+    .add-list {
+        max-width: 500px;       
     }
 }

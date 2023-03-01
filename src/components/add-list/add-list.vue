@@ -50,11 +50,17 @@ const createNewList: () => Promise<void> = async () => {
 <template>
   <section class="add-list__overlay">
     <section class="add-list" ref="addItemRef">
-      {{ props.displayOverlay }}
-      <input type="text" name="listname" v-model="listname">
-      <select name="listtype" v-model="listtype">
-        <option v-for="list in listTypes" :value="list">{{ list }}</option>
-    </select>
+      <h2>New list</h2>
+      <div class="input-container">
+        <select name="listtype" required v-model="listtype">
+          <option v-for="list in listTypes" :value="list">{{ list }}</option>
+        </select>
+        <label for="listtype">Type</label>
+      </div>
+      <div class="input-container">
+        <input type="text" name="listname" placeholder=' ' required v-model="listname">
+        <label for="listname">Name</label>
+      </div>
     <div class="button-container">
       <Button variant="danger" text="Cancel" @click="emit('click')" />
       <Button variant="primary" text="Add" @click="createNewList" />
