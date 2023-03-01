@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { onBeforeMount, ref, watchEffect } from 'vue';
+import { onBeforeMount, ref, watch, watchEffect } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -8,33 +8,42 @@ const auth = getAuth()
 const isAuthenticated = ref(false)
 
 onBeforeMount(() => {
-  console.log(auth.currentUser?.displayName);
   
   onAuthStateChanged(auth, (user) => {
-    isAuthenticated.value = !!user
-  })
-  if (isAuthenticated.value) {
-    console.log('Logged in');
     
-  } else {
-    console.log('Not Logged In');
-    router.push('/login')
-  }
+    isAuthenticated.value = !!user
+    console.log(auth.currentUser?.displayName);
+    
+    if (isAuthenticated.value) {
+      console.log('Logged in');
+      router.push('/')
+      
+    } else {
+      console.log('Not Logged In');
+      router.push('/login')
+    }
+  })
+})
+
+watch(() => auth, (newVal) => {  
+  onAuthStateChanged(auth, (user) => {
+    isAuthenticated.value = !!user
+    console.log(auth.currentUser?.displayName);
+    if (isAuthenticated.value) {
+      isAuthenticated.value = true;
+      router.push('/')
+      console.log('Logged in');
+      
+    } else {
+      console.log('Not Logged In');
+      isAuthenticated.value = false;
+      router.push('/login')
+    }
+  })
+
 })
 
 watchEffect(() => {
-  console.log(auth.currentUser);
-  onAuthStateChanged(auth, (user) => {
-  })
-  if (isAuthenticated.value) {
-    isAuthenticated.value = true;
-    console.log('Logged in');
-    
-  } else {
-    console.log('Not Logged In');
-    isAuthenticated.value = false;
-    router.push('/login')
-  }
 })
 
 const handleSignOut = () => {

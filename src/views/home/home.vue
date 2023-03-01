@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getAuth } from 'firebase/auth';
-import { onBeforeMount, ref } from 'vue';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onBeforeMount, onMounted, ref, watch, watchEffect } from 'vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import { db } from '@/firebase';
@@ -12,10 +12,13 @@ import router from '@/router';
 const auth = getAuth()
 const addOverlay = ref<boolean>(false)
 const lists = ref()
+const loader = ref<boolean>(true)
 
 onBeforeMount(async () => {
-  const listsRef = collection(db, "lists");
-  console.log(listsRef);
+  // const listsRef = collection(db, "lists");
+  // console.log(auth.currentUser);
+  
+  // console.log(listsRef);
   
 // const authorQuery = query(listsRef, where("author", "==", auth.currentUser?.displayName));
 // const userQuery = query(listsRef, where("users", "array-contains", auth.currentUser?.displayName));
@@ -28,15 +31,7 @@ onBeforeMount(async () => {
 // });
 // console.log(authorQuery);
 
-const userQuery = query(collection(db, "lists"), where("users", "array-contains", auth.currentUser?.uid));
 
-const unsubscribe = onSnapshot(userQuery, (querySnapshot) => {
-const getLists : List[]  = []
-  querySnapshot.forEach((doc) => {
-    getLists.push(doc.data() as List);
-  });
-  lists.value = getLists  
-});
 
 // const matchingLists = await getDocs(authorQuery);
 // matchingLists.forEach((doc) => {
@@ -47,21 +42,63 @@ const getLists : List[]  = []
 
 
 })
+const isAuthenticated = ref(false)
+watch(() => auth, (newVal) => {  
+  onAuthStateChanged(auth, (user) => {
+    isAuthenticated.value = !!user
+    console.log(auth.currentUser?.displayName);
+    if (isAuthenticated.value) {
+      isAuthenticated.value = true;
+
+      router.push('/')
+      console.log('Logged in');
+      
+    } else {
+      console.log('Not Logged In');
+      isAuthenticated.value = false;
+      router.push('/login')
+    }
+  })
+
+})
+
+watchEffect(() => {
+  
+
+  onAuthStateChanged(auth, (user) => {
+    isAuthenticated.value = !!user
+    console.log(auth.currentUser?.displayName);
+    if (isAuthenticated.value) {
+      const userQuery = query(collection(db, "lists"), where("users", "array-contains", auth.currentUser?.uid));
+      loader.value = false
+    const unsubscribe = onSnapshot(userQuery, (querySnapshot) => {
+    const getLists : List[]  = []
+      querySnapshot.forEach((doc) => {
+        getLists.push(doc.data() as List);
+      });
+      lists.value = getLists  
+    });
+      
+    } else {
+      console.log('Not Logged In');
+      isAuthenticated.value = false;
+      router.push('/login')
+    }
+  })
+
+})
 
 const goToList: (listId: string) => void = (listId) => {
   setActiveListId(listId)
   router.push('/list')
 }
 
-
 const deleteList: (listId: string) => Promise<void> = async (listId) => {
   await deleteDoc(doc(db, 'lists', listId))
 }
 
 const removeUser: (listId: string, users: string[]) => Promise<void> = async (listId, users) => {
-  const listRef = doc(db, "lists", listId);
-  console.log();
-  
+  const listRef = doc(db, "lists", listId);  
   const listDoc = await getDoc(listRef);
   if (listDoc.exists()) {
     
@@ -69,7 +106,7 @@ const removeUser: (listId: string, users: string[]) => Promise<void> = async (li
     const updatedUsers = currentUsers.filter((userId : string) => userId !== auth.currentUser?.uid);
     await updateDoc(listRef, { users: updatedUsers });
     console.log(`Removed ${auth.currentUser?.displayName} from the users array of list ${listId}`);
-    // ---------------------- FIX STOPPROP --------------------------------
+    // ---------------------- stop click on parent --------------------------------
   } else {
     console.log(`List ${listId} does not exist`);
   }
@@ -91,6 +128,7 @@ const handleOverlasy: (e:Event) => void = (e) => {
 <template>
   <section class="home">
     <Navbar param="home" @click=" handleOverlasy" />
+    <div class="lists--container" v-if="!loader">
     <h2>{{ auth.currentUser?.displayName }}</h2>
     <button @click="handleOverlay" >TEST OVERLAY</button>
     <section class="list--container">
@@ -101,6 +139,10 @@ const handleOverlasy: (e:Event) => void = (e) => {
       <button v-else @click="removeUser(list.id, list.users)">Leave</button>
     </div>
     </section>
+  </div>
+  <section v-else>
+    <p>loading..</p>
+  </section>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </section>
 </template>
