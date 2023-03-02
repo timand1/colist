@@ -30,11 +30,19 @@ const createNewList: () => Promise<void> = async () => {
   
   if(listname.value?.length > 2 && listtype.value?.length > 0) {
     await setDoc(doc(db, "lists", uniqueId), {
-      author : auth.currentUser?.displayName,
+      author : {
+        name : auth.currentUser?.displayName,
+        id : auth.currentUser?.uid,
+        img : auth.currentUser?.photoURL
+      },
       name: listname.value,
       id : uniqueId,
       list: [],
-      users: [auth.currentUser?.uid],
+      users: [{
+        name : auth.currentUser?.displayName,
+        id : auth.currentUser?.uid,
+        img : auth.currentUser?.photoURL
+      }],
       type: listtype.value
     })
     router.push(`/list/${uniqueId}`)
@@ -51,14 +59,14 @@ const createNewList: () => Promise<void> = async () => {
     <section class="add-list" ref="addItemRef">
       <h2>New list</h2>
       <div class="input-container">
+        <input type="text" name="listname" placeholder=' ' required v-model="listname">
+        <label for="listname">Name</label>
+      </div>
+      <div class="input-container">
         <select name="listtype" required v-model="listtype">
           <option v-for="list in listTypes" :value="list">{{ list }}</option>
         </select>
         <label for="listtype">Type</label>
-      </div>
-      <div class="input-container">
-        <input type="text" name="listname" placeholder=' ' required v-model="listname">
-        <label for="listname">Name</label>
       </div>
     <div class="button-container">
       <Button variant="danger" text="Cancel" @click="emit('click')" />

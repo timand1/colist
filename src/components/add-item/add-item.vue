@@ -76,7 +76,7 @@ const handleAddItem: () => Promise<void> = async () => {
     <section class="add-item">
     <div class="add-item__headline" @click="toggleAddItem">
         <h2>Add item</h2>
-        <font-awesome-icon icon="chevron-down" />
+        <font-awesome-icon icon="chevron-down" :class="addItem ? 'add-item--active' : ''" />
     </div>
     <div class="add-item__form" :class="addItem ? 'add-item__form--active' : ''" >
         <div v-for="(input, index) in inputFields" :key="index" class="input-container">

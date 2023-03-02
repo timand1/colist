@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { onBeforeMount, ref, watch, watchEffect } from 'vue';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { onBeforeMount, ref, watch } from 'vue';
 import { RouterView, useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -27,30 +27,16 @@ onBeforeMount(() => {
 watch(() => auth, (newVal) => {  
   onAuthStateChanged(auth, (user) => {
     isAuthenticated.value = !!user
-    console.log(auth.currentUser?.displayName);
     if (isAuthenticated.value) {
       isAuthenticated.value = true;
-      router.push('/')
-      console.log('Logged in');
-      
+      router.push('/')      
     } else {
-      console.log('Not Logged In');
       isAuthenticated.value = false;
       router.push('/login')
     }
   })
 
 })
-
-watchEffect(() => {
-})
-
-const handleSignOut = () => {
-        signOut(auth).then(() => {
-        }).catch((error) => {
-
-        });
-    }
 
 </script>
 <template>

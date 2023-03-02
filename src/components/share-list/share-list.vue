@@ -3,6 +3,15 @@ import { db } from '@/firebase';
 import { arrayUnion, arrayRemove, doc, updateDoc } from 'firebase/firestore';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
+
+type ShareListProps = {
+    users: string[]
+    displayShareList : boolean
+}
+
+const props = defineProps<ShareListProps>()
+
+// displayShareList - list func -> nav (click) -> list uppd -> share-list
 // Get lodash debound for search func
 
 const route = useRoute();
@@ -16,7 +25,7 @@ const updateUsers: () => Promise<void> = async () => {
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
-        list: arrayUnion(docRef, ...addedUsers.value),
+        users: arrayUnion(docRef, ...addedUsers.value),
     });
         console.log('Users added successfully!');
     } catch (error) {
@@ -30,9 +39,9 @@ const removeUser: (id: string) => Promise<void> = async (id) => {
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
-        list: arrayRemove(docRef, id),
+        users: arrayRemove(docRef, id),
     });
-        console.log('Users added successfully!');
+        console.log('User removed successfully!');
     } catch (error) {
         console.error('Error adding users:', error);
     }

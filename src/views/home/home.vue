@@ -5,7 +5,7 @@ import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import { db } from '@/firebase';
 import { doc, onSnapshot, collection, query, where, updateDoc, deleteField, deleteDoc, getDoc } from 'firebase/firestore';
-import { type List } from '@/helpers/types/types'
+import { User, type List } from '@/helpers/types/types'
 import router from '@/router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -63,13 +63,15 @@ watch(() => auth, (newVal) => {
 })
 
 watchEffect(() => {
-  
-
   onAuthStateChanged(auth, (user) => {
     isAuthenticated.value = !!user
-    console.log(auth.currentUser?.displayName);
     if (isAuthenticated.value) {
-      const userQuery = query(collection(db, "lists"), where("users", "array-contains", auth.currentUser?.uid));
+      const userQuery = query(collection(db, "lists"), where("users", "array-contains", 
+        { name : auth.currentUser?.displayName, 
+          id: auth.currentUser?.uid, 
+          img: auth.currentUser?.photoURL 
+        }
+      ));
       loader.value = false
     const unsubscribe = onSnapshot(userQuery, (querySnapshot) => {
     const getLists : List[]  = []
@@ -101,13 +103,12 @@ const removeUser: (listId: string, users: string[], e : Event) => Promise<void> 
   e.stopPropagation()
   const listRef = doc(db, "lists", listId);  
   const listDoc = await getDoc(listRef);
-  if (listDoc.exists()) {
-    
+  if (listDoc.exists()) {    
     const currentUsers = listDoc.data().users;
-    const updatedUsers = currentUsers.filter((userId : string) => userId !== auth.currentUser?.uid);
+    const updatedUsers = currentUsers.filter((user : User) => user.id !== auth.currentUser?.uid);
     await updateDoc(listRef, { users: updatedUsers });
+
     console.log(`Removed ${auth.currentUser?.displayName} from the users array of list ${listId}`);
-    // ---------------------- stop click on parent --------------------------------
   } else {
     console.log(`List ${listId} does not exist`);
   }
@@ -138,7 +139,7 @@ const handleOverlasy: (e:Event) => void = (e) => {
         <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
         <p>{{ list.type }}</p>
       </div>
-      <div class="list--remove" v-if="list.author == auth.currentUser?.displayName" @click="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
+      <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
       <div class="list--remove" v-else @click="removeUser(list.id, list.users, $event)" ><p>Leave</p></div>
     </div>
     </section>

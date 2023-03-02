@@ -19,10 +19,16 @@ export type NumberedList = {
     id: string
 }
 
+export type User = {
+    name : string
+    id : string
+    img : string
+}
+
 export type List = {
-    author : string
+    author : User
     name : string
     id : string
     list : Shoppinglist[] | ToDoList[] | NumberedList[] | []
-    users : string[]
+    users : User[]
 }

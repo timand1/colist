@@ -13,12 +13,16 @@
         svg {
             font-size: 18px;
             color: colors.$primary-font;
+            transition: all 0.3s;
+        }
+        .add-item--active {
+            transform: rotate(180deg);
         }
     }
 
     .add-item__form {
         max-height: 0;
-        transition: all 1s;
+        transition: all 0.3s;
         overflow: hidden;
         margin: 0 1em 1em 1em;
         display: flex;
