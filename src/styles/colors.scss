@@ -7,7 +7,7 @@ $primary-accent: #51355A;
 $primary-font: #141313;
 $secondary-font: #bbb3b3;
 $disabled-font: #14131362;
-$gray-font : #B8B8B8;
+$gray-font : #727171;
 $overlay: rgba(0, 0, 0, 0.397);
 $primary-bg-dark: #595959;
 $secondary-bg-dark: #243354;
@@ -18,18 +18,18 @@ $primary-font-dark: #FFFFFFFA;
 $success: #4DD1BB;
 $danger: #DC3545;
 $primary: #00B0D4;
-$ghost : transparent;
+$ghost : $primary-bg;
 
 $success-disabled: #4dd1bb8f;
 $danger-disabled: #dc354686;
 $primary-disabled: #00b1d470;
-$ghost-disabled : transparent;
+$ghost-disabled : $primary-bg;
 
 // Button
 $button-bg-colors: (
   primary: $primary,
-  ghost: $ghost,
   danger: $danger,
+  ghost: $ghost,
   success: $success,
 );
 
@@ -42,7 +42,7 @@ $button-outline-colors: (
 
 $button-hover-colors: (
     primary: darken($primary, 20%),
-    ghost: darken($primary-font, 20%),
+    ghost: darken($gray-font, 20%),
     danger: darken($danger, 20%),
     success: darken($success, 20%)
 );

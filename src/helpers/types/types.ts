@@ -19,6 +19,12 @@ export type NumberedList = {
     id: string
 }
 
+export type TimeList = {
+    item : string
+    placement : number
+    id: string
+}
+
 export type User = {
     name : string
     id : string
@@ -30,6 +36,6 @@ export type List = {
     author : User
     name : string
     id : string
-    list : Shoppinglist[] | ToDoList[] | NumberedList[] | []
+    list : Shoppinglist[] | ToDoList[] | NumberedList[] | TimeList[] | []
     users : User[]
 }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Button from '../button/button.vue';
+import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { User } from '@/helpers/types/types';
 import { getAuth } from 'firebase/auth';
-import { arrayUnion, arrayRemove, doc, updateDoc, query, collection, DocumentData, Query, where, getDocs } from 'firebase/firestore';
-import { computed, onMounted, ref, watch } from 'vue';
+import { arrayUnion, arrayRemove, doc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
+import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { createPopper } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -164,18 +164,24 @@ const removeAdded: (user : User) => void = (user) => {
             </div>
             <div class="share__users">
                 <div class="share__current" v-for="user in listUsers">
-                    <div class="share__user" v-if="user.id != auth.currentUser?.uid && auth.currentUser?.uid == props.author.id">
-                        <p>{{ user.name }}</p>
+                    <div class="share__user" v-if="auth.currentUser?.uid != props.author.id || user.id != props.author.id">
                         <img :src="user.img" alt="">
+                        <div class="share__user--info">
+                            <p>{{ user.name }}</p>
+                            <p class="email">{{ user.email }}</p>
+                        </div>
                     </div>
-                    <div class="user-remove" v-if="auth.currentUser?.uid == props.author.id && user.id != auth.currentUser?.uid " @click="removeUser(user)"><font-awesome-icon icon="trash-can"/></div>
-                    <div class="user-remove" v-if="auth.currentUser?.uid == user.id && user.id != auth.currentUser?.uid" @click="removeUser(user)"><p>Leave</p></div>
+                    <div class="user-remove" v-if="auth.currentUser?.uid == props.author.id && user.id != auth.currentUser?.uid " @click="removeUser(user)"><Button variant="ghost" text="Remove" /></div>
+                    <div class="user-remove" v-if="auth.currentUser?.uid != props.author.id && user.id == auth.currentUser?.uid" @click="removeUser(user)"><Button variant="ghost" text="Leave" /></div>
                 </div>
                 <div class="share__added" v-if="addedUsers.length > 0">
                     <p>New users</p>
                     <div class="share__current" v-for="user in addedUsers">
                         <div class="share__user">
-                            <p>{{ user.name }}</p>
+                            <div class="share__user--info">
+                                <p>{{ user.name }}</p>
+                                <p class="email">{{ user.email }}</p>
+                            </div>
                             <img :src="user.img" alt="">
                         </div>
                         <div class="user-remove" @click="removeAdded(user)"><font-awesome-icon icon="trash-can"/></div>

@@ -8,10 +8,10 @@ import router from '@/router';
 import { arrayRemove, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist, ToDoList, NumberedList, User } from '@/helpers/types/types';
+import { Shoppinglist, ToDoList, NumberedList, User, TimeList } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
 
-type ListItem = Shoppinglist | ToDoList | NumberedList;
+type ListItem = Shoppinglist | ToDoList | NumberedList | TimeList;
 
 const route = useRoute();
 const list = ref()
@@ -101,7 +101,7 @@ const closeDeleteMode: () => void = () => {
 }
 
 let deleteArr = ref<ListItem[]>([])
-const addDeleteItem: (item : Shoppinglist | ToDoList | NumberedList) => void = (item) => {
+const addDeleteItem: (item : Shoppinglist | ToDoList | NumberedList | TimeList) => void = (item) => {
 
   // Check if item is already in the arr
   const foundIndex = deleteArr.value.findIndex(x => x.id == item.id)
@@ -207,17 +207,20 @@ const handleOverlay: () => void = () => {
         <h2>{{ list?.name }}</h2>
         <font-awesome-icon icon="pen" @click="changeTitle" />
       </div>
-      <p>{{ list?.author.name }}</p>
+      <p>Author - {{ list?.author.name }}</p>
     </div>
     <AddItem :type="list?.type" />
     <div class="item-container">
       <div v-for="item in list?.list" class="item">
         <div class="item__info--left">
+          <p class="item__name" v-if="item?.todo">{{ item?.todo }}</p>
           <p class="item__name">{{ item?.item }}</p>
           <p class="item__comment" v-if="item?.comment">{{ item?.comment }}</p>
+          <p class="item__comment" v-if="item?.date">{{ item?.date }}</p>
         </div>
           <div class="item__info--right">
-            <select name="amount" @change="updateAmount(item, parseInt(($event.target as HTMLSelectElement).value))">
+            <p class="item__comment" v-if="item?.time">at {{ item?.time }}</p>
+            <select  v-if="item?.amount" name="amount" @change="updateAmount(item, parseInt(($event.target as HTMLSelectElement).value))">
               <option v-for="amount in amountArr" :value="amount" :selected="item?.amount == amount">{{ amount }}</option>
             </select>
 
@@ -226,7 +229,7 @@ const handleOverlay: () => void = () => {
                 <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
               </div>
 
-              <div class="checkbox-container checkbox-container--check" v-else>
+              <div class="checkbox-container checkbox-container--check" v-else-if="item.hasOwnProperty('done')">
                 <input type="checkbox" name="check" :checked="item?.done" @change="handleCheckedItem(item)">
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
                 

@@ -107,32 +107,20 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                .share__user {
+                    display: flex;
+                    gap: 8px;
+                    .share__user--info {
+                        .email {
+                            font-size: 12px;
+                            color: colors.$gray-font;
+                        }
+                    }
+                }
                 img {
                     height: 25px;
                     width: 25px;
                     border-radius: 50%;
-                }
-                .user-remove {
-                    background-color: colors.$primary-accent;
-                    svg, p {
-                        color: colors.$secondary-bg;
-                    }
-                    &:has(svg) {
-                        border-radius: 50%; 
-                    }
-                    &:has(p) {
-                        border-radius: 12px;
-                    }
-                    &:hover {
-                        background-color: colors.$danger;
-                    }
-                    svg {
-                        padding: 12px;
-                    }
-                    p {
-                        padding: 8px;
-                        font-size: 14px;
-                    }
                 }
             }
         }

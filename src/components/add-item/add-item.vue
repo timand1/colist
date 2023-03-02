@@ -17,35 +17,39 @@ type UserInput = {
 const props = defineProps<AddItemProps>()
 
 const route = useRoute();
-let userInput: UserInput = reactive({amount : 1});
+let userInput: UserInput = reactive({});
 const addItem = ref(false)
 
 const inputFields = computed(() => {    
       switch (props.type) {
-        case 'Shoppinglist':
+        case 'Shopping':
           return [
-            { name: 'item', label: 'Item', type: 'text' },
-            { name: 'amount', label: 'Amount', type: 'number' },
-            { name: 'comment', label: 'Comment', type: 'text' },
+            { name: 'item', label: 'Item*', type: 'text', req: true },
+            { name: 'amount', label: 'Amount', type: 'number', req: true },
+            { name: 'comment', label: 'Comment', type: 'text', req: false },
           ]
-        case 'ToDoList':
+        case 'ToDo':
           return [
-            { name: 'todo', label: 'Todo', type: 'text' },
-            { name: 'comment', label: 'Comment', type: 'text' },
+            { name: 'todo', label: 'Todo*', type: 'text', req: true },
+            { name: 'comment', label: 'Comment', type: 'text', req: false },
           ]
-        case 'NumberedList':
+        case 'Numbered':
           return [
-            { name: 'item', label: 'Item', type: 'text' },
-            { name: 'placement', label: 'Placement', type: 'number' },
+            { name: 'item', label: 'Item*', type: 'text', req: true },
+            { name: 'placement', label: 'Placement*', type: 'number', req: true },
+          ]
+        case 'Time':
+          return [
+            { name: 'item', label: 'Item*', type: 'text', req: true },
+            { name: 'time', label: 'Time*', type: 'time', req: true },
+            { name: 'date', label: 'Date', type: 'date', req: false },
           ]
         default:
           return []
       }
     })
 onMounted(() => {
-    // props.type == 'Shoppinglist' ?
-    // template.value = `` : null
-    // console.log(props.type);
+    props.type == 'Shopping' ? userInput = { amount : 1} : null
     
 })
 
@@ -54,7 +58,10 @@ const toggleAddItem: () => void = () => {
 }
 
 const handleAddItem: () => Promise<void> = async () => {
-    const newItem = {...userInput, done : false, id : crypto.randomUUID()}
+    const newItem = props.type == 'Shopping' || props.type == 'ToDO' ? 
+      {...userInput, done : false, id : crypto.randomUUID()} 
+      : {...userInput, id : crypto.randomUUID()}
+
     const listId : string = route.params.id as string
     
     const listRef = doc(db, "lists", listId);
@@ -67,7 +74,7 @@ const handleAddItem: () => Promise<void> = async () => {
     for (const key in userInput) {
         userInput[key] = '';
     }
-    userInput.amount = 1    
+    props.type == 'Shopping' ? userInput.amount = 1 : null
 }
 
 </script>
@@ -78,16 +85,16 @@ const handleAddItem: () => Promise<void> = async () => {
         <h2>Add item</h2>
         <font-awesome-icon icon="chevron-down" :class="addItem ? 'add-item--active' : ''" />
     </div>
-    <div class="add-item__form" :class="addItem ? 'add-item__form--active' : ''" >
+    <form @submit.prevent="handleAddItem" class="add-item__form" :class="addItem ? 'add-item__form--active' : ''" >
         <div v-for="(input, index) in inputFields" :key="index" class="input-container">
-            <input :type="input.type" :required="input.name !== 'comment'" :name="input.name" v-model="userInput[input.name]" placeholder=" " @keyup.enter="handleAddItem">
+            <input :type="input.type" :required="input.req" :name="input.name" v-model="userInput[input.name]" placeholder=" " @keyup.enter="handleAddItem">
             <label :for="input.name">{{ input.label }}</label>
         </div>
         <div class="add-item__buttons">
             <Button variant="danger" outline text="Close" @click="toggleAddItem" />
-            <Button variant="primary" text="Add" @click="handleAddItem" />
+            <Button type="submit" variant="primary" text="Add" />
         </div>
-    </div>
+    </form>
     </section>
 </template>
 

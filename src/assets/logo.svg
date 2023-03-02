@@ -3,11 +3,11 @@
 <path d="M37 72L72 42.373L54.5 32.2703L37 22.1865M37 72V22.1865M37 72L2 42.373L19.5 32.2703L37 22.1865" stroke="black" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
  <style>
     path {
-      stroke: white;
+      stroke: black;
     }
     @media (prefers-color-scheme: dark) {
       path {
-        stroke: black;
+        stroke: white;
       }
     }
   </style>

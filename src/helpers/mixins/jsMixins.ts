@@ -1,5 +1,5 @@
 export const buttonVariants = ['primary', 'success', 'danger', 'ghost'];
-export const listTypes = ['Shoppinglist', 'ToDoList']
+export const listTypes = ['Shopping', 'ToDo', 'Time']
 
 export const defaultVariantMixin = (variants: string[]) => ({
     variant: variants,
