@@ -39,16 +39,16 @@
             position: relative;
             width: 100%;
             input {
-            all: unset;
-            outline: 1px solid colors.$gray-font;
-            outline-offset: -1px;
-            border-radius: 4px;
-            padding: 10px 12px;
-            font-size: 18px;
-            &:focus {
-                outline-color: colors.$primary;
+                all: unset;
+                outline: 1px solid colors.$gray-font;
+                outline-offset: -1px;
+                border-radius: 4px;
+                padding: 10px 12px;
+                font-size: 18px;
+                &:focus {
+                    outline-color: colors.$primary;
+                }
             }
-        }
         label {
             pointer-events: none;
             position: absolute;

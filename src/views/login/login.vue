@@ -5,6 +5,8 @@ import logo from "@/assets/logo.svg";
 import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence   } from "firebase/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { db } from "@/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const auth = getAuth();
 const errorRef = ref<boolean>(false)
@@ -18,15 +20,25 @@ const signInWithGoogle = () => {
     // sign in the user with Google Sign-In
     return signInWithPopup(auth, provider);
   })
-  .then((result) => {
-    // handle the successful sign-in
+  .then(async (result) => {
+
+    // If first time logging in, create a user in firestore
+    const user = result.user
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        await setDoc(doc(db, "users", user.uid), {
+          id: user.uid,
+          name : user.displayName,
+          img: user.photoURL,
+        });
+      }
     router.push('/')
-    console.log("User signed in:", result.user.displayName);
   })
   .catch((error) => {
-    // handle sign-in errors
     errorRef.value = !errorRef.value
-    console.log("Error signing in:", error.message);
   });
 
   }

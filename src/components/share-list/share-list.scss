@@ -1,5 +1,150 @@
 @use '@/styles/colors';
 
-.share {
-    
+.share__container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background-color: colors.$overlay;
+    z-index: 99999;
+    .share {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        width: calc(100% - 2em);
+        height: 40%;
+        background-color: colors.$primary-bg;
+        padding: 2em;
+        border-radius: 12px;
+        overflow: auto;
+        .search {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+            height: 40px;
+            input {
+                all: unset;
+                outline: 1px solid colors.$gray-font;
+                outline-offset: -1px;
+                border-radius: 4px;
+                padding: 10px 12px;
+                font-size: 18px;
+                &:focus {
+                    outline-color: colors.$primary;
+                }
+            }
+            label {
+                pointer-events: none;
+                position: absolute;
+                top: calc(50% - 7px);
+                left: 10px;
+                font-size: 14px;
+                transition: all 150ms;
+            }
+            
+            input:focus ~ label, input:not(:placeholder-shown) ~label {
+                font-size: 14px;
+                padding: 4px 4px 0 4px;
+                background-color: colors.$primary-bg;
+                top: -12px;
+                z-index: 1;
+            }
+            .search__clear {
+                position: absolute;
+                right: 10px;
+                top: 12px;
+                font-size: 16px;
+                color: colors.$primary-font;
+                cursor: pointer;
+            }
+
+        }
+        .search__found {
+            border: 1px solid colors.$gray-font;
+            background-color: colors.$secondary-bg;
+            width: 100%;
+            border-radius: 8px;
+            // padding: 12px;
+            flex-direction: column;
+
+            .search__user {
+                padding: 1em;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 60px;
+                img {
+                    max-height: 30px;
+                    border-radius: 50%;
+                }
+                &:hover {
+                    background-color: colors.$gray-font;
+                }
+            }
+
+        }
+        .share__users {
+            width: 100%;
+            height: 50%;
+            overflow: auto;
+            display: flex; 
+            flex-direction: column;
+            gap: 10px;
+            .share__current {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                img {
+                    height: 25px;
+                    width: 25px;
+                    border-radius: 50%;
+                }
+                .user-remove {
+                    background-color: colors.$primary-accent;
+                    svg, p {
+                        color: colors.$secondary-bg;
+                    }
+                    &:has(svg) {
+                        border-radius: 50%; 
+                    }
+                    &:has(p) {
+                        border-radius: 12px;
+                    }
+                    &:hover {
+                        background-color: colors.$danger;
+                    }
+                    svg {
+                        padding: 12px;
+                    }
+                    p {
+                        padding: 8px;
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+        .share__buttons {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 2em;
+            button {
+                flex: 1;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 786px) {
+    .share {
+        max-width: 500px;       
+    }
 }

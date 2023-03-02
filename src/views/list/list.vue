@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import AddItem from '@/components/add-item/add-item.vue';
 import Navbar from '@/components/navbar/navbar.vue';
+import ShareList from '@/components/share-list/share-list.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
-import { arrayRemove, doc, onSnapshot, updateDoc, writeBatch  } from "firebase/firestore";
-import { onBeforeMount, reactive, ref } from 'vue';
+import { arrayRemove, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { onBeforeMount, ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist, ToDoList, NumberedList } from '@/helpers/types/types';
+import { Shoppinglist, ToDoList, NumberedList, User } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
 
 type ListItem = Shoppinglist | ToDoList | NumberedList;
@@ -19,6 +20,7 @@ const deleteMode = ref(false)
 const updateName = ref(false)
 const newTitle = ref('')
 const loader = ref<boolean>(true)
+const displayShareList = ref<boolean>(false)
 
 onBeforeMount(async () => {
   listId.value = route.params.id as string
@@ -29,7 +31,7 @@ onBeforeMount(async () => {
   
   const docRef = doc(db, "lists", listId.value);
   onSnapshot(docRef, (docSnap) => {
-    if (docSnap.exists() && docSnap.data().users.includes(auth.currentUser?.uid)) {
+    if (docSnap.exists() && docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid) != -1) {
       list.value = docSnap.data();
       newTitle.value = list.value.name
       loader.value = false;
@@ -122,7 +124,6 @@ const clearDeleteList: () => void = () => {
   deleteArr.value = []
 }
 
-
 const changeTitle: () => void = () => {
   updateName.value = !updateName.value
   newTitle.value = list.value.name
@@ -141,13 +142,22 @@ const handleUpdateName: () => Promise<void> = async () => {
   updateName.value = !updateName.value
 }
 
+const handleShareList: () => void = () => {  
+  displayShareList.value = !displayShareList.value
+    
+}
+
 </script>
 <template>
-    <Navbar param="list" />
+    <Navbar param="list" @toggleShare="handleShareList"/>
+    <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
     <section v-if="loader">
     <p>loading..</p>
   </section>
   <div class="list" v-else>
+  <div class="user-container">
+    <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`">
+  </div>
     <div class="list__header">
       <div class="list__header--title" v-if="updateName">
         <input type="text" v-model="newTitle">
@@ -163,7 +173,7 @@ const handleUpdateName: () => Promise<void> = async () => {
         <h2>{{ list?.name }}</h2>
         <font-awesome-icon icon="pen" @click="changeTitle" />
       </div>
-      <p>{{ list?.author }}</p>
+      <p>{{ list?.author.name }}</p>
     </div>
     <AddItem :type="list?.type" />
     <div class="item-container">

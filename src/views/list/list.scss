@@ -2,6 +2,19 @@
 
 .list {
     margin-top: 5em;
+    .user-container {
+        margin-left: 1em;
+        display: flex;
+        .user-image {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transform: translateX(-6px);
+            &:first-child {
+                transform: translateX(0);
+            }
+        }
+    }
     .list__header {
         display: flex;
         flex-direction: column;
@@ -113,8 +126,10 @@
     }
     .delete__menu--closed {
         border-radius: 50%;
-        padding: 12px;
+        padding: 10px;
         cursor: pointer;
+        display: grid;
+        place-items: center;
         svg {
             color: colors.$secondary-bg;
         }
@@ -137,7 +152,6 @@
         }
     }
 }
-
 @media screen and (min-width: 786px) {
     .list {
         .delete__menu {

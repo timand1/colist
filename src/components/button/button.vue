@@ -6,12 +6,14 @@ type ButtonProps = {
     text?: string
     variant?: string
     outline?: boolean
+    disabled? : boolean
 };
 
 const props = withDefaults(defineProps<ButtonProps>(), {
     text: 'Text',
     variant: 'primary',
-    outline: false
+    outline: false,
+    disabled: false
 });
 const emit = defineEmits(['click']);
 
@@ -34,6 +36,7 @@ onMounted(() => {
 
 <template>
   <button
+    :role="props.disabled ? 'disabled' : 'button'"
     ref="componentRef"
     class="button"
     :class="buttonClass, props.outline ? 'outline' : ''"

@@ -9,6 +9,7 @@
     display: grid;
     place-items: center;
     background-color: colors.$overlay;
+    z-index: 99999;
     .add-list {
         display: flex;
         flex-direction: column;
