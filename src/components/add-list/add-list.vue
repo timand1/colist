@@ -26,7 +26,6 @@ const router = useRouter()
 const createNewList: () => Promise<void> = async () => {
   
   const uniqueId = crypto.randomUUID()
-  console.log(listname.value?.length );
   
   if(listname.value?.length > 2 && listtype.value?.length > 0) {
     await setDoc(doc(db, "lists", uniqueId), {
@@ -45,10 +44,11 @@ const createNewList: () => Promise<void> = async () => {
       }],
       type: listtype.value
     })
+    console.log(uniqueId);
+    emit('click')
     router.push(`/list/${uniqueId}`)
   } else {
-    console.log('wtf dude');
-    
+    // FIXA    
   }
 }
 

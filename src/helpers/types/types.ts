@@ -23,6 +23,7 @@ export type User = {
     name : string
     id : string
     img : string
+    email : string
 }
 
 export type List = {

@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import AddItem from '@/components/add-item/add-item.vue';
+import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import ShareList from '@/components/share-list/share-list.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
 import { arrayRemove, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Shoppinglist, ToDoList, NumberedList, User } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
@@ -21,6 +22,8 @@ const updateName = ref(false)
 const newTitle = ref('')
 const loader = ref<boolean>(true)
 const displayShareList = ref<boolean>(false)
+const addOverlay = ref<boolean>(false)
+const prevListId = ref(route.params.id)
 
 onBeforeMount(async () => {
   listId.value = route.params.id as string
@@ -44,6 +47,33 @@ onBeforeMount(async () => {
     
 });
 
+watch(() => route.params.id, (newVal) => {  
+  if(prevListId.value != route.params.id) {
+    console.log('hej?');
+
+    listId.value = route.params.id as string
+    if (!listId) {
+      router.push('/');
+      return;
+    }
+    
+    const docRef = doc(db, "lists", listId.value);
+    onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists() && docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid) != -1) {
+        list.value = docSnap.data();
+        newTitle.value = list.value.name
+        loader.value = false;
+        console.log('NUSÅ');
+        
+      } else {
+        // Redirect / if the list doesnt exist or if the user does not have access to the list
+        router.push('/')
+      }
+    });
+    return { list };
+  }
+  })
+  
 const updateAmount = async (item : Shoppinglist, newAmount : number) => {
   const docRef = doc(db, "lists", listId.value);
   let updatedItem = item
@@ -147,9 +177,13 @@ const handleShareList: () => void = () => {
     
 }
 
+const handleOverlay: () => void = () => { 
+  addOverlay.value = !addOverlay.value
+}
+
 </script>
 <template>
-    <Navbar param="list" @toggleShare="handleShareList"/>
+    <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
     <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
     <section v-if="loader">
     <p>loading..</p>
@@ -210,6 +244,7 @@ const handleShareList: () => void = () => {
           <p class="delete__option" @click="handleDeleteChosen">Delete {{ deleteArr.length }}</p>
         </div>
     </div>
+    <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </div>
 </template>
 

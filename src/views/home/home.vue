@@ -114,22 +114,14 @@ const removeUser: (listId: string, users: string[], e : Event) => Promise<void> 
   }
 }
   
-const handleOverlay: (e:Event) => void = (e) => {
-  e.stopPropagation()
-  
-  addOverlay.value = !addOverlay.value
-}
-
-const handleOverlasy: (e:Event) => void = (e) => {
-  console.log(addOverlay.value);
-  
+const handleOverlay: () => void = () => { 
   addOverlay.value = !addOverlay.value
 }
 
 </script>
 <template>
   <section class="home">
-    <Navbar param="home" @click="handleOverlasy" />
+    <Navbar param="home" @click="handleOverlay" />
     <div class="lists--container" v-if="!loader">
     <h2>{{ auth.currentUser?.displayName }}</h2>
     <section class="list--container">

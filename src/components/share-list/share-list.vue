@@ -154,19 +154,22 @@ const removeAdded: (user : User) => void = (user) => {
                 <label for="search">Search user</label>
                 <div class="search__found" :style="{ display : foundUsers.length <= 0 ? 'none' : 'flex'}" >
                 <div class="search__user" v-for="user in foundUsers" @click="addUser(user)" >
-                    <p>{{ user.name }}</p>
+                    <div class="search__user--info">
+                        <p class="name">{{ user.name }}</p>
+                        <p class="email">{{ user.email }}</p>
+                    </div>
                     <img :src="user.img" alt="">
                 </div>
                 </div>
             </div>
             <div class="share__users">
                 <div class="share__current" v-for="user in listUsers">
-                    <div class="share__user">
+                    <div class="share__user" v-if="user.id != auth.currentUser?.uid && auth.currentUser?.uid == props.author.id">
                         <p>{{ user.name }}</p>
                         <img :src="user.img" alt="">
                     </div>
-                    <div class="user-remove" v-if="auth.currentUser?.uid == props.author.id" @click="removeUser(user)"><font-awesome-icon icon="trash-can"/></div>
-                    <div class="user-remove" v-else-if="auth.currentUser?.uid == user.id" @click="removeUser(user)"><p>Leave</p></div>
+                    <div class="user-remove" v-if="auth.currentUser?.uid == props.author.id && user.id != auth.currentUser?.uid " @click="removeUser(user)"><font-awesome-icon icon="trash-can"/></div>
+                    <div class="user-remove" v-if="auth.currentUser?.uid == user.id && user.id != auth.currentUser?.uid" @click="removeUser(user)"><p>Leave</p></div>
                 </div>
                 <div class="share__added" v-if="addedUsers.length > 0">
                     <p>New users</p>

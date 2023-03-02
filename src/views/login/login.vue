@@ -2,7 +2,7 @@
 import LoginSidepanel from "@/components/login-sidepanel/login-sidepanel.vue";
 import Button from "@/components/button/button.vue";
 import logo from "@/assets/logo.svg";
-import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence   } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence } from "firebase/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "@/firebase";
@@ -33,6 +33,7 @@ const signInWithGoogle = () => {
           id: user.uid,
           name : user.displayName,
           img: user.photoURL,
+          emai: user.email
         });
       }
     router.push('/')

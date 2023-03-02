@@ -4,6 +4,7 @@ import logoLight from '@/assets/logo-light.svg'
 import { useRouter } from 'vue-router';
 import { getAuth, signOut } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import useDetectOutsideClick from '@/composables/clickOutsideComponent';
 import { ref } from 'vue';
 
 type NavProps = {
@@ -15,6 +16,7 @@ const emit = defineEmits(['click', 'toggleShare']);
 const router = useRouter()
 const auth = getAuth();
 const displayUserMenu = ref(false)
+const userMenuRef = ref()
 
 const handleShareList: () => void = () => { 
   emit('toggleShare')
@@ -39,13 +41,12 @@ const handleList: () => void = () => {
 
 const handleNewList: () => void = () => { 
   toggleUserMenu()
-  // toggle new list from app isntead?
-  router.push('/').then(() => {
-    emit('click')
-  }
-    
-  )
+  emit('click')
 }
+
+useDetectOutsideClick(userMenuRef, () => {
+  displayUserMenu.value = false
+});
 
 </script>
 <template>
@@ -55,7 +56,7 @@ const handleNewList: () => void = () => {
     <Button v-if="props.param == 'list'" text="Share" variant="primary" @click="handleShareList" />
       <font-awesome-icon v-if="props.param == 'home'" icon="plus" @click="emit('click')" />
       <div>      
-      <div class="navbar__user">
+      <div class="navbar__user" ref="userMenuRef">
         <font-awesome-icon icon="circle-user" class="user" @click="toggleUserMenu" />
         <div class="navbar__user--menu" v-if="displayUserMenu">
           <p @click="handleList">Lists</p>
