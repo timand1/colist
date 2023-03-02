@@ -1,0 +1,85 @@
+@use '@/styles/colors';
+
+.add-item {
+    width: 100%;
+    .add-item__headline {
+        display: flex;
+        cursor: pointer;
+        justify-content: space-between;
+        padding: 14px 10vw;
+        h2 {
+            font-size: 18px;
+        }
+        svg {
+            font-size: 18px;
+            color: colors.$primary-font;
+        }
+    }
+
+    .add-item__form {
+        max-height: 0;
+        transition: all 1s;
+        overflow: hidden;
+        margin: 0 1em 1em 1em;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        // background-color: colors.$secondary-bg;
+        outline: 1px solid colors.$primary-font;
+        outline-offset: -1px;
+        border-radius: 8px;
+        // box-shadow: 2px 2px 10px colors.$primary-font;
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+            input {
+            all: unset;
+            outline: 1px solid colors.$gray-font;
+            outline-offset: -1px;
+            border-radius: 4px;
+            padding: 10px 12px;
+            font-size: 18px;
+            &:focus {
+                outline-color: colors.$primary;
+            }
+        }
+        label {
+            pointer-events: none;
+            position: absolute;
+            top: calc(50% - 7px);
+            left: 10px;
+            font-size: 14px;
+            transition: all 150ms;
+        }
+        
+        input:focus ~ label, input:not(:placeholder-shown) ~label {
+            font-size: 14px;
+            padding: 4px 4px 0 4px;
+            background-color: colors.$primary-bg;
+            top: -12px;
+            z-index: 1;
+        }
+    }
+    }
+    .add-item__form--active {
+        padding: 1em;
+        max-height: 300px;
+    }
+    .add-item__buttons {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+@media screen and (min-width: 786px) {
+    .add-item {
+        margin: 0 auto;
+        width: clamp(300px, 30vw, 400px);
+        .add-item__headline {
+
+            padding: 1em;
+        }
+    }
+}

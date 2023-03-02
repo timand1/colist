@@ -4,9 +4,8 @@ import { onBeforeMount, onMounted, ref, watch, watchEffect } from 'vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import { db } from '@/firebase';
-import { doc, getDocs, onSnapshot, collection, query, where, updateDoc, deleteField, deleteDoc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, updateDoc, deleteField, deleteDoc, getDoc } from 'firebase/firestore';
 import { type List } from '@/helpers/types/types'
-import { setActiveListId } from '@/composables/activeList';
 import router from '@/router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
@@ -90,8 +89,7 @@ watchEffect(() => {
 })
 
 const goToList: (listId: string) => void = (listId) => {
-  setActiveListId(listId)
-  router.push('/list')
+  router.push(`/list/${listId}`)
 }
 
 const deleteList: (listId: string, e:Event) => Promise<void> = async (listId, e) => {
@@ -130,7 +128,7 @@ const handleOverlasy: (e:Event) => void = (e) => {
 </script>
 <template>
   <section class="home">
-    <Navbar param="home" @click=" handleOverlasy" />
+    <Navbar param="home" @click="handleOverlasy" />
     <div class="lists--container" v-if="!loader">
     <h2>{{ auth.currentUser?.displayName }}</h2>
     <section class="list--container">

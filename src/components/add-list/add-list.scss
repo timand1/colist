@@ -52,10 +52,6 @@
                 top: -12px;
                 z-index: 1;
             }
-        
-            input:focus ~svg {
-                color: colors.$secondary-bg;                             
-            } 
         }
         .button-container {
             display: flex;

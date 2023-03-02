@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import { listTypes } from '@/helpers/mixins/jsMixins';
 import Button from '@/components/button/button.vue';
-import { setActiveListId } from '@/composables/activeList';
 import { doc, setDoc } from "firebase/firestore"; 
 import { auth, db } from '@/firebase';
 import { useRouter } from "vue-router";
@@ -12,6 +11,7 @@ type AddItemProps = {
   displayOverlay: boolean
 };
 
+// CHECK IF NEEDED
 const props = defineProps<AddItemProps>()
 
 
@@ -37,8 +37,7 @@ const createNewList: () => Promise<void> = async () => {
       users: [auth.currentUser?.uid],
       type: listtype.value
     })
-    setActiveListId(uniqueId)
-    router.push(`/list`)
+    router.push(`/list/${uniqueId}`)
   } else {
     console.log('wtf dude');
     

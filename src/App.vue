@@ -16,7 +16,6 @@ onBeforeMount(() => {
     
     if (isAuthenticated.value) {
       console.log('Logged in');
-      router.push('/')
       
     } else {
       console.log('Not Logged In');
@@ -55,7 +54,6 @@ const handleSignOut = () => {
 
 </script>
 <template>
-  <button v-if="auth.currentUser" @click="handleSignOut">Logga ut</button>
   <RouterView />
 </template>
 
