@@ -80,12 +80,13 @@
                 justify-content: space-between;
                 align-items: center;
                 height: 60px;
+                border-radius: 8px;
                 img {
                     max-height: 30px;
                     border-radius: 50%;
                 }
                 &:hover {
-                    background-color: colors.$gray-font;
+                    background-color: colors.$hover-light;
                 }
 
                 .email {
@@ -94,6 +95,12 @@
                 }
             }
 
+        }
+        .share__added {
+            .share__added--headline {
+                margin-bottom: 12px;
+                font-size: 18px;
+            }
         }
         .share__users {
             width: 100%;

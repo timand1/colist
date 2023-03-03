@@ -163,6 +163,7 @@ const removeAdded: (user : User) => void = (user) => {
                 </div>
             </div>
             <div class="share__users">
+                <p class="users--headline" v-if="listUsers.length > 0 && auth.currentUser?.uid != props.author.id">Current users</p>
                 <div class="share__current" v-for="user in listUsers">
                     <div class="share__user" v-if="auth.currentUser?.uid != props.author.id || user.id != props.author.id">
                         <img :src="user.img" alt="">
@@ -175,7 +176,7 @@ const removeAdded: (user : User) => void = (user) => {
                     <div class="user-remove" v-if="auth.currentUser?.uid != props.author.id && user.id == auth.currentUser?.uid" @click="removeUser(user)"><Button variant="ghost" text="Leave" /></div>
                 </div>
                 <div class="share__added" v-if="addedUsers.length > 0">
-                    <p>New users</p>
+                    <p class="share__added--headline">New users</p>
                     <div class="share__current" v-for="user in addedUsers">
                         <div class="share__user">
                             <div class="share__user--info">
@@ -184,7 +185,7 @@ const removeAdded: (user : User) => void = (user) => {
                             </div>
                             <img :src="user.img" alt="">
                         </div>
-                        <div class="user-remove" @click="removeAdded(user)"><font-awesome-icon icon="trash-can"/></div>
+                        <div class="user-remove" @click="removeAdded(user)" ><Button variant="ghost" text="Remove" /></div>
                     </div>
                 </div>
             </div>

@@ -49,7 +49,7 @@ onBeforeMount(async () => {
 
 watch(() => route.params.id, (newVal) => {  
   if(prevListId.value != route.params.id) {
-    console.log('hej?');
+    loader.value = true;
 
     listId.value = route.params.id as string
     if (!listId) {
@@ -63,18 +63,19 @@ watch(() => route.params.id, (newVal) => {
         list.value = docSnap.data();
         newTitle.value = list.value.name
         loader.value = false;
-        console.log('NUSÅ');
         
       } else {
         // Redirect / if the list doesnt exist or if the user does not have access to the list
+        loader.value = false;
         router.push('/')
       }
     });
     return { list };
   }
-  })
+})
   
 const updateAmount = async (item : Shoppinglist, newAmount : number) => {
+  loader.value = true;
   const docRef = doc(db, "lists", listId.value);
   let updatedItem = item
   updatedItem.amount = newAmount
@@ -85,7 +86,7 @@ const updateAmount = async (item : Shoppinglist, newAmount : number) => {
     await updateDoc(docRef, {
       list : updatedList
     });
-    console.log("Item updated successfully!");
+    loader.value = false;
   } catch (error) {
     console.error("Error updating item:", error);
   }
@@ -109,6 +110,7 @@ const addDeleteItem: (item : Shoppinglist | ToDoList | NumberedList | TimeList) 
   
 }
 const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = async (item) => {
+  loader.value = true;
   const updatedItem = {...item, done : !item.done}
   const docRef = doc(db, "lists", listId.value);
   const updatedList = list.value.list.map((oldItem : Shoppinglist) =>
@@ -118,33 +120,37 @@ const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = asy
     await updateDoc(docRef, {
       list : updatedList
     });
-    console.log("Item updated successfully!");
+    loader.value = false;
   } catch (error) {
     console.error("Error updating item:", error);
   }
 }
 
 const handleDeleteAll: () => Promise<void> = async () => {
+  loader.value = true;
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
       list : []
     });
-    console.log("Item updated successfully!");
+    loader.value = false;
   } catch (error) {
+    loader.value = false;
     console.error("Error updating item:", error);
   }
   closeDeleteMode()
 }
 
 const handleDeleteChosen: () => Promise<void> = async () => {
+  loader.value = true;
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
       list: arrayRemove(docRef, ...deleteArr.value),
     });
-    console.log('Items deleted successfully!');
+    loader.value = false;
   } catch (error) {
+    loader.value = false;
     console.error('Error deleting items:', error);
   }
   closeDeleteMode()
@@ -160,13 +166,15 @@ const changeTitle: () => void = () => {
 }
 
 const handleUpdateName: () => Promise<void> = async () => {
+  loader.value = true;
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
      name : newTitle.value
     });
-    console.log("List name successfully!");
+    loader.value = false;
   } catch (error) {
+    loader.value = false;
     console.error("Error updating name:", error);
   }
   updateName.value = !updateName.value
@@ -185,9 +193,7 @@ const handleOverlay: () => void = () => {
 <template>
     <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
     <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
-    <section v-if="loader">
-    <p>loading..</p>
-  </section>
+    <section v-if="loader" class="loader"></section>
   <div class="list" v-else>
   <div class="user-container">
     <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`">
@@ -211,31 +217,63 @@ const handleOverlay: () => void = () => {
     </div>
     <AddItem :type="list?.type" />
     <div class="item-container">
-      <div v-for="item in list?.list" class="item">
+      <section v-if="list.type == 'Shopping'">
+        <div v-for="item in list?.list" class="item">
         <div class="item__info--left">
-          <p class="item__name" v-if="item?.todo">{{ item?.todo }}</p>
           <p class="item__name">{{ item?.item }}</p>
           <p class="item__comment" v-if="item?.comment">{{ item?.comment }}</p>
-          <p class="item__comment" v-if="item?.date">{{ item?.date }}</p>
         </div>
           <div class="item__info--right">
-            <p class="item__comment" v-if="item?.time">at {{ item?.time }}</p>
-            <select  v-if="item?.amount" name="amount" @change="updateAmount(item, parseInt(($event.target as HTMLSelectElement).value))">
+            <select name="amount" @change="updateAmount(item, parseInt(($event.target as HTMLSelectElement).value))">
               <option v-for="amount in amountArr" :value="amount" :selected="item?.amount == amount">{{ amount }}</option>
             </select>
-
               <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
                 <input type="checkbox" name="remove" id="" @change="addDeleteItem(item)">
                 <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
               </div>
 
-              <div class="checkbox-container checkbox-container--check" v-else-if="item.hasOwnProperty('done')">
+              <div class="checkbox-container checkbox-container--check">
                 <input type="checkbox" name="check" :checked="item?.done" @change="handleCheckedItem(item)">
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
                 
               </div>
           </div>
       </div>
+      </section>
+      <section v-else-if="list.type == 'ToDo'">
+        <div v-for="item in list?.list" class="item">
+        <div class="item__info--left">
+          <p class="item__name">{{ item?.todo }}</p>
+          <p class="item__comment" v-if="item?.comment">{{ item?.comment }}</p>
+        </div>
+          <div class="item__info--right">
+              <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
+                <input type="checkbox" name="remove" id="" @change="addDeleteItem(item)">
+                <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
+              </div>
+
+              <div class="checkbox-container checkbox-container--check">
+                <input type="checkbox" name="check" :checked="item?.done" @change="handleCheckedItem(item)">
+                <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
+              </div>
+          </div>
+        </div>
+      </section>
+      <section v-else-if="list.type == 'Time'">
+        <div v-for="item in list?.list" class="item">
+        <div class="item__info--left">
+          <p class="item__name">{{ item?.item }}</p>
+          <p class="item__comment" v-if="item?.date">{{ item?.date }}</p>
+        </div>
+          <div class="item__info--right">
+            <p class="item__comment" v-if="item?.time">at {{ item?.time }}</p>
+              <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
+                <input type="checkbox" name="remove" id="" @change="addDeleteItem(item)">
+                <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
+              </div>
+          </div>
+        </div>
+      </section>
     </div>
     <div class="delete__menu" :class="deleteMode ? 'delete__menu--open' : 'delete__menu--closed'">
         <font-awesome-icon icon="trash-can"  v-if="!deleteMode"  @click="handleDeleteMode" />

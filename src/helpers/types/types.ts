@@ -35,6 +35,7 @@ export type User = {
 export type List = {
     author : User
     name : string
+    type: string
     id : string
     list : Shoppinglist[] | ToDoList[] | NumberedList[] | TimeList[] | []
     users : User[]

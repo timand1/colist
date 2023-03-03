@@ -27,7 +27,6 @@ const signInWithGoogle = () => {
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
       } else {
         await setDoc(doc(db, "users", user.uid), {
           id: user.uid,

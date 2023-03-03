@@ -14,52 +14,18 @@ const addOverlay = ref<boolean>(false)
 const lists = ref()
 const loader = ref<boolean>(true)
 
-onBeforeMount(async () => {
-  // const listsRef = collection(db, "lists");
-  // console.log(auth.currentUser);
-  
-  // console.log(listsRef);
-  
-// const authorQuery = query(listsRef, where("author", "==", auth.currentUser?.displayName));
-// const userQuery = query(listsRef, where("users", "array-contains", auth.currentUser?.displayName));
-  // const authorRef = db.collection("list").where("author", "array-contains", "auth.currentUser");
-
-  // userRef.get().then((querySnapshot) => {
-  // querySnapshot.forEach((doc) => {
-  //   console.log(doc.id, " => ", doc.data());
-  // });
-// });
-// console.log(authorQuery);
-
-
-
-// const matchingLists = await getDocs(authorQuery);
-// matchingLists.forEach((doc) => {
-//   console.log(doc.data());
-// });
-// console.log(matchingLists);
-
-
-
-})
 const isAuthenticated = ref(false)
 watch(() => auth, (newVal) => {  
   onAuthStateChanged(auth, (user) => {
     isAuthenticated.value = !!user
-    console.log(auth.currentUser?.displayName);
     if (isAuthenticated.value) {
       isAuthenticated.value = true;
-
-      router.push('/')
-      console.log('Logged in');
-      
+      router.push('/')      
     } else {
-      console.log('Not Logged In');
       isAuthenticated.value = false;
       router.push('/login')
     }
   })
-
 })
 
 watchEffect(() => {
@@ -82,7 +48,6 @@ watchEffect(() => {
     });
       
     } else {
-      console.log('Not Logged In');
       isAuthenticated.value = false;
       router.push('/login')
     }
@@ -96,11 +61,14 @@ const goToList: (listId: string) => void = (listId) => {
 
 const deleteList: (listId: string, e:Event) => Promise<void> = async (listId, e) => {
   e.stopPropagation()
+  loader.value = true;
   await deleteDoc(doc(db, 'lists', listId))
+  loader.value = false;
 }
 
 const removeUser: (listId: string, users: string[], e : Event) => Promise<void> = async (listId, users, e) => {
   e.stopPropagation()
+  loader.value = true;
   const listRef = doc(db, "lists", listId);  
   const listDoc = await getDoc(listRef);
   if (listDoc.exists()) {    
@@ -108,7 +76,7 @@ const removeUser: (listId: string, users: string[], e : Event) => Promise<void> 
     const updatedUsers = currentUsers.filter((user : User) => user.id !== auth.currentUser?.uid);
     await updateDoc(listRef, { users: updatedUsers });
 
-    console.log(`Removed ${auth.currentUser?.displayName} from the users array of list ${listId}`);
+    loader.value = false;
   } else {
     console.log(`List ${listId} does not exist`);
   }
@@ -123,22 +91,20 @@ const handleOverlay: () => void = () => {
   <section class="home">
     <Navbar param="home" @click="handleOverlay" />
     <div class="lists--container" v-if="!loader">
-    <h2>{{ auth.currentUser?.displayName }}</h2>
-    <section class="list--container">
-    <div v-for="list in lists" @click="goToList(list.id)" class="list">
-      <div class="list--info">
-        <h2>{{ list.name }}</h2>
-        <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
-        <p>{{ list.type }}</p>
-      </div>
-      <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
-      <div class="list--remove" v-else @click="removeUser(list.id, list.users, $event)" ><p>Leave</p></div>
+      <h2>{{ auth.currentUser?.displayName }}</h2>
+      <section class="list--container">
+        <div v-for="list in lists" @click="goToList(list.id)" class="list">
+          <div class="list--info">
+            <h2>{{ list.name }}</h2>
+            <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
+            <p>{{ list.type }} - {{ list.list.length }} items</p>
+          </div>
+          <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
+          <div class="list--remove" v-else @click="removeUser(list.id, list.users, $event)" ><p>Leave</p></div>
+        </div>
+      </section>
     </div>
-    </section>
-  </div>
-  <section v-else>
-    <p>loading..</p>
-  </section>
+    <section v-else class="loader"></section>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </section>
 </template>

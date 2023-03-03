@@ -1,0 +1,17 @@
+@use '@/styles/colors';
+
+.error {
+    max-width: 1000px;
+    margin: 100px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 40px;
+    padding: 40px;
+    border-radius: 12px;
+    background-color: colors.$secondary-bg;
+    border: 2px solid colors.$primary-accent;
+    outline: 2px solid colors.$primary-accent;
+    outline-offset: -10px;
+}
