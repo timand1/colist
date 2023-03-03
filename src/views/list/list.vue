@@ -24,6 +24,8 @@ const loader = ref<boolean>(true)
 const displayShareList = ref<boolean>(false)
 const addOverlay = ref<boolean>(false)
 const prevListId = ref(route.params.id)
+const dragIndex = ref<number>(0); // old position
+const dragItem = ref<HTMLDivElement | null >();
 
 onBeforeMount(async () => {
   listId.value = route.params.id as string
@@ -189,6 +191,91 @@ const handleOverlay: () => void = () => {
   addOverlay.value = !addOverlay.value
 }
 
+const dragStart: (index: number) => void = (index) => {   
+  dragIndex.value = index;
+  dragItem.value = list.value.list[index];  
+}
+
+const drop: (index: number) => Promise<void> = async (index) => { 
+  if (index === dragIndex.value) {
+    return;
+  };
+  
+  const newList = [...list.value.list];
+  newList.splice(dragIndex.value, 1);
+  newList.splice(index, 0, dragItem.value);
+  list.value.list = newList;
+  loader.value = true;
+
+  const docRef = doc(db, "lists", listId.value);
+  try {
+    await updateDoc(docRef, {
+     list : newList
+    });
+    loader.value = false;
+  } catch (error) {
+    loader.value = false;
+    console.error("Error updating list:", error);
+  }
+
+  dragIndex.value = 0;
+  dragItem.value = null;
+}
+
+const touchIndex = ref<number | null>(null);
+const touchStartX = ref<number>(0);
+const touchStart: (index:number, e:any) => void = (index, e) => {
+  touchIndex.value = index;
+  touchStartX.value = e.touches[0].clientX;
+}
+
+const touchEnd: (index:number, e:any, id: string) => Promise<void> = async (index, e, id) => {
+  if (index !== touchIndex.value) {
+    return;
+  }
+  transformItem.value = `translateX(0px)`
+  const touchEndX = e.changedTouches[0].clientX;
+  const touchDistance = touchEndX - touchStartX.value;
+  
+  if (touchDistance > 70) {
+    const newList = [...list.value.list];
+    newList.splice(index, 1);
+    list.value.list = newList;
+
+    const docRef = doc(db, "lists", listId.value);
+    try {
+      await updateDoc(docRef, {
+      list : newList
+    });
+    loader.value = false;
+    } catch (error) {
+      loader.value = false;
+      console.error("Error updating list:", error);
+    }
+  }
+  
+  touchIndex.value = null;
+  touchStartX.value = 0;
+  const element = document.getElementById(id);
+if (element) {
+  element.style.transform = `translateX(${0}px)`;
+}
+}
+const transformItem = ref()
+const touchMove: (index:number, e:any, id: string) => Promise<void> = async (index, e, id) => {
+  if (index !== touchIndex.value) {
+    return;
+  }
+
+  const touchCurrentX = e.touches[0].clientX;
+  const touchDistance = touchCurrentX - touchStartX.value;
+  const element = document.getElementById(id);
+if (element) {
+  element.style.transform = `translateX(${touchDistance}px)`;
+}
+
+}
+
 </script>
 <template>
     <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
@@ -218,7 +305,16 @@ const handleOverlay: () => void = () => {
     <AddItem :type="list?.type" />
     <div class="item-container">
       <section v-if="list.type == 'Shopping'">
-        <div v-for="item in list?.list" class="item">
+        <div v-for="(item, index) in list?.list" class="item" 
+          :id="item.id"
+          draggable="true"
+          @dragstart="dragStart(index)"
+          @dragover.prevent
+          @drop="drop(index)"
+          @touchstart="touchStart(index, $event)"
+          @touchend="touchEnd(index, $event, item.id)"
+          @touchmove="touchMove(index, $event, item.id)"
+        >
         <div class="item__info--left">
           <p class="item__name">{{ item?.item }}</p>
           <p class="item__comment" v-if="item?.comment">{{ item?.comment }}</p>
@@ -232,7 +328,7 @@ const handleOverlay: () => void = () => {
                 <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
               </div>
 
-              <div class="checkbox-container checkbox-container--check">
+              <div class="checkbox-container checkbox-container--check" v-else>
                 <input type="checkbox" name="check" :checked="item?.done" @change="handleCheckedItem(item)">
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
                 
@@ -241,7 +337,16 @@ const handleOverlay: () => void = () => {
       </div>
       </section>
       <section v-else-if="list.type == 'ToDo'">
-        <div v-for="item in list?.list" class="item">
+        <div v-for="(item, index) in list?.list" class="item"
+          :id="item.id"
+          draggable="true"
+          @dragstart="dragStart(index)"
+          @dragover.prevent
+          @drop="drop(index)"
+          @touchstart="touchStart(index, $event)"
+          @touchend="touchEnd(index, $event, item.id)"
+          @touchmove="touchMove(index, $event, item.id)"
+        >
         <div class="item__info--left">
           <p class="item__name">{{ item?.todo }}</p>
           <p class="item__comment" v-if="item?.comment">{{ item?.comment }}</p>
@@ -252,7 +357,7 @@ const handleOverlay: () => void = () => {
                 <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
               </div>
 
-              <div class="checkbox-container checkbox-container--check">
+              <div class="checkbox-container checkbox-container--check" v-else>
                 <input type="checkbox" name="check" :checked="item?.done" @change="handleCheckedItem(item)">
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
               </div>
@@ -260,7 +365,16 @@ const handleOverlay: () => void = () => {
         </div>
       </section>
       <section v-else-if="list.type == 'Time'">
-        <div v-for="item in list?.list" class="item">
+        <div v-for="(item, index) in list?.list" class="item"
+          :id="item.id"
+          draggable="true"
+          @dragstart="dragStart(index)"
+          @dragover.prevent
+          @drop="drop(index)"
+          @touchstart="touchStart(index, $event)"
+          @touchend="touchEnd(index, $event, item.id)"
+          @touchmove="touchMove(index, $event, item.id)"
+        >
         <div class="item__info--left">
           <p class="item__name">{{ item?.item }}</p>
           <p class="item__comment" v-if="item?.date">{{ item?.date }}</p>

@@ -4,6 +4,9 @@
 
 .home {
     margin-top: 5em;
+    .home__header {
+        text-align: center;
+    }
     .lists--container {
         display: flex;
         flex-direction: column;

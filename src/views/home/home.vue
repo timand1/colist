@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { onBeforeMount, onMounted, ref, watch, watchEffect } from 'vue';
+import { ref, watch, watchEffect } from 'vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import { db } from '@/firebase';
@@ -92,7 +92,10 @@ const handleOverlay: () => void = () => {
   <section class="home">
     <Navbar param="home" @click="handleOverlay" />
     <div class="lists--container" v-if="!loader">
-      <h2>{{ auth.currentUser?.displayName }}</h2>
+        <div class="home__header">
+          <h2>All lists</h2>
+          <h3><font-awesome-icon icon="circle-user" /> {{ auth.currentUser?.displayName }}</h3>
+        </div>
       <section class="list--container">
         <div v-for="list in lists" @click="goToList(list.id)" class="list">
           <div class="list--info">

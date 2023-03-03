@@ -71,9 +71,10 @@ const handleAddItem: () => Promise<void> = async () => {
     });
 
     // Clear input fields
-    for (const key in userInput) {
+    for (const key in userInput) {      
         userInput[key] = '';
     }
+        
     props.type == 'Shopping' ? userInput.amount = 1 : null
 }
 

@@ -21,6 +21,10 @@
         color: colors.$primary-font-dark;
         font-size: 22px;
         cursor: pointer;
+        transition: all 0.2s;
+        &:hover {
+            color: colors.$primary;
+        }
     }
     .navbar--right {
         display: flex;
@@ -31,7 +35,7 @@
         }
         .navbar__user--menu {
             position: absolute;
-            bottom: -calc((12px * 3) + (1px * 2) + (4px * 6) + (4px * 4));;
+            bottom: calc((-12px * 3) + (-1px * 2) + (-4px * 6) + (-4px * 4) - 4px);
             left: -20px;
             width: max-content;
             border-radius: variables.$radius-m;
@@ -47,16 +51,16 @@
                 padding: 4px 8px;
                 color: colors.$primary-font;                
                 &:hover {
-                    background-color: colors.$gray-font;
+                    background-color: colors.$hover-light;
                 }
             }
             p:first-of-type {
-                border-top-right-radius: variables.$radius-m;
-                border-top-left-radius: variables.$radius-m;
+                border-top-right-radius: calc(variables.$radius-m - 2px);
+                border-top-left-radius: calc(variables.$radius-m - 2px);
             }
             p:last-of-type {
-                border-bottom-right-radius: variables.$radius-m;
-                border-bottom-left-radius: variables.$radius-m;
+                border-bottom-right-radius: calc(variables.$radius-m - 2px);
+                border-bottom-left-radius: calc(variables.$radius-m - 2px);
             }
             .divider {
                 width: 40px;

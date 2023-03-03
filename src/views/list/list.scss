@@ -39,6 +39,7 @@
     }
     .item-container {
         width: 100%;
+        cursor: grab;
         section {            
             display: flex;
             flex-direction: column;

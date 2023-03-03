@@ -9,7 +9,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    @include grid-center();
+    @include mixins.grid-center();
     background-color: colors.$overlay;
     z-index: 99999;
     .share {
