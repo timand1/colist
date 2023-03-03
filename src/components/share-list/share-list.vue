@@ -33,7 +33,6 @@ watch(() => props.users, (newVal) => {
 const updateUsers: () => Promise<void> = async () => {
     const listId : string = route.params.id as string
     // Add chosen user to the user array in the list
-    console.log([...listUsers.value, ...addedUsers.value]);
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
@@ -55,7 +54,7 @@ const removeUser: (user: User) => Promise<void> = async (user) => {
     await updateDoc(docRef, {
         users: arrayRemove(docRef, {name : user.name, id : user.id, img : user.img}),
     });
-        console.log('User removed successfully!');
+
     } catch (error) {
         console.error('Error adding users:', error);
     }
@@ -70,18 +69,14 @@ const searchUser: () => Promise<void> = async () => {
 
 const searchDatabase = debounce(async () => {    
     let words : string | string[] = userInput.value.split(' ');
-      const capitalizedWords = words.map(word => {
+    const capitalizedWords = words.map(word => {
         const firstLetter = word.charAt(0);
         const restOfWord = word.slice(1);
         return `${firstLetter.toUpperCase()}${restOfWord}`;
-      });
-      words = capitalizedWords.join(' ')
-      console.log(words);
-      
-      const q = query(
-      collection(db, "users"),
-      where("name", "<=", words)
-    );
+    });
+    words = capitalizedWords.join(' ')   
+
+    const q = query(collection(db, "users"),where("name", "<=", words));
 
     try {
       const querySnapshot = await getDocs(q);      

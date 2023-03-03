@@ -1,4 +1,6 @@
 @use '@/styles/colors';
+@use '@/styles/variables';
+
 @import url('https://fonts.googleapis.com/css2?family=Handlee&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 * {
@@ -9,10 +11,10 @@
 body {
     background-color: colors.$primary-bg;
     #app {
-        max-width: 1200px;
+        max-width: variables.$app-width;
         margin: 0 auto;
     }
-    h1, h2, h3, h4, h5, h6, p, span, a, button, input, select, option, label, .button {
-        font-family: 'Inter', sans-serif;
+    h1, h2, h3, h4, h5, h6, p, span, a, button, input, select, option, label {
+        font-family: variables.$primary-font;
     }
 }

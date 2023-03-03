@@ -1,5 +1,6 @@
 @use '@/styles/colors';
 @use '@/styles/mixins';
+@use '@/styles/variables';
 
 .list {
     margin-top: 5em;
@@ -9,7 +10,7 @@
         .user-image {
             width: 20px;
             height: 20px;
-            border-radius: 50%;
+            border-radius: variables.$radius-round;
             transform: translateX(-6px);
             &:first-child {
                 transform: translateX(0);
@@ -17,21 +18,16 @@
         }
     }
     .list__header {
-        display: flex;
+        @include mixins.flexbox();
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
         .list__header--title {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            @include mixins.flexbox();
             gap: 10px;
             .icon {
                 width: 30px;
                 height: 30px;
-                border-radius: 50%;
-                display: grid;
-                place-items: center;
+                border-radius: variables.$radius-round;
+                @include mixins.grid-center();
             }
             .check {
                 background-color: colors.$success;
@@ -42,76 +38,76 @@
         }
     }
     .item-container {
-            width: 100%;
+        width: 100%;
+        section {            
             display: flex;
             flex-direction: column;
             gap: 12px;
-        .item {
-            margin: 0 10px;
-            border-radius: 4px;
-            padding: 8px;
-            background-color: colors.$secondary-bg;      
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            .item__info--left {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                .item__comment {
-                    font-size: 12px;
-                }
-            }
-            .item__info--right {
-                display: flex;
-                gap: 10px;
-                .checkbox-container {
-                    position: relative;
-                    input {
-                        cursor: pointer;
-                        width: 25px;
-                        height: 25px;
-                        border-radius: 50%;
-                        background-color: colors.$gray-font;
-                        appearance: none;
-                        padding: 0;
-                        margin: 0;
-                        
-                    }
-                    label {
-                        display: none;
-                        position: absolute;
-                        pointer-events: none;
-                        svg {
-                            font-size: 15px;
-                            color: colors.$secondary-bg;
-                        }
-                    }
-                    input:checked ~ label {
-                        display: block;
+            .item {
+                margin: 0 10px;
+                border-radius: 4px;
+                padding: 8px;
+                background-color: colors.$secondary-bg;      
+                @include mixins.flexbox($justify : space-between);
+                height: 60px;
+                .item__info--left {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    .item__comment {
+                        font-size: 12px;
                     }
                 }
-                .checkbox-container--remove {
-                    input {
-                        &:checked {
-                            background-color: colors.$danger;
+                .item__info--right {
+                    display: flex;
+                    gap: 10px;
+                    .checkbox-container {
+                        position: relative;
+                        input {
+                            cursor: pointer;
+                            width: 25px;
+                            height: 25px;
+                            border-radius: variables.$radius-round;
+                            background-color: colors.$gray-font;
+                            appearance: none;
+                            padding: 0;
+                            margin: 0;
+                            
+                        }
+                        label {
+                            display: none;
+                            position: absolute;
+                            pointer-events: none;
+                            svg {
+                                font-size: 15px;
+                                color: colors.$secondary-bg;
+                            }
+                        }
+                        input:checked ~ label {
+                            display: block;
                         }
                     }
-                    label {
-                        top: 2.5px;
-                        left: 7px;
-                    }
-                }
-                .checkbox-container--check {
-                    input {
-                        &:checked {
-                            background-color: colors.$success;
+                    .checkbox-container--remove {
+                        input {
+                            &:checked {
+                                background-color: colors.$danger;
+                            }
                         }
-                    } 
-                    label {
-                        top: 2.5px;
-                        left: 5px;
+                        label {
+                            top: 2.5px;
+                            left: 7px;
+                        }
+                    }
+                    .checkbox-container--check {
+                        input {
+                            &:checked {
+                                background-color: colors.$success;
+                            }
+                        } 
+                        label {
+                            top: 2.5px;
+                            left: 5px;
+                        }
                     }
                 }
             }
@@ -126,11 +122,10 @@
         background-color: colors.$primary-accent;
     }
     .delete__menu--closed {
-        border-radius: 50%;
+        border-radius: variables.$radius-round;
         padding: 10px;
         cursor: pointer;
-        display: grid;
-        place-items: center;
+        @include mixins.grid-center();
         svg {
             color: colors.$secondary-bg;
         }
@@ -138,7 +133,7 @@
     .delete__menu--open {
         width: 300px;
         padding: 8px 14px;
-        border-radius: 12px;
+        border-radius: variables.$radius-l;
 
         .delete__menu--options {
             overflow: hidden;

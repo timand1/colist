@@ -35,7 +35,8 @@ watchEffect(() => {
       const userQuery = query(collection(db, "lists"), where("users", "array-contains", 
         { name : auth.currentUser?.displayName, 
           id: auth.currentUser?.uid, 
-          img: auth.currentUser?.photoURL 
+          img: auth.currentUser?.photoURL,
+          email: auth.currentUser?.email
         }
       ));
       loader.value = false

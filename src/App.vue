@@ -9,18 +9,11 @@ const isAuthenticated = ref(false)
 
 onBeforeMount(() => {
   
-  onAuthStateChanged(auth, (user) => {
-    
-    isAuthenticated.value = !!user
-    console.log(auth.currentUser?.displayName);
-    
-    if (isAuthenticated.value) {
-      console.log('Logged in');
-      
-    } else {
-      console.log('Not Logged In');
+  onAuthStateChanged(auth, (user) => {    
+    isAuthenticated.value = !!user    
+    if (!isAuthenticated.value) {
       router.push('/login')
-    }
+    } 
   })
 })
 

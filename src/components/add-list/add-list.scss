@@ -1,4 +1,6 @@
 @use '@/styles/colors';
+@use '@/styles/variables';
+@use '@/styles/mixins';
 
 .add-list__overlay {
     position: absolute;
@@ -11,30 +13,32 @@
     background-color: colors.$overlay;
     z-index: 99999;
     .add-list {
-        display: flex;
+        @include mixins.flexbox($justify : space-between);
         flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
         gap: 20px;
         width: calc(100% - 2em);
-        height: 35%;
+        height: 40%;
         background-color: colors.$primary-bg;
         padding: 2em;
         border-radius: 12px;
-        .input-container {
+        .input-container, .select-container {
             display: flex;
             flex-direction: column;
             position: relative;
             width: 100%;
             input, select {
-                all: unset;
+                all: unset;                
+                font-family: variables.$primary-font;
+                font-size: 16px;
                 outline: 1px solid colors.$gray-font;
                 outline-offset: -1;
-                border-radius: 4px;
+                border-radius: variables.$radius-s;
                 padding: 10px 12px;
-                font-size: 18px;
                 &:focus {
                     outline-color: colors.$primary;
+                }
+                option {
+                    font-size: 14px;
                 }
             }
             label {
@@ -53,6 +57,21 @@
                 top: -12px;
                 z-index: 1;
             }
+        }
+        .select-container {
+            margin-bottom: 40px;
+        }
+        .input-error {
+            input, select {
+                outline-color: colors.$danger;
+            }
+        }
+        .error-text {
+            position: absolute;
+            bottom: -34px;
+            left: 0;
+            font-size: 12px;
+            color: colors.$danger;
         }
         .button-container {
             display: flex;
