@@ -7,6 +7,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const auth = getAuth();
 const errorRef = ref<boolean>(false)
@@ -53,8 +54,13 @@ const signInWithGoogle = () => {
         <img :src="logo" alt="">
         <h2>CoList</h2>
       </div>
-        <Button text="Sign in With Google" variant="ghost" outline @click="signInWithGoogle"></Button>
-      <p v-if="errorRef">Something went wrong... Try again</p>
+          <div class="btn-container">
+            <button class="btn btn--google" @click="signInWithGoogle"><font-awesome-icon icon="fa-brands fa-google" /> Continue with Google</button>
+            <button class="btn btn--apple"><font-awesome-icon icon="fa-brands fa-apple" /> Continue with Apple</button>
+            <button class="btn btn--facebook"><font-awesome-icon icon="fa-brands fa-facebook-f" /> Continue with Facebook</button>
+            <button class="btn btn--github"><font-awesome-icon icon="fa-brands fa-github" /> Continue with GitHub</button>
+            <p v-if="errorRef">Something went wrong... Try again</p>
+        </div>
     </section>
   </section>
 </template>

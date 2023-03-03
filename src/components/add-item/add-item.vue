@@ -74,8 +74,8 @@ const handleAddItem: () => Promise<void> = async () => {
     for (const key in userInput) {      
         userInput[key] = '';
     }
-        
-    props.type == 'Shopping' ? userInput.amount = 1 : null
+
+    props.type == 'Shopping' ? userInput = { amount : 1 } : null
 }
 
 </script>
@@ -92,7 +92,7 @@ const handleAddItem: () => Promise<void> = async () => {
             <label :for="input.name">{{ input.label }}</label>
         </div>
         <div class="add-item__buttons">
-            <Button variant="danger" outline text="Close" @click="toggleAddItem" />
+            <!-- <Button variant="danger" outline text="Close" @click="toggleAddItem" /> -->
             <Button type="submit" variant="primary" text="Add" />
         </div>
     </form>

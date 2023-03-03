@@ -5,7 +5,7 @@
     path {
       stroke: black;
     }
-    @media (prefers-color-scheme: dark) {
+    body.dark {
       path {
         stroke: white;
       }

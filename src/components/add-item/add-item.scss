@@ -74,6 +74,10 @@
     .add-item__buttons {
         display: flex;
         justify-content: space-between;
+        gap: 2em;
+        button {
+            flex: 1;
+        }
     }
 }
 

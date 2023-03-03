@@ -39,12 +39,15 @@
     }
     .item-container {
         width: 100%;
+        overflow-x: hidden;
         cursor: grab;
+
         section {            
             display: flex;
             flex-direction: column;
             gap: 12px;
             .item {
+                touch-action: none;
                 margin: 0 10px;
                 border-radius: 4px;
                 padding: 8px;
@@ -62,6 +65,10 @@
                 .item__info--right {
                     display: flex;
                     gap: 10px;
+                    select {
+                        border-radius: variables.$radius-s;
+                        align-self: center;
+                    }
                     .checkbox-container {
                         position: relative;
                         input {

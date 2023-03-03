@@ -26,6 +26,10 @@ const addOverlay = ref<boolean>(false)
 const prevListId = ref(route.params.id)
 const dragIndex = ref<number>(0); // old position
 const dragItem = ref<HTMLDivElement | null >();
+const transformItem = ref()
+const itemRefs = ref<HTMLElement[]>([]);
+const touchIndex = ref<number | null>(null);
+const touchStartX = ref<number>(0);
 
 onBeforeMount(async () => {
   listId.value = route.params.id as string
@@ -222,8 +226,6 @@ const drop: (index: number) => Promise<void> = async (index) => {
   dragItem.value = null;
 }
 
-const touchIndex = ref<number | null>(null);
-const touchStartX = ref<number>(0);
 const touchStart: (index:number, e:any) => void = (index, e) => {
   touchIndex.value = index;
   touchStartX.value = e.touches[0].clientX;
@@ -256,12 +258,9 @@ const touchEnd: (index:number, e:any, id: string) => Promise<void> = async (inde
   
   touchIndex.value = null;
   touchStartX.value = 0;
-  const element = document.getElementById(id);
-if (element) {
-  element.style.transform = `translateX(${0}px)`;
+  itemRefs.value[index].style.transform= `translateX(0px)`;
 }
-}
-const transformItem = ref()
+
 const touchMove: (index:number, e:any, id: string) => Promise<void> = async (index, e, id) => {
   if (index !== touchIndex.value) {
     return;
@@ -269,10 +268,7 @@ const touchMove: (index:number, e:any, id: string) => Promise<void> = async (ind
 
   const touchCurrentX = e.touches[0].clientX;
   const touchDistance = touchCurrentX - touchStartX.value;
-  const element = document.getElementById(id);
-if (element) {
-  element.style.transform = `translateX(${touchDistance}px)`;
-}
+  itemRefs.value[index].style.transform= `translateX(${touchDistance}px)`;
 
 }
 
@@ -306,7 +302,7 @@ if (element) {
     <div class="item-container">
       <section v-if="list.type == 'Shopping'">
         <div v-for="(item, index) in list?.list" class="item" 
-          :id="item.id"
+          :ref="(el) => { itemRefs[index] = el as HTMLElement }"
           draggable="true"
           @dragstart="dragStart(index)"
           @dragover.prevent
@@ -338,7 +334,7 @@ if (element) {
       </section>
       <section v-else-if="list.type == 'ToDo'">
         <div v-for="(item, index) in list?.list" class="item"
-          :id="item.id"
+          :ref="(el) => { itemRefs[index] = el as HTMLElement }"
           draggable="true"
           @dragstart="dragStart(index)"
           @dragover.prevent
@@ -366,7 +362,7 @@ if (element) {
       </section>
       <section v-else-if="list.type == 'Time'">
         <div v-for="(item, index) in list?.list" class="item"
-          :id="item.id"
+          :ref="(el) => { itemRefs[index] = el as HTMLElement }"
           draggable="true"
           @dragstart="dragStart(index)"
           @dragover.prevent

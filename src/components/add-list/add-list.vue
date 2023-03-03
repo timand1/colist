@@ -22,7 +22,8 @@ const createNewList: () => Promise<void> = async () => {
       author : {
         name : auth.currentUser?.displayName,
         id : auth.currentUser?.uid,
-        img : auth.currentUser?.photoURL
+        img : auth.currentUser?.photoURL,
+        email : auth.currentUser?.email
       },
       name: listname.value,
       id : uniqueId,
@@ -30,7 +31,8 @@ const createNewList: () => Promise<void> = async () => {
       users: [{
         name : auth.currentUser?.displayName,
         id : auth.currentUser?.uid,
-        img : auth.currentUser?.photoURL
+        img : auth.currentUser?.photoURL,
+        email : auth.currentUser?.email
       }],
       type: listtype.value
     })
