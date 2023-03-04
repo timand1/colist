@@ -17,6 +17,8 @@
     "firebase": "^9.17.1",
     "lodash": "^4.17.21",
     "sass": "^1.58.3",
+    "sortablejs": "^1.15.0",
+    "sortablejs-vue3": "^1.2.8",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },

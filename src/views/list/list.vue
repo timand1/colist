@@ -6,10 +6,11 @@ import ShareList from '@/components/share-list/share-list.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
 import { arrayRemove, doc, onSnapshot, updateDoc } from "firebase/firestore";
-import { onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Shoppinglist, ToDoList, NumberedList, User, TimeList } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
+import { Sortable } from "sortablejs-vue3"
 
 type ListItem = Shoppinglist | ToDoList | NumberedList | TimeList;
 
@@ -24,25 +25,34 @@ const loader = ref<boolean>(true)
 const displayShareList = ref<boolean>(false)
 const addOverlay = ref<boolean>(false)
 const prevListId = ref(route.params.id)
-const dragIndex = ref<number>(0); // old position
-const dragItem = ref<HTMLDivElement | null >();
-const transformItem = ref()
-const itemRefs = ref<HTMLElement[]>([]);
-const touchIndex = ref<number | null>(null);
-const touchStartX = ref<number>(0);
+const itemList = ref()
+let deleteArr = ref<ListItem[]>([])
+const sortable = ref<InstanceType<typeof Sortable> | null>(null);
 
 onBeforeMount(async () => {
+  getList()    
+});
+
+watch(() => route.params.id, (newVal) => {  
+  if(prevListId.value != route.params.id) {
+    loader.value = true;
+    getList()
+  }
+})
+
+const getList: () => void = () => {
   listId.value = route.params.id as string
   if (!listId) {
     router.push('/');
     return;
   }
-  
+
   const docRef = doc(db, "lists", listId.value);
   onSnapshot(docRef, (docSnap) => {
     if (docSnap.exists() && docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid) != -1) {
       list.value = docSnap.data();
       newTitle.value = list.value.name
+      itemList.value = list.value.list
       loader.value = false;
     } else {
       // Redirect / if the list doesnt exist or if the user does not have access to the list
@@ -50,35 +60,8 @@ onBeforeMount(async () => {
     }
   });
   return { list };
-    
-});
+}
 
-watch(() => route.params.id, (newVal) => {  
-  if(prevListId.value != route.params.id) {
-    loader.value = true;
-
-    listId.value = route.params.id as string
-    if (!listId) {
-      router.push('/');
-      return;
-    }
-    
-    const docRef = doc(db, "lists", listId.value);
-    onSnapshot(docRef, (docSnap) => {
-      if (docSnap.exists() && docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid) != -1) {
-        list.value = docSnap.data();
-        newTitle.value = list.value.name
-        loader.value = false;
-        
-      } else {
-        // Redirect / if the list doesnt exist or if the user does not have access to the list
-        loader.value = false;
-        router.push('/')
-      }
-    });
-    return { list };
-  }
-})
   
 const updateAmount = async (item : Shoppinglist, newAmount : number) => {
   loader.value = true;
@@ -107,14 +90,12 @@ const closeDeleteMode: () => void = () => {
   clearDeleteList()
 }
 
-let deleteArr = ref<ListItem[]>([])
 const addDeleteItem: (item : Shoppinglist | ToDoList | NumberedList | TimeList) => void = (item) => {
-
   // Check if item is already in the arr
   const foundIndex = deleteArr.value.findIndex(x => x.id == item.id)
   foundIndex != -1 ? deleteArr.value.splice(foundIndex, 1) : deleteArr.value.push(item)
-  
 }
+
 const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = async (item) => {
   loader.value = true;
   const updatedItem = {...item, done : !item.done}
@@ -187,91 +168,41 @@ const handleUpdateName: () => Promise<void> = async () => {
 }
 
 const handleShareList: () => void = () => {  
-  displayShareList.value = !displayShareList.value
-    
+  displayShareList.value = !displayShareList.value    
 }
 
 const handleOverlay: () => void = () => { 
   addOverlay.value = !addOverlay.value
 }
 
-const dragStart: (index: number) => void = (index) => {   
-  dragIndex.value = index;
-  dragItem.value = list.value.list[index];  
-}
-
-const drop: (index: number) => Promise<void> = async (index) => { 
-  if (index === dragIndex.value) {
-    return;
+const options = computed(() => {
+  return {
+    draggable: ".draggable",
+    animation: 250,
   };
-  
-  const newList = [...list.value.list];
-  newList.splice(dragIndex.value, 1);
-  newList.splice(index, 0, dragItem.value);
-  list.value.list = newList;
-  loader.value = true;
+});
+
+const moveItem = async (evt: any) => {
+  const newIndex = evt.newIndex;
+  const oldIndex = evt.oldIndex;
+
+  const newList = itemList.value;
+  const [removed] = newList.splice(oldIndex, 1);
+  newList.splice(newIndex, 0, removed);
+
+  itemList.value = [...newList];
 
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
      list : newList
-    });
+    });    
     loader.value = false;
   } catch (error) {
     loader.value = false;
     console.error("Error updating list:", error);
   }
-
-  dragIndex.value = 0;
-  dragItem.value = null;
-}
-
-const touchStart: (index:number, e:any) => void = (index, e) => {
-  touchIndex.value = index;
-  touchStartX.value = e.touches[0].clientX;
-}
-
-const touchEnd: (index:number, e:any, id: string) => Promise<void> = async (index, e, id) => {
-  if (index !== touchIndex.value) {
-    return;
-  }
-  transformItem.value = `translateX(0px)`
-  const touchEndX = e.changedTouches[0].clientX;
-  const touchDistance = touchEndX - touchStartX.value;
-  
-  if (touchDistance > 70) {
-    const newList = [...list.value.list];
-    newList.splice(index, 1);
-    list.value.list = newList;
-
-    const docRef = doc(db, "lists", listId.value);
-    try {
-      await updateDoc(docRef, {
-      list : newList
-    });
-    loader.value = false;
-    } catch (error) {
-      loader.value = false;
-      console.error("Error updating list:", error);
-    }
-  }
-  
-  touchIndex.value = null;
-  touchStartX.value = 0;
-  itemRefs.value[index].style.transform= `translateX(0px)`;
-}
-
-const touchMove: (index:number, e:any, id: string) => Promise<void> = async (index, e, id) => {
-  if (index !== touchIndex.value) {
-    return;
-  }
-
-  const touchCurrentX = e.touches[0].clientX;
-  const touchDistance = touchCurrentX - touchStartX.value;
-  itemRefs.value[index].style.transform= `translateX(${touchDistance}px)`;
-
-}
-
+};
 </script>
 <template>
     <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
@@ -299,92 +230,95 @@ const touchMove: (index:number, e:any, id: string) => Promise<void> = async (ind
       <p>Author - {{ list?.author.name }}</p>
     </div>
     <AddItem :type="list?.type" />
-    <div class="item-container">
-      <section v-if="list.type == 'Shopping'">
-        <div v-for="(item, index) in list?.list" class="item" 
-          :ref="(el) => { itemRefs[index] = el as HTMLElement }"
-          draggable="true"
-          @dragstart="dragStart(index)"
-          @dragover.prevent
-          @drop="drop(index)"
-          @touchstart="touchStart(index, $event)"
-          @touchend="touchEnd(index, $event, item.id)"
-          @touchmove="touchMove(index, $event, item.id)"
-        >
-        <div class="item__info--left">
-          <p class="item__name">{{ item?.item }}</p>
-          <p class="item__comment" v-if="item?.comment">{{ item?.comment }}</p>
-        </div>
-          <div class="item__info--right">
-            <select name="amount" @change="updateAmount(item, parseInt(($event.target as HTMLSelectElement).value))">
-              <option v-for="amount in amountArr" :value="amount" :selected="item?.amount == amount">{{ amount }}</option>
-            </select>
+      <Sortable
+        v-if="list.type == 'Shopping'"
+        :key="itemList"
+        :item-key="list.id"
+        :list="itemList"
+        :options="options"
+        class="item-container"
+        ref="sortable"
+        @end="moveItem"
+      >
+        <template #item="{element, index}">
+          <div class="draggable item" :key="element.id">
+            <div class="item__info--left">
+              <p class="item__name">{{ element?.item }}</p>
+              <p class="item__comment" v-if="element?.comment">{{ element?.comment }}</p>
+            </div>
+            <div class="item__info--right">
+              <select name="amount" @change="updateAmount(element, parseInt(($event.target as HTMLSelectElement).value))">
+                <option v-for="amount in amountArr" :value="amount" :selected="element?.amount == amount">{{ amount }}</option>
+              </select>
               <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
-                <input type="checkbox" name="remove" id="" @change="addDeleteItem(item)">
+                <input type="checkbox" name="remove" id="" @change="addDeleteItem(element)">
                 <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
               </div>
 
               <div class="checkbox-container checkbox-container--check" v-else>
-                <input type="checkbox" name="check" :checked="item?.done" @change="handleCheckedItem(item)">
+                <input type="checkbox" name="check" :checked="element?.done" @change="handleCheckedItem(element)">
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
-                
               </div>
+            </div>
           </div>
-      </div>
-      </section>
-      <section v-else-if="list.type == 'ToDo'">
-        <div v-for="(item, index) in list?.list" class="item"
-          :ref="(el) => { itemRefs[index] = el as HTMLElement }"
-          draggable="true"
-          @dragstart="dragStart(index)"
-          @dragover.prevent
-          @drop="drop(index)"
-          @touchstart="touchStart(index, $event)"
-          @touchend="touchEnd(index, $event, item.id)"
-          @touchmove="touchMove(index, $event, item.id)"
-        >
-        <div class="item__info--left">
-          <p class="item__name">{{ item?.todo }}</p>
-          <p class="item__comment" v-if="item?.comment">{{ item?.comment }}</p>
-        </div>
-          <div class="item__info--right">
-              <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
-                <input type="checkbox" name="remove" id="" @change="addDeleteItem(item)">
-                <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
-              </div>
+        </template>
+      </Sortable>
+      <Sortable
+        v-if="list.type == 'ToDo'"
+        :key="itemList"
+        :item-key="list.id"
+        :list="itemList"
+        :options="options"
+        class="item-container"
+        ref="sortable"
+        @end="moveItem"
+      >
+        <template #item="{element, index}">
+          <div class="draggable item" :key="element.id">
+            <div class="item__info--left">
+            <p class="item__name">{{ element?.todo }}</p>
+            <p class="item__comment" v-if="element?.comment">{{ element?.comment }}</p>
+          </div>
+            <div class="item__info--right">
+                <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
+                  <input type="checkbox" name="remove" id="" @change="addDeleteItem(element)">
+                  <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
+                </div>
 
-              <div class="checkbox-container checkbox-container--check" v-else>
-                <input type="checkbox" name="check" :checked="item?.done" @change="handleCheckedItem(item)">
-                <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
-              </div>
+                <div class="checkbox-container checkbox-container--check" v-else>
+                  <input type="checkbox" name="check" :checked="element?.done" @change="handleCheckedItem(element)">
+                  <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
+                </div>
+            </div>
           </div>
-        </div>
-      </section>
-      <section v-else-if="list.type == 'Time'">
-        <div v-for="(item, index) in list?.list" class="item"
-          :ref="(el) => { itemRefs[index] = el as HTMLElement }"
-          draggable="true"
-          @dragstart="dragStart(index)"
-          @dragover.prevent
-          @drop="drop(index)"
-          @touchstart="touchStart(index, $event)"
-          @touchend="touchEnd(index, $event, item.id)"
-          @touchmove="touchMove(index, $event, item.id)"
-        >
-        <div class="item__info--left">
-          <p class="item__name">{{ item?.item }}</p>
-          <p class="item__comment" v-if="item?.date">{{ item?.date }}</p>
-        </div>
-          <div class="item__info--right">
-            <p class="item__comment" v-if="item?.time">at {{ item?.time }}</p>
+        </template>
+      </Sortable>
+      <Sortable
+        v-if="list.type == 'Time'"
+        :key="itemList"
+        :item-key="list.id"
+        :list="itemList"
+        :options="options"
+        class="item-container"
+        ref="sortable"
+        @end="moveItem"
+      >
+        <template #item="{element, index}">
+          <div class="draggable item" :key="element.id">
+            <div class="item__info--left">
+              <p class="item__name">{{ element?.item }}</p>
+              <p class="item__comment" v-if="element?.date">{{ element?.date }}</p>
+            </div>
+            <div class="item__info--right">
+              <p class="item__comment" v-if="element?.time">at {{ element?.time }}</p>
               <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
-                <input type="checkbox" name="remove" id="" @change="addDeleteItem(item)">
+                <input type="checkbox" name="remove" id="" @change="addDeleteItem(element)">
                 <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
               </div>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </template>
+      </Sortable>
     <div class="delete__menu" :class="deleteMode ? 'delete__menu--open' : 'delete__menu--closed'">
         <font-awesome-icon icon="trash-can"  v-if="!deleteMode"  @click="handleDeleteMode" />
         <div class="delete__menu--options" v-else>

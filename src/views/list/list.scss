@@ -41,81 +41,78 @@
         width: 100%;
         overflow-x: hidden;
         cursor: grab;
-
-        section {            
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            .item {
-                touch-action: none;
-                margin: 0 10px;
-                border-radius: 4px;
-                padding: 8px;
-                background-color: colors.$secondary-bg;      
-                @include mixins.flexbox($justify : space-between);
-                height: 60px;
-                .item__info--left {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-                    .item__comment {
-                        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        .item {
+            touch-action: none;
+            margin: 0 10px;
+            border-radius: 4px;
+            padding: 8px;
+            background-color: colors.$secondary-bg;      
+            @include mixins.flexbox($justify : space-between);
+            height: 60px;
+            .item__info--left {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                .item__comment {
+                    font-size: 12px;
+                }
+            }
+            .item__info--right {
+                display: flex;
+                gap: 10px;
+                select {
+                    border-radius: variables.$radius-s;
+                    align-self: center;
+                }
+                .checkbox-container {
+                    position: relative;
+                    input {
+                        cursor: pointer;
+                        width: 25px;
+                        height: 25px;
+                        border-radius: variables.$radius-round;
+                        background-color: colors.$gray-font;
+                        appearance: none;
+                        padding: 0;
+                        margin: 0;
+                        
+                    }
+                    label {
+                        display: none;
+                        position: absolute;
+                        pointer-events: none;
+                        svg {
+                            font-size: 15px;
+                            color: colors.$secondary-bg;
+                        }
+                    }
+                    input:checked ~ label {
+                        display: block;
                     }
                 }
-                .item__info--right {
-                    display: flex;
-                    gap: 10px;
-                    select {
-                        border-radius: variables.$radius-s;
-                        align-self: center;
-                    }
-                    .checkbox-container {
-                        position: relative;
-                        input {
-                            cursor: pointer;
-                            width: 25px;
-                            height: 25px;
-                            border-radius: variables.$radius-round;
-                            background-color: colors.$gray-font;
-                            appearance: none;
-                            padding: 0;
-                            margin: 0;
-                            
-                        }
-                        label {
-                            display: none;
-                            position: absolute;
-                            pointer-events: none;
-                            svg {
-                                font-size: 15px;
-                                color: colors.$secondary-bg;
-                            }
-                        }
-                        input:checked ~ label {
-                            display: block;
+                .checkbox-container--remove {
+                    input {
+                        &:checked {
+                            background-color: colors.$danger;
                         }
                     }
-                    .checkbox-container--remove {
-                        input {
-                            &:checked {
-                                background-color: colors.$danger;
-                            }
-                        }
-                        label {
-                            top: 2.5px;
-                            left: 7px;
-                        }
+                    label {
+                        top: 2.5px;
+                        left: 7px;
                     }
-                    .checkbox-container--check {
-                        input {
-                            &:checked {
-                                background-color: colors.$success;
-                            }
-                        } 
-                        label {
-                            top: 2.5px;
-                            left: 5px;
+                }
+                .checkbox-container--check {
+                    input {
+                        &:checked {
+                            background-color: colors.$success;
                         }
+                    } 
+                    label {
+                        top: 2.5px;
+                        left: 5px;
                     }
                 }
             }
