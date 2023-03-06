@@ -23,7 +23,7 @@ const router = createRouter({
       component: List
     },
     {
-      path: '/*',
+      path: '/:pathMatch(.*)',
       name: 'error',
       component : Errorpage
     }
