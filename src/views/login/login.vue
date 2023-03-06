@@ -79,7 +79,7 @@ const signInWithFacebook = () => {
 const signInWithGitHub = () => {
   const provider = new GithubAuthProvider();
   signInWithPopup(auth, provider)
-  .then((result) => {
+  .then(async (result) => {
     // This gives you a GitHub Access Token. You can use it to access the GitHub API.
     const credential = GithubAuthProvider.credentialFromResult(result);
     const token = credential?.accessToken;
@@ -88,8 +88,18 @@ const signInWithGitHub = () => {
     const user = result.user;
     console.log(user);
     
-    // IdP data available using getAdditionalUserInfo(result)
-    // ...
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      } else {
+        await setDoc(doc(db, "users", user.uid), {
+          id: user.uid,
+          name : user.displayName,
+          img: user.photoURL,
+          emai: user.email
+        });
+      }
+    router.push('/')
   }).catch((error) => {
     // Handle Errors here.
     console.log(error);
