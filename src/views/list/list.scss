@@ -56,10 +56,11 @@
     }
     .delete__menu--closed {
         border-radius: variables.$radius-round;
-        padding: 10px;
+
         cursor: pointer;
         @include mixins.grid-center();
         svg {
+            padding: 10px;
             color: colors.$secondary-bg;
         }
     }
@@ -73,10 +74,14 @@
             white-space: nowrap;
             display: flex;
             justify-content: space-evenly;
-            color: colors.$primary-font-dark;
             gap: 4px;
             .delete__option {
+                flex: 1;
+                text-align: center;
                 cursor: pointer;
+            }
+            p {
+                color: colors.$primary-font-dark;
             }
         }
     }

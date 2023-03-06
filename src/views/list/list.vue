@@ -217,9 +217,8 @@ const moveItem = async (evt: any) => {
   const newList = itemList.value;
   const [removed] = newList.splice(oldIndex, 1);
   newList.splice(newIndex, 0, removed);
-
   itemList.value = [...newList];
-
+  
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
@@ -261,7 +260,7 @@ const moveItem = async (evt: any) => {
     <AddItem :type="list?.type" />
     <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
     <Sortable
-      :key="list.id"
+      :key="JSON.stringify(itemList)"
       :item-key="list.id"
       :list="itemList"
       :options="options"
@@ -299,8 +298,6 @@ const moveItem = async (evt: any) => {
           <p class="delete__option" @click="closeDeleteMode">Cancel</p>
           <p >|</p>
           <p class="delete__option" @click="handleDeleteAll">Delete All</p>
-          <!-- <p >|</p>
-          <p class="delete__option" @click="handleDeleteChosen">Delete {{ deleteArr.length }}</p> -->
         </div>
     </div>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />

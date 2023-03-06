@@ -27,7 +27,7 @@ const checkDarkmode: (dark : boolean) => void = (dark) => {
 
 <template>
     <div class="dark-mode" @click="toggleDarkmode">
-        <font-awesome-icon :icon="store ? 'moon' : 'sun'" />
+        <font-awesome-icon icon="moon" />
     </div>
 </template>
 
