@@ -25,12 +25,14 @@ const userInput = ref<string>('')
 const foundUsers = ref<User[]>([])
 const listUsers = ref(props.users)
 const addedUsers = ref<User[]>([])
+const errorRef = ref<boolean>(false)
 
 watch(() => props.users, (newVal) => {  
     listUsers.value = newVal
 })
 
 const updateUsers: () => Promise<void> = async () => {
+    errorRef.value ? errorRef.value = false : null;
     const listId : string = route.params.id as string
     // Add chosen user to the user array in the list
     const docRef = doc(db, "lists", listId);
@@ -42,13 +44,13 @@ const updateUsers: () => Promise<void> = async () => {
     handleCloseShare();
 
     } catch (error) {
-        console.error('Error adding users:', error);
+        errorRef.value = !errorRef.value;
     }
 };
 
 const removeUser: (user: User) => Promise<void> = async (user) => {
     const listId : string = route.params.id as string
-    
+    errorRef.value ? errorRef.value = false : null;
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
@@ -56,7 +58,7 @@ const removeUser: (user: User) => Promise<void> = async (user) => {
     });
 
     } catch (error) {
-        console.error('Error adding users:', error);
+        errorRef.value = !errorRef.value;
     }
 }
 
@@ -68,6 +70,7 @@ const searchUser: () => Promise<void> = async () => {
 }
 
 const searchDatabase = debounce(async () => {    
+    errorRef.value ? errorRef.value = false : null;
     let words : string | string[] = userInput.value.split(' ');
     const capitalizedWords = words.map(word => {
         const firstLetter = word.charAt(0);
@@ -87,7 +90,7 @@ const searchDatabase = debounce(async () => {
       popperInstance.value.update()
 
     } catch (err) {
-    //   FIXA
+        errorRef.value = !errorRef.value;
     }
 }, 500);
 
@@ -184,6 +187,7 @@ const removeAdded: (user : User) => void = (user) => {
                     </div>
                 </div>
             </div>
+            <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
             <div class="share__buttons">
                 <Button text="Cancel" variant="danger" outline @click="handleCloseShare" />
                 <Button text="Update" variant="primary" :disabled="addedUsers.length > 0 ? false : true" @click="updateUsers" />

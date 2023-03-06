@@ -2,7 +2,7 @@
 import LoginSidepanel from "@/components/login-sidepanel/login-sidepanel.vue";
 import Button from "@/components/button/button.vue";
 import logo from "@/assets/logo.svg";
-import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence, GithubAuthProvider, FacebookAuthProvider  } from "firebase/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "@/firebase";
@@ -12,9 +12,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 const auth = getAuth();
 const errorRef = ref<boolean>(false)
 const router = useRouter()
-const provider = new GoogleAuthProvider();
 
 const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
     errorRef.value ? errorRef.value = false : null
     setPersistence(auth, browserSessionPersistence)
   .then(() => {
@@ -44,6 +44,65 @@ const signInWithGoogle = () => {
 
   }
 
+const signInWithApple = () => {
+
+}
+
+const signInWithFacebook = () => {
+  const provider = new FacebookAuthProvider();
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    // The signed-in user info.
+    const user = result.user;
+
+    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+    const credential = FacebookAuthProvider.credentialFromResult(result);
+    const accessToken = credential?.accessToken;
+
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+  })
+  .catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = FacebookAuthProvider.credentialFromError(error);
+
+    // ...
+  });
+}
+
+const signInWithGitHub = () => {
+  const provider = new GithubAuthProvider();
+  signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+    const credential = GithubAuthProvider.credentialFromResult(result);
+    const token = credential?.accessToken;
+
+    // The signed-in user info.
+    const user = result.user;
+    console.log(user);
+    
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    console.log(error);
+    
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GithubAuthProvider.credentialFromError(error);
+    // ...
+  });
+}
+
 </script>
 
 <template>
@@ -56,9 +115,9 @@ const signInWithGoogle = () => {
       </div>
           <div class="btn-container">
             <button class="btn btn--google" @click="signInWithGoogle"><font-awesome-icon icon="fa-brands fa-google" /> Continue with Google</button>
-            <button class="btn btn--apple"><font-awesome-icon icon="fa-brands fa-apple" /> Continue with Apple</button>
-            <button class="btn btn--facebook"><font-awesome-icon icon="fa-brands fa-facebook-f" /> Continue with Facebook</button>
-            <button class="btn btn--github"><font-awesome-icon icon="fa-brands fa-github" /> Continue with GitHub</button>
+            <button class="btn btn--apple" @click="signInWithApple"><font-awesome-icon icon="fa-brands fa-apple" /> Continue with Apple</button>
+            <button class="btn btn--facebook" @click="signInWithFacebook"><font-awesome-icon icon="fa-brands fa-facebook-f" /> Continue with Facebook</button>
+            <button class="btn btn--github" @click="signInWithGitHub"><font-awesome-icon icon="fa-brands fa-github" /> Continue with GitHub</button>
             <p v-if="errorRef">Something went wrong... Try again</p>
         </div>
     </section>

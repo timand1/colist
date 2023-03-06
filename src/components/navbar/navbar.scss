@@ -30,6 +30,9 @@
         display: flex;
         align-items: center;
         gap: 1em;
+        .button {
+            padding: 4px 8px;
+        }
         .navbar__user {
             position: relative;
         }

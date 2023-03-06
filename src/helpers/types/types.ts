@@ -20,8 +20,9 @@ export type NumberedList = {
 }
 
 export type TimeList = {
-    item : string
-    placement : number
+    item: string
+    time: string
+    date? : number
     id: string
 }
 

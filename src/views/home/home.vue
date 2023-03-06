@@ -13,7 +13,8 @@ const auth = getAuth()
 const addOverlay = ref<boolean>(false)
 const lists = ref()
 const loader = ref<boolean>(true)
-
+  const errorRef = ref<boolean>(false)
+  
 const isAuthenticated = ref(false)
 watch(() => auth, (newVal) => {  
   onAuthStateChanged(auth, (user) => {
@@ -63,12 +64,18 @@ const goToList: (listId: string) => void = (listId) => {
 const deleteList: (listId: string, e:Event) => Promise<void> = async (listId, e) => {
   e.stopPropagation()
   loader.value = true;
-  await deleteDoc(doc(db, 'lists', listId))
+  errorRef.value ? errorRef.value = false : null;
+  try {
+    await deleteDoc(doc(db, 'lists', listId))
+  } catch {
+    errorRef.value = !errorRef.value;
+  }
   loader.value = false;
 }
 
 const removeUser: (listId: string, users: string[], e : Event) => Promise<void> = async (listId, users, e) => {
   e.stopPropagation()
+  errorRef.value ? errorRef.value = false : null;
   loader.value = true;
   const listRef = doc(db, "lists", listId);  
   const listDoc = await getDoc(listRef);
@@ -76,11 +83,10 @@ const removeUser: (listId: string, users: string[], e : Event) => Promise<void> 
     const currentUsers = listDoc.data().users;
     const updatedUsers = currentUsers.filter((user : User) => user.id !== auth.currentUser?.uid);
     await updateDoc(listRef, { users: updatedUsers });
-
-    loader.value = false;
   } else {
-    console.log(`List ${listId} does not exist`);
+    errorRef.value = !errorRef.value;
   }
+  loader.value = false;
 }
   
 const handleOverlay: () => void = () => { 
@@ -96,6 +102,7 @@ const handleOverlay: () => void = () => {
           <h2>All lists</h2>
           <h3><font-awesome-icon icon="circle-user" /> {{ auth.currentUser?.displayName }}</h3>
         </div>
+      <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
       <section class="list--container">
         <div v-for="list in lists" @click="goToList(list.id)" class="list">
           <div class="list--info">

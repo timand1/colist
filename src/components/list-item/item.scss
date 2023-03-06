@@ -1,0 +1,86 @@
+@use '@/styles/colors';
+@use '@/styles/variables';
+@use '@/styles/mixins';
+
+.item {
+    margin: 0 10px;
+    border-radius: 4px;
+    padding: 8px;
+    background-color: colors.$secondary-bg;      
+    @include mixins.flexbox($justify : space-between);
+    height: 60px;
+    .item__info--left {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .item__comment {
+            font-size: 12px;
+        }
+    }
+    .item__info--right {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        select {
+            border-radius: variables.$radius-s;
+            align-self: center;
+        }
+        .checkbox-container {
+            position: relative;
+            input, .checkbox-container--remove  {
+                cursor: pointer;
+                width: 25px;
+                height: 25px;
+                border-radius: variables.$radius-round;
+                background-color: colors.$gray-font;
+                appearance: none;
+                padding: 0;
+                margin: 0;
+                
+            }
+            label {
+                display: none;
+                position: absolute;
+                pointer-events: none;
+                svg {
+                    font-size: 15px;
+                    color: colors.$secondary-bg;
+                }
+            }
+            input:checked ~ label {
+                display: block;
+            }
+        }
+        .checkbox-container--remove {
+            position: relative;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            border-radius: variables.$radius-round;
+            background-color: colors.$gray-font;
+            padding: 0;
+            margin: 0;
+            background-color: colors.$primary-accent;
+
+            svg {
+                font-size: 12px;
+                top: 6px;
+                left: 7px;
+                position: absolute;
+                color: colors.$secondary-bg;
+            }
+        }
+        .checkbox-container--check {
+            input {
+                &:checked {
+                    background-color: colors.$success;
+                }
+            } 
+            label {
+                top: 2.5px;
+                left: 5px;
+            }
+        }
+    }
+}
+

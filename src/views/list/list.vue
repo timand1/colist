@@ -3,30 +3,33 @@ import AddItem from '@/components/add-item/add-item.vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import ShareList from '@/components/share-list/share-list.vue';
+import ShoppingItem from '@/components/list-item/shopping-item.vue';
+import TodoItem from '@/components/list-item/todo-item.vue';
+import TimeItem from '@/components/list-item/time-item.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
 import { arrayRemove, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist, ToDoList, NumberedList, User, TimeList } from '@/helpers/types/types';
+import { Shoppinglist, ToDoList, User, TimeList } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
 import { Sortable } from "sortablejs-vue3"
 
-type ListItem = Shoppinglist | ToDoList | NumberedList | TimeList;
+type ListItem = Shoppinglist | ToDoList | TimeList;
 
 const route = useRoute();
 const list = ref()
-const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
 const listId = ref<string>('')
-const deleteMode = ref(false)
-const updateName = ref(false)
-const newTitle = ref('')
+const deleteMode = ref<boolean>(false)
 const loader = ref<boolean>(true)
+const updateName = ref<boolean>(false)
+const newTitle = ref<string>('')
 const displayShareList = ref<boolean>(false)
 const addOverlay = ref<boolean>(false)
-const prevListId = ref(route.params.id)
-const itemList = ref()
-let deleteArr = ref<ListItem[]>([])
+const errorRef = ref<boolean>(false)
+const prevListId = ref<string>(route.params.id as string)
+const itemList = ref<ListItem[]>([])
+const deleteArr = ref<ListItem[]>([])
 const sortable = ref<InstanceType<typeof Sortable> | null>(null);
 
 onBeforeMount(async () => {
@@ -65,7 +68,8 @@ const getList: () => void = () => {
   
 const updateAmount = async (item : Shoppinglist, newAmount : number) => {
   loader.value = true;
-  const docRef = doc(db, "lists", listId.value);
+  errorRef.value ? errorRef.value = false : null;
+  const docRef = doc(db, "lists", listId.value);  
   let updatedItem = item
   updatedItem.amount = newAmount
   const updatedList = list.value.list.map((oldItem : Shoppinglist) =>
@@ -77,7 +81,7 @@ const updateAmount = async (item : Shoppinglist, newAmount : number) => {
     });
     loader.value = false;
   } catch (error) {
-    console.error("Error updating item:", error);
+    errorRef.value = !errorRef.value;
   }
 };
 
@@ -90,7 +94,7 @@ const closeDeleteMode: () => void = () => {
   clearDeleteList()
 }
 
-const addDeleteItem: (item : Shoppinglist | ToDoList | NumberedList | TimeList) => void = (item) => {
+const addDeleteItem: (item : Shoppinglist | ToDoList | TimeList) => void = (item) => {
   // Check if item is already in the arr
   const foundIndex = deleteArr.value.findIndex(x => x.id == item.id)
   foundIndex != -1 ? deleteArr.value.splice(foundIndex, 1) : deleteArr.value.push(item)
@@ -98,6 +102,7 @@ const addDeleteItem: (item : Shoppinglist | ToDoList | NumberedList | TimeList) 
 
 const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = async (item) => {
   loader.value = true;
+  errorRef.value ? errorRef.value = false : null;
   const updatedItem = {...item, done : !item.done}
   const docRef = doc(db, "lists", listId.value);
   const updatedList = list.value.list.map((oldItem : Shoppinglist) =>
@@ -109,12 +114,13 @@ const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = asy
     });
     loader.value = false;
   } catch (error) {
-    console.error("Error updating item:", error);
+    errorRef.value = !errorRef.value;
   }
 }
 
 const handleDeleteAll: () => Promise<void> = async () => {
   loader.value = true;
+  errorRef.value ? errorRef.value = false : null;
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
@@ -123,13 +129,18 @@ const handleDeleteAll: () => Promise<void> = async () => {
     loader.value = false;
   } catch (error) {
     loader.value = false;
-    console.error("Error updating item:", error);
+    errorRef.value = !errorRef.value;
   }
   closeDeleteMode()
 }
 
+// ADD ITEM TO DELETE LIST
+// OR
+// DELETE EACH ITEM ON CLICK
+
 const handleDeleteChosen: () => Promise<void> = async () => {
-  loader.value = true;
+  loader.value = true;  
+  errorRef.value ? errorRef.value = false : null;
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
@@ -138,9 +149,25 @@ const handleDeleteChosen: () => Promise<void> = async () => {
     loader.value = false;
   } catch (error) {
     loader.value = false;
-    console.error('Error deleting items:', error);
+    errorRef.value = !errorRef.value;
   }
   closeDeleteMode()
+}
+
+const handleDeletItem: (item : ListItem ) => Promise<void> = async (item) => {
+  loader.value = true;  
+  errorRef.value ? errorRef.value = false : null;
+  const updatedList = [...list.value.list].filter(del => del.id != item.id)
+  const docRef = doc(db, "lists", listId.value);
+  try {
+    await updateDoc(docRef, {
+      list: updatedList
+    });
+    loader.value = false;
+  } catch (error) {
+    loader.value = false;
+    errorRef.value = !errorRef.value;
+  }
 }
 
 const clearDeleteList: () => void = () => {
@@ -154,6 +181,7 @@ const changeTitle: () => void = () => {
 
 const handleUpdateName: () => Promise<void> = async () => {
   loader.value = true;
+  errorRef.value ? errorRef.value = false : null;
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
@@ -162,7 +190,7 @@ const handleUpdateName: () => Promise<void> = async () => {
     loader.value = false;
   } catch (error) {
     loader.value = false;
-    console.error("Error updating name:", error);
+    errorRef.value = !errorRef.value;
   }
   updateName.value = !updateName.value
 }
@@ -185,7 +213,7 @@ const options = computed(() => {
 const moveItem = async (evt: any) => {
   const newIndex = evt.newIndex;
   const oldIndex = evt.oldIndex;
-
+  errorRef.value ? errorRef.value = false : null;
   const newList = itemList.value;
   const [removed] = newList.splice(oldIndex, 1);
   newList.splice(newIndex, 0, removed);
@@ -200,18 +228,20 @@ const moveItem = async (evt: any) => {
     loader.value = false;
   } catch (error) {
     loader.value = false;
-    console.error("Error updating list:", error);
+    errorRef.value = !errorRef.value;
   }
 };
+
 </script>
+
 <template>
-    <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
-    <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
-    <section v-if="loader" class="loader"></section>
+  <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
+  <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
+  <section v-if="loader" class="loader"></section>
   <div class="list" v-else>
-  <div class="user-container">
-    <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`">
-  </div>
+    <div class="user-container">
+      <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`">
+    </div>
     <div class="list__header">
       <div class="list__header--title" v-if="updateName">
         <input type="text" v-model="newTitle">
@@ -221,7 +251,6 @@ const moveItem = async (evt: any) => {
         <div class="icon cancel">
           <font-awesome-icon icon="xmark" @click="changeTitle" />
         </div>
-        
       </div>
       <div class="list__header--title" v-else>
         <h2>{{ list?.name }}</h2>
@@ -230,103 +259,48 @@ const moveItem = async (evt: any) => {
       <p>Author - {{ list?.author.name }}</p>
     </div>
     <AddItem :type="list?.type" />
-      <Sortable
-        v-if="list.type == 'Shopping'"
-        :key="itemList"
-        :item-key="list.id"
-        :list="itemList"
-        :options="options"
-        class="item-container"
-        ref="sortable"
-        @end="moveItem"
-      >
-        <template #item="{element, index}">
-          <div class="draggable item" :key="element.id">
-            <div class="item__info--left">
-              <p class="item__name">{{ element?.item }}</p>
-              <p class="item__comment" v-if="element?.comment">{{ element?.comment }}</p>
-            </div>
-            <div class="item__info--right">
-              <select name="amount" @change="updateAmount(element, parseInt(($event.target as HTMLSelectElement).value))">
-                <option v-for="amount in amountArr" :value="amount" :selected="element?.amount == amount">{{ amount }}</option>
-              </select>
-              <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
-                <input type="checkbox" name="remove" id="" @change="addDeleteItem(element)">
-                <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
-              </div>
-
-              <div class="checkbox-container checkbox-container--check" v-else>
-                <input type="checkbox" name="check" :checked="element?.done" @change="handleCheckedItem(element)">
-                <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
-              </div>
-            </div>
-          </div>
-        </template>
-      </Sortable>
-      <Sortable
-        v-if="list.type == 'ToDo'"
-        :key="itemList"
-        :item-key="list.id"
-        :list="itemList"
-        :options="options"
-        class="item-container"
-        ref="sortable"
-        @end="moveItem"
-      >
-        <template #item="{element, index}">
-          <div class="draggable item" :key="element.id">
-            <div class="item__info--left">
-            <p class="item__name">{{ element?.todo }}</p>
-            <p class="item__comment" v-if="element?.comment">{{ element?.comment }}</p>
-          </div>
-            <div class="item__info--right">
-                <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
-                  <input type="checkbox" name="remove" id="" @change="addDeleteItem(element)">
-                  <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
-                </div>
-
-                <div class="checkbox-container checkbox-container--check" v-else>
-                  <input type="checkbox" name="check" :checked="element?.done" @change="handleCheckedItem(element)">
-                  <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
-                </div>
-            </div>
-          </div>
-        </template>
-      </Sortable>
-      <Sortable
-        v-if="list.type == 'Time'"
-        :key="itemList"
-        :item-key="list.id"
-        :list="itemList"
-        :options="options"
-        class="item-container"
-        ref="sortable"
-        @end="moveItem"
-      >
-        <template #item="{element, index}">
-          <div class="draggable item" :key="element.id">
-            <div class="item__info--left">
-              <p class="item__name">{{ element?.item }}</p>
-              <p class="item__comment" v-if="element?.date">{{ element?.date }}</p>
-            </div>
-            <div class="item__info--right">
-              <p class="item__comment" v-if="element?.time">at {{ element?.time }}</p>
-              <div class="checkbox-container checkbox-container--remove" v-if="deleteMode">
-                <input type="checkbox" name="remove" id="" @change="addDeleteItem(element)">
-                <label for="remove"><font-awesome-icon class="checkbox-container--remove" icon="xmark" /></label>
-              </div>
-            </div>
-          </div>
-        </template>
-      </Sortable>
+    <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
+    <Sortable
+      :key="list.id"
+      :item-key="list.id"
+      :list="itemList"
+      :options="options"
+      class="item-container"
+      ref="sortable"
+      @update="moveItem"
+    >
+      <template #item="{element}">
+        <ShoppingItem
+          v-if="list.type == 'Shopping'"
+          :delete="deleteMode"
+          :item="element"
+          @updateAmount="updateAmount"
+          @handleDeletItem="handleDeletItem"
+          @handleCheckedItem="handleCheckedItem"
+        />
+        <TodoItem
+          v-else-if="list.type == 'ToDo'"
+          :delete="deleteMode"
+          :item="element"
+          @handleDeletItem="handleDeletItem"
+          @handleCheckedItem="handleCheckedItem"
+        />
+        <TimeItem
+          v-else-if="list.type == 'Time'"
+          :delete="deleteMode"
+          :item="element"
+          @handleDeletItem="handleDeletItem"
+        />
+      </template>
+    </Sortable>
     <div class="delete__menu" :class="deleteMode ? 'delete__menu--open' : 'delete__menu--closed'">
         <font-awesome-icon icon="trash-can"  v-if="!deleteMode"  @click="handleDeleteMode" />
         <div class="delete__menu--options" v-else>
           <p class="delete__option" @click="closeDeleteMode">Cancel</p>
           <p >|</p>
           <p class="delete__option" @click="handleDeleteAll">Delete All</p>
-          <p >|</p>
-          <p class="delete__option" @click="handleDeleteChosen">Delete {{ deleteArr.length }}</p>
+          <!-- <p >|</p>
+          <p class="delete__option" @click="handleDeleteChosen">Delete {{ deleteArr.length }}</p> -->
         </div>
     </div>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
