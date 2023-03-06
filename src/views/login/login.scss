@@ -77,22 +77,6 @@
                     }
                 }
             }
-            .btn--facebook {
-                background-color: #4267B2;
-                color: #fff;
-                background: linear-gradient(to left, #4267B2 50%, #fff 50%) right;
-                background-size: 201%;
-                svg {
-                    color: #fff;
-                }
-                &:hover {  
-                    color: #4267B2;
-                    background-position: left;
-                    svg {
-                        color: #4267B2;
-                    }
-                }
-            }
             .btn--github {
                 color: #fff;
                 background: linear-gradient(to left, #000 50%, #fff 50%) right;
