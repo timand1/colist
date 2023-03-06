@@ -34,7 +34,7 @@ const signInWithGoogle = () => {
           id: user.uid,
           name : user.displayName,
           img: user.photoURL,
-          emai: user.email
+          email: user.email
         });
       }
     router.push('/')
@@ -68,7 +68,7 @@ const signInWithGitHub = () => {
           id: user.uid,
           name : user.displayName,
           img: user.photoURL,
-          emai: user.email
+          email: user.email
         });
       }
     router.push('/')
