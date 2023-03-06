@@ -64,7 +64,8 @@ const removeUser: (user: User) => Promise<void> = async (user) => {
     }
 }
 
-const searchUser: () => Promise<void> = async () => {
+const searchUser: (input : any) => Promise<void> = async (input) => {  
+    userInput.value = input.value
     foundUsers.value = []
 
     // Will delay the function by 500 ms after a keyboard event
@@ -149,7 +150,7 @@ const removeAdded: (user : User) => void = (user) => {
     <section class="share__container">
         <section class="share">
             <div class="search">
-                <input type="text" name="search" placeholder=" " v-model="userInput" @keydown="searchUser" @keyup.enter="searchUser" @keydown.escape="clearSearch">
+                <input type="text" name="search" placeholder=" " :value="userInput" @input="searchUser($event.target)" @keyup.enter="searchUser($event)" @keydown.escape="clearSearch">
                 <font-awesome-icon class="search__clear" icon="xmark" v-if="userInput.length > 0" @click="clearSearch" />
                 <label for="search">Search user</label>
                 <div class="search__found" :style="{ display : foundUsers.length <= 0 ? 'none' : 'flex'}" >
