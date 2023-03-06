@@ -81,7 +81,7 @@ const searchDatabase = debounce(async () => {
     });
     words = capitalizedWords.join(' ')   
 
-    const q = query(collection(db, "users"),where("name", "<=", words));
+    const q = query(collection(db, "users"),where("name", "==", words));
 
     try {
       const querySnapshot = await getDocs(q);      

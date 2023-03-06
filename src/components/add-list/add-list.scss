@@ -3,7 +3,7 @@
 @use '@/styles/mixins';
 
 .add-list__overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -17,7 +17,8 @@
         flex-direction: column;
         gap: 20px;
         width: calc(100% - 2em);
-        height: 40%;
+        height: fit-content;
+        min-height: 50%;
         background-color: colors.$primary-bg;
         padding: 2em;
         border-radius: 12px;
