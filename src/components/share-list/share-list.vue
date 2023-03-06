@@ -185,7 +185,7 @@ const removeAdded: (user : User) => void = (user) => {
                             </div>
                             <img :src="user.img" alt="">
                         </div>
-                        <div class="user-remove" @click="removeAdded(user)" ><Button variant="ghost" text="Remove" /></div>
+                        <div class="user-remove" @click="removeAdded(user)" ><Button variant="ghost" outline text="Remove" /></div>
                     </div>
                 </div>
             </div>

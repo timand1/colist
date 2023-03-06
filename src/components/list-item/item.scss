@@ -86,7 +86,13 @@
 
 body.dark {
     .item {
-        background-color: colors.$secondary-bg-dark;      
+        background-color: colors.$secondary-bg-dark;     
+        .item__info--right {
+
+            select {
+                background-color: colors.$secondary-bg-dark;
+            }
+        } 
     }
 }
 

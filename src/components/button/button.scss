@@ -43,9 +43,17 @@ $bg in colors.$button-bg-colors {
         outline: 1px solid $bg;
         outline-offset: -1px;
         background-color: transparent;
+        @if (str-index($name, "ghost")) {
+            color: colors.$primary-font;
+            outline: 1px solid colors.$primary-font;
+            outline-offset: -1px;
+        }
         &:hover {
             color: colors.$primary-font-dark;
             background-color: map-get(colors.$button-bg-colors, $name);
+            @if (str-index($name, "ghost")) {
+                background-color: map-get(colors.$button-bg-colors, danger);
+            }
         }
     }
     body.dark {

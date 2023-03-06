@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import logoLight from '@/assets/logo-light.svg'
+import Logo from "@/assets/logo.vue";
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import logoLight from '@/assets/logo-light.svg'
       <h1>with easy list-making </h1>
       <p>Streamline your tasks with CoList</p>
     </div>
-    <img :src="logoLight" alt="CoList Logo">
+    <Logo />
   </div>
 </template>
 
