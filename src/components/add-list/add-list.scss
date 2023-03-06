@@ -97,9 +97,6 @@ body.dark {
                     &:focus {
                         outline-color: colors.$primary;
                     }
-                    option {
-                        font-size: 14px;
-                    }
                 }
                 input:focus ~ label, input:not(:placeholder-shown) ~label, select:focus ~ label, select:valid ~ label {
                     background-color: colors.$primary-bg-dark;
