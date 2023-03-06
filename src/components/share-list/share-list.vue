@@ -3,7 +3,7 @@ import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { User } from '@/helpers/types/types';
 import { getAuth } from 'firebase/auth';
-import { arrayUnion, arrayRemove, doc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { createPopper } from '@popperjs/core';

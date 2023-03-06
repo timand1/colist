@@ -4,7 +4,7 @@ import { ref, watch, watchEffect } from 'vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import { db } from '@/firebase';
-import { doc, onSnapshot, collection, query, where, updateDoc, deleteField, deleteDoc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { User, type List } from '@/helpers/types/types'
 import router from '@/router';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';

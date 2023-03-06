@@ -114,7 +114,7 @@
 
 body.dark {
     .login__container {
-        background-color: colors.$secondary-bg-dark;
+        background-color: colors.$primary-accent;
     }
 }
 
@@ -129,11 +129,18 @@ body.dark {
         display: flex;
         margin-top: 10vh;
         height: 80vh;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         .login {
             padding: 5em;
             border-bottom-right-radius: variables.$radius-m;
             border-top-right-radius: variables.$radius-m;
             flex: 1;
+            box-shadow: none;
+        }
+    }
+    body.dark {
+        .login__container {
+            background-color: colors.$secondary-bg-dark;
         }
     }
 }
