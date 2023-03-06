@@ -254,7 +254,7 @@ const moveItem = async (evt: any) => {
       </div>
       <div class="list__header--title" v-else>
         <h2>{{ list?.name }}</h2>
-        <font-awesome-icon icon="pen" @click="changeTitle" />
+        <font-awesome-icon class="change-title" icon="pen" @click="changeTitle" />
       </div>
       <p>Author - {{ list?.author.name }}</p>
     </div>

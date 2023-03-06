@@ -85,6 +85,35 @@
     }
 }
 
+body.dark {
+    .add-list__overlay {
+        .add-list {
+            background-color: colors.$primary-bg-dark;
+            .input-container, .select-container {
+                input, select {
+                    outline: 1px solid colors.$gray-font;
+                    color: colors.$primary-font-dark;
+                    &:focus {
+                        outline-color: colors.$primary;
+                    }
+                    option {
+                        font-size: 14px;
+                    }
+                }
+                input:focus ~ label, input:not(:placeholder-shown) ~label, select:focus ~ label, select:valid ~ label {
+                    background-color: colors.$primary-bg-dark;
+                }
+            }
+            select {
+                option {
+                    background-color: colors.$primary-bg-dark;
+                }
+            }
+
+        }
+    }
+}
+
 @media screen and (min-width: 786px) {
     .add-list {
         max-width: 500px;       

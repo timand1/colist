@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import Button from '../button/button.vue';
-import logoLight from '@/assets/logo-light.svg'
+import Logo from '@/assets/logo-tab.svg'
 import { useRouter } from 'vue-router';
 import { getAuth, signOut } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import useDetectOutsideClick from '@/composables/clickOutsideComponent';
+import DarkMode from '../dark-mode/dark-mode.vue';
 import { ref } from 'vue';
 
 type NavProps = {
@@ -51,7 +52,7 @@ useDetectOutsideClick(userMenuRef, () => {
 </script>
 <template>
   <nav class="navbar">
-    <img :src="logoLight" alt="CoList Logo" @click="router.push('/')">
+    <img :src="Logo" alt="CoList Logo" @click="router.push('/')">
     <div class="navbar--right">
     <Button v-if="props.param == 'list'" text="Share" variant="primary" @click="handleShareList" />
       <font-awesome-icon v-if="props.param == 'home'" icon="plus" @click="emit('click')" />
@@ -68,6 +69,7 @@ useDetectOutsideClick(userMenuRef, () => {
       </div>
       </div>
     </div>
+    <DarkMode />
   </nav>
 </template>
 

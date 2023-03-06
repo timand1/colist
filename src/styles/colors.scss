@@ -1,5 +1,6 @@
 @use 'sass:color';
 
+// light mode
 $primary-bg: #DBDFE8;
 $secondary-bg: #F0F0F0;
 $primary-accent: #51355A;
@@ -10,10 +11,12 @@ $disabled-font: #14131362;
 $hover-light: #d1cece;
 $gray-font : #636060;
 $overlay: rgba(0, 0, 0, 0.397);
+
+// dark mode
 $primary-bg-dark: #1F1F23;
 $secondary-bg-dark: #26262C;
 $primary-accent-dark: #4D3256;
-
+$hover-dark: #636161;
 $primary-font-dark: #FFFFFFFA;
 
 $success: #4DD1BB;

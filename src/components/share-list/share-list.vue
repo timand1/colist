@@ -51,10 +51,12 @@ const updateUsers: () => Promise<void> = async () => {
 const removeUser: (user: User) => Promise<void> = async (user) => {
     const listId : string = route.params.id as string
     errorRef.value ? errorRef.value = false : null;
+    const updatedUsers = props.users.filter(del => del.id != user.id)
+    
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
-        users: arrayRemove(docRef, {name : user.name, id : user.id, img : user.img}),
+        users: updatedUsers,
     });
 
     } catch (error) {

@@ -20,6 +20,8 @@
     svg {
         color: colors.$primary-font-dark;
         font-size: 22px;
+        width: 22px; 
+        height: 22px;
         cursor: pointer;
         transition: all 0.2s;
         &:hover {
@@ -48,6 +50,7 @@
             background-color: colors.$secondary-bg;
             box-shadow: 7px 14px 12px rgba(0, 0, 0, 0.4);
             border: 1px solid colors.$primary-font;
+            z-index: 9999;
             p {
                 cursor: pointer;
                 font-size: 12px;
@@ -70,6 +73,34 @@
                 margin: 0 auto;
                 background-color: colors.$primary-font;
                 height: 1px;
+            }
+        }
+    }
+
+    .dark-mode {
+        right : 1.5em;
+        top: 80px;
+    }
+}
+
+body.dark {
+    .navbar {
+        .navbar--right {
+            .navbar__user--menu {
+                background-color: colors.$secondary-bg-dark;
+                border: 1px solid colors.$primary-font-dark;
+                p {
+                    color: colors.$primary-font-dark;                
+                    &:hover {
+                        background-color: colors.$hover-dark;
+                    }
+                }
+                .divider {
+                    width: 40px;
+                    margin: 0 auto;
+                    background-color: colors.$primary-font-dark;
+                    height: 1px;
+                }
             }
         }
     }

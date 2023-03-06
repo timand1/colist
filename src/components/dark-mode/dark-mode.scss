@@ -1,0 +1,19 @@
+@use '@/styles/colors';
+@use '@/styles/variables';
+
+.dark-mode {
+    position: absolute;
+    cursor: pointer;
+    svg {
+        color: colors.$primary-font;
+        font-size: 14px;
+    }
+}
+
+body.dark {
+    .dark-mode {
+        svg {
+            color: colors.$primary-font-dark;
+        }
+    }
+}

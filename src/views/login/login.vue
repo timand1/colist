@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import LoginSidepanel from "@/components/login-sidepanel/login-sidepanel.vue";
 import Button from "@/components/button/button.vue";
-import logo from "@/assets/logo.svg";
+import Logo from "@/assets/logo.vue";
 import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence, GithubAuthProvider, FacebookAuthProvider  } from "firebase/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import DarkMode from '@/components/dark-mode/dark-mode.vue';
 
 const auth = getAuth();
 const errorRef = ref<boolean>(false)
@@ -109,8 +110,9 @@ const signInWithGitHub = () => {
   <section class="login__container">
     <LoginSidepanel />
     <section class="login">
+    <DarkMode />
       <div class="logo-container">
-        <img :src="logo" alt="">
+        <Logo />
         <h2>CoList</h2>
       </div>
           <div class="btn-container">

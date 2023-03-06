@@ -138,6 +138,49 @@
     }
 }
 
+body.dark {
+    .share__container {
+        .share {
+            background-color: colors.$primary-bg-dark;
+            .search {
+                input {
+                    color : colors.$primary-font-dark;
+                }      
+                input:focus ~ label, input:not(:placeholder-shown) ~label {
+                    background-color: colors.$primary-bg-dark;
+                }
+                .search__clear {
+                    color: colors.$primary-font-dark;
+                }
+            }
+            .search__found {
+                border: 1px solid colors.$gray-font;
+                background-color: colors.$secondary-bg-dark;
+                .search__user {
+                    &:hover {
+                        background-color: colors.$hover-dark;
+                    }
+                    .email {
+                        color: colors.$hover-light;
+                    }
+                }
+            }
+            .share__users {
+                .share__current {
+                    .share__user {
+                        .share__user--info {
+                            .email {
+                                color: colors.$hover-light;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+}
+
 @media screen and (min-width: 786px) {
     .share {
         max-width: 500px;       

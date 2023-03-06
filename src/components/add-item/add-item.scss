@@ -49,23 +49,23 @@
                     outline-color: colors.$primary;
                 }
             }
-        label {
-            pointer-events: none;
-            position: absolute;
-            top: calc(50% - 7px);
-            left: 10px;
-            font-size: 14px;
-            transition: all 150ms;
-        }
+            label {
+                pointer-events: none;
+                position: absolute;
+                top: calc(50% - 7px);
+                left: 10px;
+                font-size: 14px;
+                transition: all 150ms;
+            }
         
-        input:focus ~ label, input:not(:placeholder-shown) ~ label {
-            font-size: 14px;
-            padding: 4px 4px 0 4px;
-            background-color: colors.$primary-bg;
-            top: -12px;
-            z-index: 1;
+            input:focus ~ label, input:not(:placeholder-shown) ~ label {
+                font-size: 14px;
+                padding: 4px 4px 0 4px;
+                background-color: colors.$primary-bg;
+                top: -12px;
+                z-index: 1;
+            }
         }
-    }
     }
     .add-item__form--active {
         padding: 1em;
@@ -77,6 +77,27 @@
         gap: 2em;
         button {
             flex: 1;
+        }
+    }
+}
+
+body.dark {
+    .add-item {
+        .add-item__headline {
+            svg {
+                color: colors.$primary-font-dark;
+            }
+        }
+        .add-item__form {
+            outline: 1px solid colors.$gray-font;
+            .input-container {
+                input, select {
+                    color: colors.$primary-font-dark;
+                }
+                input:focus ~ label, input:not(:placeholder-shown) ~ label {
+                    background-color: colors.$primary-bg-dark;
+                }
+            }
         }
     }
 }

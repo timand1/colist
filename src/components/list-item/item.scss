@@ -84,3 +84,9 @@
     }
 }
 
+body.dark {
+    .item {
+        background-color: colors.$secondary-bg-dark;      
+    }
+}
+
