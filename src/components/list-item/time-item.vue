@@ -20,7 +20,7 @@ const emit = defineEmits(['handleDeletItem']);
         </div>
         <div class="item__info--right">
             <p class="item__comment" v-if="props.item?.time">at {{ props.item?.time }}</p>
-            <div class="checkbox-container checkbox-container--remove" v-if="props.delete" @click="emit('handleDeletItem', props.item)">
+            <div class="checkbox-container checkbox-container--remove" v-if="props.delete" @click.stopPropagation="emit('handleDeletItem', props.item)">
                 <font-awesome-icon icon="trash-can" />
             </div>
         </div>

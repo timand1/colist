@@ -21,36 +21,35 @@ let userInput: UserInput = reactive({});
 const addItem = ref(false)
 
 const inputFields = computed(() => {    
-      switch (props.type) {
-        case 'Shopping':
-          return [
-            { name: 'item', label: 'Item*', type: 'text', req: true },
-            { name: 'amount', label: 'Amount', type: 'number', req: true },
-            { name: 'comment', label: 'Comment', type: 'text', req: false },
-          ]
-        case 'ToDo':
-          return [
-            { name: 'todo', label: 'Todo*', type: 'text', req: true },
-            { name: 'comment', label: 'Comment', type: 'text', req: false },
-          ]
-        case 'Numbered':
-          return [
-            { name: 'item', label: 'Item*', type: 'text', req: true },
-            { name: 'placement', label: 'Placement*', type: 'number', req: true },
-          ]
-        case 'Time':
-          return [
-            { name: 'item', label: 'Item*', type: 'text', req: true },
-            { name: 'time', label: 'Time*', type: 'time', req: true },
-            { name: 'date', label: 'Date', type: 'date', req: false },
-          ]
-        default:
-          return []
-      }
-    })
+  switch (props.type) {
+    case 'Shopping':
+      return [
+        { name: 'item', label: 'Item*', type: 'text', req: true },
+        { name: 'amount', label: 'Amount', type: 'number', req: true },
+        { name: 'comment', label: 'Comment', type: 'text', req: false },
+      ]
+    case 'ToDo':
+      return [
+        { name: 'todo', label: 'Todo*', type: 'text', req: true },
+        { name: 'comment', label: 'Comment', type: 'text', req: false },
+      ]
+    case 'Numbered':
+      return [
+        { name: 'item', label: 'Item*', type: 'text', req: true },
+        { name: 'placement', label: 'Placement*', type: 'number', req: true },
+      ]
+    case 'Time':
+      return [
+        { name: 'item', label: 'Item*', type: 'text', req: true },
+        { name: 'time', label: 'Time*', type: 'time', req: true },
+        { name: 'date', label: 'Date', type: 'date', req: false },
+      ]
+    default:
+      return []
+  }
+})
 onMounted(() => {
-    props.type == 'Shopping' ? userInput = { amount : 1} : null
-    
+  props.type == 'Shopping' ? userInput.amount = 1 : null;
 })
 
 const toggleAddItem: () => void = () => {
@@ -75,7 +74,7 @@ const handleAddItem: () => Promise<void> = async () => {
         userInput[key] = '';
     }
 
-    props.type == 'Shopping' ? userInput = { amount : 1 } : null
+    props.type == 'Shopping' ? userInput.amount = 1 : null
 }
 
 </script>
@@ -92,7 +91,6 @@ const handleAddItem: () => Promise<void> = async () => {
             <label :for="input.name">{{ input.label }}</label>
         </div>
         <div class="add-item__buttons">
-            <!-- <Button variant="danger" outline text="Close" @click="toggleAddItem" /> -->
             <Button type="submit" variant="primary" text="Add" />
         </div>
     </form>

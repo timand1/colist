@@ -36,6 +36,7 @@
                 .list--remove {
                     background-color: colors.$primary-accent;
                     transition: all variables.$transition-time;
+                    z-index: 10;
                     svg, p {
                         color: colors.$secondary-bg;
                     }

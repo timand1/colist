@@ -110,8 +110,8 @@ const handleOverlay: () => void = () => {
             <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
             <p>{{ list.type }} - {{ list.list.length }} items</p>
           </div>
-          <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
-          <div class="list--remove" v-else @click="removeUser(list.id, list.users, $event)" ><p>Leave</p></div>
+          <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click.stopPropagation="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
+          <div class="list--remove" v-else @click.stopPropagation="removeUser(list.id, list.users, $event)" ><p>Leave</p></div>
         </div>
       </section>
     </div>
