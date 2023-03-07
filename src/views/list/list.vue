@@ -247,8 +247,8 @@ const moveItem = async (evt: any) => {
       class="item-container"
       ref="sortable"
       @update="moveItem"
-      :delay="50"
-      :delayOnTouchOnly="true"
+      delay="50"
+      delayOnTouchOnly="true"
       
     >
       <template #item="{element}">
