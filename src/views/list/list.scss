@@ -85,6 +85,11 @@
             }
         }
     }
+    &:focus-within {
+        .delete__menu {
+            display: none;
+        }
+    }
 }
 .loader {
     @include mixins.loader();
@@ -116,6 +121,11 @@ body.dark {
         }
         .delete__menu--open {
             width: 300px;
+        }
+        &:focus-within {
+            .delete__menu {
+                display: grid;
+            }
         }
     }
 }
