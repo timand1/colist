@@ -40,7 +40,7 @@
         }
         .navbar__user--menu {
             position: absolute;
-            bottom: calc((-12px * 3) + (-1px * 2) + (-4px * 6) + (-4px * 4) - 4px);
+            bottom: calc((-12px * 5) + (-1px * 3) + (-4px * 8) + (-4px * 6) - 4px);
             left: -20px;
             width: max-content;
             border-radius: variables.$radius-m;
@@ -52,6 +52,7 @@
             border: 1px solid colors.$primary-font;
             z-index: 9999;
             p {
+                text-align: center;
                 cursor: pointer;
                 font-size: 12px;
                 padding: 4px 8px;

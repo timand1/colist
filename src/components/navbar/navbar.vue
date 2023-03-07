@@ -45,6 +45,11 @@ const handleNewList: () => void = () => {
   emit('click')
 }
 
+const handleHelp: () => void = () => { 
+  toggleUserMenu()
+  router.push('/help')
+}
+
 useDetectOutsideClick(userMenuRef, () => {
   displayUserMenu.value = false
 });
@@ -63,6 +68,8 @@ useDetectOutsideClick(userMenuRef, () => {
           <p @click="handleList">Lists</p>
           <div class="divider"></div>
           <p @click="handleNewList">New List</p>
+          <div class="divider"></div>
+          <p @click="handleHelp">Help</p>
           <div class="divider"></div>
           <p @click="handleSignOut">Sign out</p>
         </div>

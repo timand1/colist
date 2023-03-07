@@ -11,7 +11,7 @@
 
 body {
     background-color: colors.$primary-bg;
-    
+    height: 100vh;
     h1, h2, h3, h4, h5, h6, p, span, a, button, input, select, option, label {
         font-family: variables.$primary-font;
         color: colors.$primary-font;

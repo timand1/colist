@@ -1,0 +1,88 @@
+@use '@/styles/colors';
+@use '@/styles/variables';
+@use '@/styles/mixins';
+
+.help {
+    margin: 5em 0;
+    .mobile-info, .desktop-info {
+        @include mixins.flexbox();
+        flex-direction: column;
+        gap: 2em;
+        padding: 0 1em;
+        .info-container {
+            .help__headline {
+                width: 100%;
+                @include mixins.flexbox($justify: space-between);
+                cursor: pointer;
+                margin-bottom: 1em;
+                border-bottom: 1px solid colors.$primary-font;
+                svg {
+                    font-size: 18px;
+                    color: colors.$primary-font;
+                    transition: all 0.3s;
+                }
+                .display-text--active {
+                    transform: rotate(180deg);
+                }
+            }
+            width: 100%;
+            .text-container {
+                height: 0;
+                overflow: hidden;
+                width: 100%;
+                padding: 0;
+                box-shadow: 1px 1px 4px colors.$gray-font;
+                border-radius: variables.$radius-m;
+                display: flex;
+                flex-direction: column;
+                gap: 2em;
+                transition: all 300ms;
+                background-color: colors.$secondary-bg;
+                .text {
+                    padding: 1em;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1em;
+                }
+            }
+            &:last-of-type .text-container {
+                margin-bottom: 4em;
+            }
+        }
+    }
+    .desktop-info {
+        display: none;
+    }
+}
+
+body.dark {
+    .help {
+        .mobile-info, .desktop-info {
+            .info-container {
+                .help__headline {
+
+                    border-bottom: 1px solid colors.$primary-font-dark;
+                    svg {
+                        color: colors.$primary-font-dark;
+                    }
+                }
+                .text-container {
+
+                    box-shadow: 1px 1px 4px colors.$hover-dark;
+                    background-color: colors.$secondary-bg-dark;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 786px) {
+    .help {
+        .desktop-info {
+            display: flex;
+        }
+        .mobile-info {
+            display: none;
+        }
+    }
+}

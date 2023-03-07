@@ -1,0 +1,104 @@
+{
+    "desktop": [
+      {
+      "title": "Items",
+      "items": [
+        {
+          "sub-title": "List items",
+          "content": [
+            "In order to drag and drop an item to change position, you can do so by clicking with the left mouse button and hold.",
+            "While holding down the mouse button - drag the item to the desirable position and let go of the mouse button to drop the item."
+          ]
+        },
+        {
+          "sub-title": "Complete items",
+          "content": [
+            "Shopping and Todo items have the option to toggle them complete.",
+            "To toggle an item complete - click on the gray circle on the right side of the chosen item to mark it complete / incomplete."
+          ]
+        },
+        {
+          "sub-title": "Remove items",
+          "content": [
+            "In order to remove items, click on the trash can icon in the lower left corner of the screen to start the delete mode.",
+            "While delete mode is active, each item will now have a trashcan icon on their right side, to remove an item - click on the trashcan.",
+            "To remove all items, click on the 'Delete all' button in the delete menu.",
+            "To cancel the delete mode, click on the 'Cancel' button in the delete menu."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Share list",
+      "items": [
+        {
+          "sub-title": "Create",
+          "content": [
+            "To create a list can click on the + sign if you are at the homescreen.",
+            "You can also create a new list by clicking on the account menu (user icon) to get a dropdown of alternatives.",
+            "Click on the 'New list' option to open the create list modal."
+          ]
+        },
+        {
+          "sub-title": "Share",
+          "content": [
+            "In order to share your list with someone - click on the 'Share' button in the navigation bar at the top of your screen.",
+            "A modal will open up with a search bar. Type in the name of the person you wish to share your list with.",
+            "Click on the person in the search field and then click on the 'Update' button."
+          ]
+        }
+    ]
+}
+],
+"mobile": [
+  {
+    "title": "Items",
+    "items": [
+    { 
+        "sub-title": "List items",
+        "content": [
+            "In order to drag and drop an item to change position, you can do so by clicking on an item and hold.",
+            "While holding down your finger or stylus - drag the item to the desirable position and let go of your finger / stylus button to drop the item."
+        ]
+      },
+      {
+        "sub-title": "Complete items",
+        "content": [
+          "Shopping and Todo items have the option to toggle them complete.",
+          "To toggle an item complete - click on the gray circle on the right side of the chosen item to mark it complete / incomplete."
+        ]
+      },
+      {
+        "sub-title": "Remove items",
+        "content": [
+          "In order to remove items, click on the trash can icon in the lower left corner of the screen to start the delete mode.",
+          "While delete mode is active, each item will now have a trashcan icon on their right side, to remove an item - click on the trashcan.",
+          "To remove all items, click on the 'Delete all' button in the delete menu.",
+          "To cancel the delete mode, click on the 'Cancel' button in the delete menu."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Share list",
+    "items": [
+      {
+        "sub-title": "Create",
+        "content": [
+          "To create a list can click on the + sign if you are at the homescreen.",
+          "You can also create a new list by clicking on the account menu (user icon) to get a dropdown of alternatives.",
+          "Click on the 'New list' option to open the create list modal."
+        ]
+      },
+      {
+        "sub-title": "Share",
+        "content": [
+          "In order to share your list with someone - click on the 'Share' button in the navigation bar at the top of your screen.",
+          "A modal will open up with a search bar. Type in the name of the person you wish to share your list with.",
+          "Click on the person in the search field and then click on the 'Update' button."
+        ]
+    }
+]
+}
+]
+}
