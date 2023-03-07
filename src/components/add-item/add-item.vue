@@ -87,7 +87,14 @@ const handleAddItem: () => Promise<void> = async () => {
     </div>
     <form @submit.prevent="handleAddItem" class="add-item__form" :class="addItem ? 'add-item__form--active' : ''" >
         <div v-for="(input, index) in inputFields" :key="index" class="input-container">
-            <input :type="input.type" :required="input.req" :name="input.name" v-model="userInput[input.name]" placeholder=" " @keyup.enter="handleAddItem">
+            <input 
+              :type="input.type" 
+              :required="input.req" 
+              :name="input.name" 
+              v-model="userInput[input.name]" 
+              placeholder=" " 
+              @keyup.enter="handleAddItem"
+            >
             <label :for="input.name">{{ input.label }}</label>
         </div>
         <div class="add-item__buttons">
