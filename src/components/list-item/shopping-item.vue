@@ -27,7 +27,7 @@ const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
             </select>
             <div class="checkbox-container checkbox-container--remove" 
                 v-if="props.delete" 
-                @click="emit('handleDeletItem', props.item)" 
+                @touchstart="emit('handleDeletItem', props.item)" 
             >
                 <font-awesome-icon icon="trash-can" />
             </div>
@@ -35,7 +35,7 @@ const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
             <div class="checkbox-container checkbox-container--check" v-else>
                 <input type="checkbox" name="check" 
                     :checked="props?.item.done" 
-                    @change="emit('handleCheckedItem', (props.item))" 
+                    @touchstart="emit('handleCheckedItem', (props.item))" 
                 >
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
             </div>
