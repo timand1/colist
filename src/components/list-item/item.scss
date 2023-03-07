@@ -9,6 +9,7 @@
     background-color: colors.$secondary-bg;      
     @include mixins.flexbox($justify : space-between);
     height: 60px;
+    position: relative;
     .item__info--left {
         display: flex;
         flex-direction: column;
@@ -21,6 +22,8 @@
         display: flex;
         align-items: center;
         gap: 20px;
+        position: absolute;
+        right: 20px;
         select {
             border-radius: variables.$radius-s;
             align-self: center;
