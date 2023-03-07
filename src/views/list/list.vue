@@ -134,26 +134,6 @@ const handleDeleteAll: () => Promise<void> = async () => {
   closeDeleteMode()
 }
 
-// ADD ITEM TO DELETE LIST
-// OR
-// DELETE EACH ITEM ON CLICK
-
-const handleDeleteChosen: () => Promise<void> = async () => {
-  loader.value = true;  
-  errorRef.value ? errorRef.value = false : null;
-  const docRef = doc(db, "lists", listId.value);
-  try {
-    await updateDoc(docRef, {
-      list: arrayRemove(docRef, ...deleteArr.value),
-    });
-    loader.value = false;
-  } catch (error) {
-    loader.value = false;
-    errorRef.value = !errorRef.value;
-  }
-  closeDeleteMode()
-}
-
 const handleDeletItem: (item : ListItem ) => Promise<void> = async (item) => {
   loader.value = true;  
   errorRef.value ? errorRef.value = false : null;
