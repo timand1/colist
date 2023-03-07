@@ -13,6 +13,10 @@ const emit = defineEmits(['updateAmount', 'handleDeletItem', 'handleCheckedItem'
 
 const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
 
+const preventSortableTouch: (e : TouchEvent) => void = (e) => {
+    e.stopPropagation();
+}
+
 </script>
 
 <template>
@@ -22,12 +26,13 @@ const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
             <p class="item__comment" v-if="props?.item.comment">{{ props?.item.comment }}</p>
         </div>
         <div class="item__info--right">
-            <select name="amount" @change.stopPropagation="emit('updateAmount', props.item, parseInt(($event.target as HTMLSelectElement).value))">
+            <select name="amount" @touchstart="preventSortableTouch($event)" @change="emit('updateAmount', props.item, parseInt(($event.target as HTMLSelectElement).value))">
                 <option v-for="amount in amountArr" :value="amount" :selected="props?.item.amount == amount">{{ amount }}</option>
             </select>
             <div class="checkbox-container checkbox-container--remove" 
                 v-if="props.delete" 
                 @click="emit('handleDeletItem', props.item)" 
+                @touchstart="preventSortableTouch($event)"
             >
                 <font-awesome-icon icon="trash-can" />
             </div>
@@ -35,7 +40,8 @@ const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
             <div class="checkbox-container checkbox-container--check" v-else>
                 <input type="checkbox" name="check" 
                     :checked="props?.item.done" 
-                    @click="emit('handleCheckedItem', (props.item))" 
+                    @click.stopPropagation="emit('handleCheckedItem', (props.item))" 
+                    @touchstart="preventSortableTouch($event)"
                 >
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
             </div>
