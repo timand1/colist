@@ -187,6 +187,7 @@ const options = computed(() => {
   return {
     draggable: ".draggable",
     animation: 250,
+    delay: 50
   };
 });
 
@@ -247,9 +248,6 @@ const moveItem = async (evt: any) => {
       class="item-container"
       ref="sortable"
       @update="moveItem"
-      delay="50"
-      delayOnTouchOnly="true"
-      
     >
       <template #item="{element}">
         <ShoppingItem
