@@ -14,11 +14,10 @@ const handleOverlay: () => void = () => {
 }
 
 const toggleTextMobile: (index : number) => void = (index) => { 
-    console.log(index);
+    infoRefs.value.forEach(el => el.style.height = '0px')
     
     if(activeText.value == index) {
         activeText.value = null
-        infoRefs.value[index].style.height = '0px';
     }  else {
         activeText.value = index
         infoRefs.value[index].style.height =  infoRefs.value[index].scrollHeight + 'px';
@@ -26,9 +25,8 @@ const toggleTextMobile: (index : number) => void = (index) => {
 }
 
 const toggleTextDesktop: (index : number) => void = (index) => { 
-    console.log(index);
     infoDesktopRefs.value.forEach(el => el.style.height = '0px')
-    
+
     if(activeText.value == index) {
         activeText.value = null
     }  else {
