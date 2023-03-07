@@ -27,7 +27,6 @@
         }
         .checkbox-container {
             position: relative;
-            pointer-events: none;
             z-index: 10;
             input, .checkbox-container--remove  {
                 cursor: pointer;
@@ -47,6 +46,7 @@
                 svg {
                     font-size: 15px;
                     color: colors.$secondary-bg;
+                    pointer-events: none;
                 }
             }
             input:checked ~ label {
