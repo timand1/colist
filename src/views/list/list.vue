@@ -266,7 +266,7 @@ const moveItem = async (evt: any) => {
       :options="options"
       class="item-container"
       ref="sortable"
-      @update="moveItem"
+      @end="moveItem"
     >
       <template #item="{element}">
         <ShoppingItem
