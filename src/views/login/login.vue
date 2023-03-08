@@ -103,7 +103,7 @@ const checkDarkmode: (dark : boolean) => void = (dark) => {
     <LoginSidepanel />
     <section class="login">
       <div class="dark-mode" @click="toggleDarkmode">
-        <font-awesome-icon icon="moon" />
+        <font-awesome-icon :icon="store ? 'sun' : 'moon'" />
       </div>
       <div class="logo-container">
         <Logo />
