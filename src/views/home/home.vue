@@ -13,7 +13,7 @@ const auth = getAuth()
 const addOverlay = ref<boolean>(false)
 const lists = ref()
 const loader = ref<boolean>(true)
-  const errorRef = ref<boolean>(false)
+const errorRef = ref<boolean>(false)
   
 const isAuthenticated = ref(false)
 watch(() => auth, (newVal) => {  
@@ -100,7 +100,7 @@ const handleOverlay: () => void = () => {
     <div class="lists--container" v-if="!loader">
         <div class="home__header">
           <h2>All lists</h2>
-          <h3><font-awesome-icon icon="circle-user" /> {{ auth.currentUser?.displayName }}</h3>
+          <h3>{{ auth.currentUser?.displayName }}<img :src="auth.currentUser?.photoURL!" alt=""></h3>
         </div>
       <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
       <section class="list--container">
@@ -110,8 +110,12 @@ const handleOverlay: () => void = () => {
             <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
             <p>{{ list.type }} - {{ list.list.length }} items</p>
           </div>
-          <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click.stopPropagation="deleteList(list.id, $event)" ><font-awesome-icon icon="trash-can"/></div>
-          <div class="list--remove" v-else @click.stopPropagation="removeUser(list.id, list.users, $event)" ><p>Leave</p></div>
+          <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click.stopPropagation="deleteList(list.id, $event)" >
+            <font-awesome-icon icon="trash-can"/>
+          </div>
+          <div class="list--remove" v-else @click.stopPropagation="removeUser(list.id, list.users, $event)" >
+            <p>Leave</p>
+          </div>
         </div>
       </section>
     </div>

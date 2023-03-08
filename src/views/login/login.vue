@@ -8,7 +8,8 @@ import { useRouter } from "vue-router";
 import { db } from "@/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import DarkMode from '@/components/dark-mode/dark-mode.vue';
+import { useLocalStorage } from '@vueuse/core'
+import { onMounted, watch } from 'vue';
 
 const auth = getAuth();
 const errorRef = ref<boolean>(false)
@@ -76,13 +77,34 @@ const signInWithGitHub = () => {
   });
 }
 
+const store = useLocalStorage('dark-mode', false)
+
+onMounted(() => {
+    checkDarkmode(store.value)
+})
+
+watch(() => store.value, (newVal) => {  
+    checkDarkmode(newVal)
+})
+
+const toggleDarkmode: () => void = () => {
+    store.value = !store.value
+}
+
+const checkDarkmode: (dark : boolean) => void = (dark) => {
+    const bodyEl = document.querySelector('body')
+    dark ? bodyEl?.classList.add('dark') : bodyEl?.classList.remove('dark');
+}
+
 </script>
 
 <template>
   <section class="login__container">
     <LoginSidepanel />
     <section class="login">
-    <DarkMode />
+      <div class="dark-mode" @click="toggleDarkmode">
+        <font-awesome-icon icon="moon" />
+      </div>
       <div class="logo-container">
         <Logo />
         <h2>CoList</h2>

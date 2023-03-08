@@ -1,18 +1,21 @@
 @use '@/styles/colors';
 @use '@/styles/variables';
+@use '@/styles/mixins';
 
 .navbar {
     position: fixed;
     top: 0;
     left: 0;
     z-index: 999;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include mixins.flexbox($justify : space-between);
     background-color: colors.$primary-accent;
     width: 100%;
     padding: 1em 2em;
     height: 60px;
+    svg {
+        width: 18px; 
+        height: 18px;
+    }
     img {
         max-height: 25px;
         cursor: pointer;
@@ -32,6 +35,10 @@
         display: flex;
         align-items: center;
         gap: 1em;
+        .dark-mode {
+            width: 18px;
+            height: 18px;
+        }
         .button {
             padding: 4px 8px;
         }
@@ -104,5 +111,11 @@ body.dark {
                 }
             }
         }
+    }
+}
+
+@media screen and (min-width: 786px) {
+    .navbar {
+        padding: 1em 4em;
     }
 }

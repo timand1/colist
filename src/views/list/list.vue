@@ -8,7 +8,7 @@ import TodoItem from '@/components/list-item/todo-item.vue';
 import TimeItem from '@/components/list-item/time-item.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
-import { arrayRemove, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Shoppinglist, ToDoList, User, TimeList } from '@/helpers/types/types';

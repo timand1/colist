@@ -56,6 +56,10 @@ const toggleAddItem: () => void = () => {
     addItem.value = !addItem.value
 }
 
+const handleDefaultAmount: (name : string) => void = (name) => {
+  name == 'amount' ? userInput.amount = '' : null
+}
+
 const handleAddItem: () => Promise<void> = async () => {
     const newItem = props.type == 'Shopping' || props.type == 'ToDO' ? 
       {...userInput, done : false, id : crypto.randomUUID()} 
@@ -94,6 +98,8 @@ const handleAddItem: () => Promise<void> = async () => {
               v-model="userInput[input.name]" 
               placeholder=" " 
               @keyup.enter="handleAddItem"
+              @focus="handleDefaultAmount(input.name)"
+              autocomplete="off"
             >
             <label :for="input.name">{{ input.label }}</label>
         </div>

@@ -5,8 +5,9 @@ import { useRouter } from 'vue-router';
 import { getAuth, signOut } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import useDetectOutsideClick from '@/composables/clickOutsideComponent';
-import DarkMode from '../dark-mode/dark-mode.vue';
 import { ref } from 'vue';
+import { useLocalStorage } from '@vueuse/core'
+import { onMounted, watch } from 'vue';
 
 type NavProps = {
     param : string
@@ -54,12 +55,33 @@ useDetectOutsideClick(userMenuRef, () => {
   displayUserMenu.value = false
 });
 
+const store = useLocalStorage('dark-mode', false)
+
+onMounted(() => {
+    checkDarkmode(store.value)
+})
+
+watch(() => store.value, (newVal) => {  
+    checkDarkmode(newVal)
+})
+
+const toggleDarkmode: () => void = () => {
+    store.value = !store.value
+}
+
+const checkDarkmode: (dark : boolean) => void = (dark) => {
+    const bodyEl = document.querySelector('body')
+    dark ? bodyEl?.classList.add('dark') : bodyEl?.classList.remove('dark');
+}
+
+
 </script>
 <template>
   <nav class="navbar">
     <img :src="Logo" alt="CoList Logo" @click="router.push('/')">
     <div class="navbar--right">
-    <Button v-if="props.param == 'list'" text="Share" variant="primary" @click="handleShareList" />
+      <font-awesome-icon icon="moon" class="dark-mode" @click="toggleDarkmode" />
+      <Button v-if="props.param == 'list'" text="Share" variant="primary" @click="handleShareList" />
       <font-awesome-icon v-if="props.param == 'home'" icon="plus" @click="emit('click')" />
       <div>      
       <div class="navbar__user" ref="userMenuRef">
@@ -76,7 +98,6 @@ useDetectOutsideClick(userMenuRef, () => {
       </div>
       </div>
     </div>
-    <DarkMode />
   </nav>
 </template>
 
