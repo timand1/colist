@@ -3,14 +3,14 @@
 @use '@/styles/variables';
 
 .list {
-    margin: 5em 0;
+    margin: 5em;
     .user-container {
         margin-left: 1em;
         display: flex;
         cursor: pointer;
         .user-image {
-            width: 20px;
-            height: 20px;
+            width: 25px;
+            height: 25px;
             border-radius: variables.$radius-round;
             transform: translateX(-6px);
             &:first-child {

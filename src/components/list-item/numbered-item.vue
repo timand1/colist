@@ -1,0 +1,35 @@
+<script setup lang="ts">
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { NumberedList } from '@/helpers/types/types';
+
+type NumberedItemProps = {
+    item : NumberedList
+    delete : boolean
+}
+
+const props = defineProps<NumberedItemProps>()
+const emit = defineEmits(['handleDeletItem']);
+
+const preventSortableTouch: (e : TouchEvent) => void = (e) => {
+    e.stopPropagation();
+}
+
+</script>
+
+<template>
+    <div class="draggable item" :key="props.item.id">
+        <div class="item__info--numbered">
+            <p class="item__placement">{{ props.item?.placement }}</p>
+            <p class="item__name">{{ props.item?.item }}</p>
+        </div>
+        <div class="item__info--right">
+            <div class="checkbox-container checkbox-container--remove" v-if="props.delete" @touchstart="preventSortableTouch($event)" @click.stopPropagation="emit('handleDeletItem', props.item)">
+                <font-awesome-icon icon="trash-can" />
+            </div>
+        </div>
+    </div>
+</template>
+
+<style lang="scss" scoped>
+  @import '@/components/list-item/item.scss';
+</style>

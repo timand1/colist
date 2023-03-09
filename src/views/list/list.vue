@@ -6,16 +6,17 @@ import ShareList from '@/components/share-list/share-list.vue';
 import ShoppingItem from '@/components/list-item/shopping-item.vue';
 import TodoItem from '@/components/list-item/todo-item.vue';
 import TimeItem from '@/components/list-item/time-item.vue';
+import NumberedItem from '@/components/list-item/numbered-item.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist, ToDoList, User, TimeList } from '@/helpers/types/types';
+import { Shoppinglist, ToDoList, User, TimeList, NumberedList } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
 import { Sortable } from "sortablejs-vue3"
 
-type ListItem = Shoppinglist | ToDoList | TimeList;
+type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
 
 const route = useRoute();
 const list = ref()
@@ -92,12 +93,6 @@ const handleDeleteMode: () => void = () => {
 const closeDeleteMode: () => void = () => {
   deleteMode.value = !deleteMode.value;
   clearDeleteList()
-}
-
-const addDeleteItem: (item : Shoppinglist | ToDoList | TimeList) => void = (item) => {
-  // Check if item is already in the arr
-  const foundIndex = deleteArr.value.findIndex(x => x.id == item.id)
-  foundIndex != -1 ? deleteArr.value.splice(foundIndex, 1) : deleteArr.value.push(item)
 }
 
 const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = async (item) => {
@@ -201,10 +196,19 @@ const moveItem = async (evt: any) => {
   newList.splice(newIndex, 0, removed);
   itemList.value = [...newList];
   
+  if(list.value.type == 'Numbered') {
+    itemList.value =  itemList.value.map((item, index) => {
+      return {
+        ...item,
+        placement: index + 1
+      };
+    });
+  }
+
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
-     list : newList
+     list : itemList.value
     });    
     loader.value = false;
   } catch (error) {
@@ -268,6 +272,12 @@ const moveItem = async (evt: any) => {
         />
         <TimeItem
           v-else-if="list.type == 'Time'"
+          :delete="deleteMode"
+          :item="element"
+          @handleDeletItem="handleDeletItem"
+        />
+        <NumberedItem
+          v-else-if="list.type == 'Numbered'"
           :delete="deleteMode"
           :item="element"
           @handleDeletItem="handleDeletItem"

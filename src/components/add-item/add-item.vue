@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, onMounted, computed, reactive } from 'vue';
 import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
-import { updateDoc, doc, arrayUnion } from 'firebase/firestore';
+import { updateDoc, doc, arrayUnion, getDoc, DocumentReference, DocumentData } from 'firebase/firestore';
 import { useRoute } from 'vue-router';
+import { NumberedList } from '@/helpers/types/types';
 
 type AddItemProps = {
     type : string
@@ -61,17 +62,20 @@ const handleDefaultAmount: (name : string) => void = (name) => {
 }
 
 const handleAddItem: () => Promise<void> = async () => {
-    const newItem = props.type == 'Shopping' || props.type == 'ToDO' ? 
-      {...userInput, done : false, id : crypto.randomUUID()} 
-      : {...userInput, id : crypto.randomUUID()}
+  const newItem = props.type == 'Shopping' || props.type == 'ToDO' ? 
+    {...userInput, done : false, id : crypto.randomUUID()} 
+    : {...userInput, id : crypto.randomUUID()}
 
-    const listId : string = route.params.id as string
-    
-    const listRef = doc(db, "lists", listId);
+  const listId : string = route.params.id as string
+  const listRef = doc(db, "lists", listId);
 
+  if(props.type == 'Numbered') {
+    handleAddNumberedItem(listRef, newItem as NumberedList)
+  } else {
     await updateDoc(listRef, {
-        list: arrayUnion(newItem)
+      list: arrayUnion(newItem)
     });
+  }
 
     // Clear input fields
     for (const key in userInput) {      
@@ -79,6 +83,29 @@ const handleAddItem: () => Promise<void> = async () => {
     }
 
     props.type == 'Shopping' ? userInput.amount = 1 : null
+}
+
+const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem : NumberedList) => Promise<void> = async (listRef, newItem) => {
+  const docSnap = await getDoc(listRef);
+
+  newItem.placement = newItem.placement - 1
+  
+  let updatedList: NumberedList[] = [...docSnap.data()?.list]
+  updatedList.push(newItem)
+  updatedList = updatedList.sort((a, b) => a.placement - b.placement);
+
+  const updatedItems: NumberedList[] = updatedList.map((item, index) => {
+    return {
+      ...item,
+      placement: index + 1
+    };
+  });
+  
+  await updateDoc(listRef, {
+    list: updatedItems
+  });
+
+
 }
 
 </script>

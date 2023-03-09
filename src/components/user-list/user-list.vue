@@ -14,14 +14,14 @@ const auth = getAuth();
 
 <template>
     <div class="list--info">
-        <h2>{{ list.name }}</h2>
-        <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
-        <p>{{ list.type }} - {{ list.list.length }} items</p>
+        <h2>{{ props.list.name }}</h2>
+        <p v-if="props.list.users.length > 1">Users : {{ props.list.users.length }}</p>
+        <p>{{ props.list.type }} - {{ props.list.list.length }} items</p>
     </div>
-    <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click.stopPropagation="emit('deleteList', list.id, $event)" >
+    <div class="list--remove" v-if="props.list.author.id == auth.currentUser?.uid" @click.stopPropagation="emit('deleteList', props.list.id, $event)" >
         <font-awesome-icon icon="trash-can"/>
     </div>
-        <div class="list--remove" v-else @click.stopPropagation="emit('removeUser', list.id, list.users, $event)" >
+        <div class="list--remove" v-else @click.stopPropagation="emit('removeUser', props.list.id, props.list.users, $event)" >
         <p>Leave</p>
     </div>
 </template>
