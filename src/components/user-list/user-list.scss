@@ -1,0 +1,67 @@
+@use '@/styles/colors';
+@use '@/styles/variables';
+@use '@/styles/mixins';
+
+
+    .list--info {
+        h2 {
+            font-size: 16px;
+        }
+        p {
+            font-size: 12px;
+        }
+    }
+    .list--remove {
+        background-color: colors.$primary-accent;
+        transition: all variables.$transition-time;
+        z-index: 10;
+        svg, p {
+            color: colors.$secondary-bg;
+        }
+        &:has(svg) {
+            border-radius: variables.$radius-round; 
+        }
+        &:has(p) {
+            border-radius: variables.$radius-l;
+        }
+        &:hover {
+            background-color: colors.$danger;
+        }
+        svg {
+            padding: 6px 7px;
+            font-size: 12px;
+        }
+        p {
+            padding: 8px;
+            font-size: 14px;
+        }
+    }
+
+
+body.dark {
+
+        .list--remove {
+            background-color: colors.$primary-accent;
+            svg, p {
+                color: colors.$secondary-bg;
+            }
+            &:has(svg) {
+                border-radius: variables.$radius-round; 
+            }
+            &:has(p) {
+                border-radius: variables.$radius-l;
+            }
+            &:hover {
+                background-color: colors.$danger;
+            }
+            svg {
+                padding: 6px 7px;
+                font-size: 12px;
+            }
+            p {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+    
+}

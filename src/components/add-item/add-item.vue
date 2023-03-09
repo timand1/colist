@@ -100,6 +100,7 @@ const handleAddItem: () => Promise<void> = async () => {
               @keyup.enter="handleAddItem"
               @focus="handleDefaultAmount(input.name)"
               autocomplete="off"
+              :maxlength="input.name == 'comment' ? 40 : 20"
             >
             <label :for="input.name">{{ input.label }}</label>
         </div>

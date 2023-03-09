@@ -3,6 +3,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { ref, watch, watchEffect } from 'vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
+import UserList from '@/components/user-list/user-list.vue';
 import { db } from '@/firebase';
 import { doc, onSnapshot, collection, query, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { User, type List } from '@/helpers/types/types'
@@ -105,18 +106,8 @@ const handleOverlay: () => void = () => {
       <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
       <section class="list--container">
         <div v-for="list in lists" @click="goToList(list.id)" class="list">
-          <div class="list--info">
-            <h2>{{ list.name }}</h2>
-            <p v-if="list.users.length > 0">Users : {{ list.users.length }}</p>
-            <p>{{ list.type }} - {{ list.list.length }} items</p>
-          </div>
-          <div class="list--remove" v-if="list.author.id == auth.currentUser?.uid" @click.stopPropagation="deleteList(list.id, $event)" >
-            <font-awesome-icon icon="trash-can"/>
-          </div>
-          <div class="list--remove" v-else @click.stopPropagation="removeUser(list.id, list.users, $event)" >
-            <p>Leave</p>
-          </div>
-        </div>
+          <UserList :list="list" @deleteList="deleteList" @removeUser="removeUser" />
+        </div> 
       </section>
     </div>
     <section v-else class="loader"></section>

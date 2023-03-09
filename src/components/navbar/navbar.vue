@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Button from '../button/button.vue';
-import Logo from '@/assets/logo-tab.svg'
+import Logo from '@/assets/logo.svg'
 import { useRouter } from 'vue-router';
 import { getAuth, signOut } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';

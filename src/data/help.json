@@ -36,14 +36,14 @@
           "content": [
             "To create a list can click on the + sign if you are at the homescreen.",
             "You can also create a new list by clicking on the account menu (user icon) to get a dropdown of alternatives.",
-            "Click on the 'New list' option to open the create list modal."
+            "Click on the 'New list' option to open the create list box."
           ]
         },
         {
           "sub-title": "Share",
           "content": [
             "In order to share your list with someone - click on the 'Share' button in the navigation bar at the top of your screen.",
-            "A modal will open up with a search bar. Type in the name of the person you wish to share your list with.",
+            "A box will open up with a search bar. Type in the name of the person you wish to share your list with.",
             "Click on the person in the search field and then click on the 'Update' button."
           ]
         }
@@ -87,14 +87,14 @@
         "content": [
           "To create a list can click on the + sign if you are at the homescreen.",
           "You can also create a new list by clicking on the account menu (user icon) to get a dropdown of alternatives.",
-          "Click on the 'New list' option to open the create list modal."
+          "Click on the 'New list' option to open the create list box."
         ]
       },
       {
         "sub-title": "Share",
         "content": [
           "In order to share your list with someone - click on the 'Share' button in the navigation bar at the top of your screen.",
-          "A modal will open up with a search bar. Type in the name of the person you wish to share your list with.",
+          "A box will open up with a search bar. Type in the name of the person you wish to share your list with.",
           "Click on the person in the search field and then click on the 'Update' button."
         ]
     }

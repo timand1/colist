@@ -220,8 +220,8 @@ const moveItem = async (evt: any) => {
   <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
   <section v-if="loader" class="loader"></section>
   <div class="list" v-else>
-    <div class="user-container">
-      <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`">
+    <div class="user-container" @click="handleShareList">
+      <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`" :title="user.name">
     </div>
     <div class="list__header">
       <div class="list__header--title" v-if="updateName">

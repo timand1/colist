@@ -2,7 +2,7 @@
 import LoginSidepanel from "@/components/login-sidepanel/login-sidepanel.vue";
 import Button from "@/components/button/button.vue";
 import Logo from "@/assets/logo.vue";
-import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence, GithubAuthProvider  } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence, GithubAuthProvider  } from "firebase/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { db } from "@/firebase";
@@ -16,15 +16,14 @@ const errorRef = ref<boolean>(false)
 const router = useRouter()
 
 const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    errorRef.value ? errorRef.value = false : null
-    setPersistence(auth, browserSessionPersistence)
+  const provider = new GoogleAuthProvider();
+  errorRef.value ? errorRef.value = false : null
+  setPersistence(auth, browserLocalPersistence)
   .then(() => {
     // sign in the user with Google Sign-In
     return signInWithPopup(auth, provider);
   })
   .then(async (result) => {
-
     // If first time logging in, create a user in firestore
     const user = result.user
     const docRef = doc(db, "users", user.uid);
@@ -43,8 +42,7 @@ const signInWithGoogle = () => {
   .catch((error) => {
     errorRef.value = !errorRef.value
   });
-
-  }
+}
 
 const signInWithApple = () => {
 
@@ -52,14 +50,15 @@ const signInWithApple = () => {
 
 const signInWithGitHub = () => {
   const provider = new GithubAuthProvider();
-  signInWithPopup(auth, provider)
+  errorRef.value ? errorRef.value = false : null
+  setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    // sign in the user with Google Sign-In
+    return signInWithPopup(auth, provider);
+  })
   .then(async (result) => {
-    const credential = GithubAuthProvider.credentialFromResult(result);
-    const token = credential?.accessToken;
-
-    // The signed-in user info.
-    const user = result.user;
-    
+    // If first time logging in, create a user in firestore
+    const user = result.user
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -72,7 +71,8 @@ const signInWithGitHub = () => {
         });
       }
     router.push('/')
-  }).catch((error) => {
+  })
+  .catch((error) => {
     errorRef.value = !errorRef.value
   });
 }

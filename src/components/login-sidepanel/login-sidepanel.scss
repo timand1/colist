@@ -14,10 +14,10 @@
         @include mixins.flexbox($justify : space-between);
         flex-direction: column;
         gap: 3em;
-        padding: 5em;
+        padding: clamp(3em, 5vw, 5em);
         flex: 1;
         h2 {
-            font-size: clamp(1rem, 2vw, 2rem);
+            font-size: clamp(1rem, 1.8vw, 1.8rem);
             color: colors.$primary-font-dark;
         }
         .thoughtbubble {
@@ -74,13 +74,13 @@
             text-align: center;
             margin-top: auto;
             h1 {
-                font-size: clamp(1rem, 2.5vw, 2rem);
+                font-size: clamp(1rem, 1.8vw, 1.5rem);
                 color: colors.$primary-font-dark;
                 white-space: nowrap;
             }
             p {
                 margin-top: 1em;
-                font-size: clamp(0.8rem, 1.5vw, 1.5rem);
+                font-size: clamp(0.8rem, 1.2vw, 1.2rem);
                 color : colors.$hover-light;
             }
         }
