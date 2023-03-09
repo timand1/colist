@@ -80,12 +80,12 @@ const checkDarkmode: (dark : boolean) => void = (dark) => {
   <nav class="navbar">
     <img :src="Logo" alt="CoList Logo" @click="router.push('/')">
     <div class="navbar--right">
-      <font-awesome-icon :icon="store ? 'sun' : 'moon'" class="dark-mode" @click="toggleDarkmode" />
+      <font-awesome-icon :icon="store ? 'sun' : 'moon'" class="dark-mode" @click="toggleDarkmode" :title="store ? 'Light Mode' : 'Dark Mode'"/>
       <Button v-if="props.param == 'list'" text="Share" variant="primary" @click="handleShareList" />
-      <font-awesome-icon v-if="props.param == 'home'" icon="plus" @click="emit('click')" />
+      <font-awesome-icon v-if="props.param == 'home'" icon="plus" @click="emit('click')" title="Create new list" />
       <div>      
       <div class="navbar__user" ref="userMenuRef">
-        <font-awesome-icon icon="circle-user" class="user" @click="toggleUserMenu" />
+        <font-awesome-icon icon="circle-user" class="user" @click="toggleUserMenu" title="User menu" />
         <div class="navbar__user--menu" v-if="displayUserMenu">
           <p @click="handleList">Lists</p>
           <div class="divider"></div>
