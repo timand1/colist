@@ -100,7 +100,7 @@ const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem
       placement: index + 1
     };
   });
-  
+
   await updateDoc(listRef, {
     list: updatedItems
   });
@@ -124,7 +124,6 @@ const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem
               :name="input.name" 
               v-model="userInput[input.name]" 
               placeholder=" " 
-              @keyup.enter="handleAddItem"
               @focus="handleDefaultAmount(input.name)"
               autocomplete="off"
               :maxlength="input.name == 'comment' ? 40 : 20"

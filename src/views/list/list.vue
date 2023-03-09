@@ -132,8 +132,18 @@ const handleDeleteAll: () => Promise<void> = async () => {
 const handleDeletItem: (item : ListItem ) => Promise<void> = async (item) => {
   loader.value = true;  
   errorRef.value ? errorRef.value = false : null;
-  const updatedList = [...list.value.list].filter(del => del.id != item.id)
+  let updatedList = [...list.value.list].filter(del => del.id != item.id)
   const docRef = doc(db, "lists", listId.value);
+
+  if(list.value.type == 'Numbered') {
+    updatedList =  updatedList.map((item, index) => {
+      return {
+        ...item,
+        placement: index + 1
+      };
+    });
+  }
+
   try {
     await updateDoc(docRef, {
       list: updatedList
