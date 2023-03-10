@@ -255,7 +255,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
   loader.value = true;
   errorRef.value ? errorRef.value = false : null;
   const docRef = doc(db, "lists", listId.value);
-  const updatedList = list.value.list.map((oldItem : Shoppinglist) =>
+  const updatedList = list.value.list.map((oldItem : ListItem) =>
     oldItem.id === item.id ? item : oldItem
   );
   
