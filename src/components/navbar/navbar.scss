@@ -47,14 +47,14 @@
         }
         .navbar__user--menu {
             position: absolute;
-            bottom: calc((-12px * 5) + (-1px * 3) + (-4px * 8) + (-4px * 6) - 4px);
-            left: -20px;
+            bottom: calc((-14px * 5) + (-1px * 3) + (-4px * 8) + (-4px * 6) - 4px);
+            left: -24px;
             width: max-content;
             border-radius: variables.$radius-m;
             display: flex;
             flex-direction: column;
             gap: 4px;
-            background-color: colors.$secondary-bg;
+            background-color: colors.$primary-bg;
             box-shadow: 7px 14px 12px rgba(0, 0, 0, 0.4);
             border: 1px solid colors.$primary-font;
             z-index: 9999;
@@ -62,7 +62,7 @@
                 text-align: center;
                 cursor: pointer;
                 font-size: 12px;
-                padding: 4px 8px;
+                padding: 6px 12px;
                 color: colors.$primary-font;                
                 &:hover {
                     background-color: colors.$hover-light;

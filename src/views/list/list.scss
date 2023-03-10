@@ -182,7 +182,7 @@ body.dark {
 @media screen and (min-width: 786px) {
     .list {
         .delete__menu {
-            left: calc(50vw - clamp(100px, 45vw, 550px))
+            left: calc(50vw - clamp(100px, 45vw, 480px))
         }
         .delete__menu--open {
             width: 300px;
@@ -193,7 +193,7 @@ body.dark {
             }
         }
         .checkbox-container {
-            right: calc(50vw - clamp(100px, 45vw, 550px))
+            right: calc(50vw - clamp(100px, 45vw, 480px))
         }
     }
 }
