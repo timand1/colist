@@ -100,6 +100,9 @@
         }
         .active-users, .share__added {
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         
         .share__users {

@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { TimeList } from '@/helpers/types/types';
+import { TimeList, User } from '@/helpers/types/types';
 
 type TimeItemProps = {
     item : TimeList
     delete : boolean
+    users: User[]
+    showAssign : boolean
 }
 
 const props = defineProps<TimeItemProps>()
-const emit = defineEmits(['handleDeletItem']);
+const emit = defineEmits(['handleDeletItem', 'handleShowAssign']);
 
 const preventSortableTouch: (e : TouchEvent) => void = (e) => {
     e.stopPropagation();
@@ -17,7 +19,7 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
 </script>
 
 <template>
-    <div class="draggable item" :key="props.item.id">
+    <div class="draggable item" :key="props.item.id" @click="emit('handleShowAssign', props.item.id)">
         <div class="item__info--left">
             <p class="item__name">{{ props.item?.item }}</p>
             <p class="item__comment" v-if="props.item?.date">{{ props.item?.date }}</p>
@@ -31,6 +33,9 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
             >
                 <font-awesome-icon icon="trash-can" />
             </div>
+        </div>
+        <div class="assigned-users" >
+            <img v-for="user in item.assigned" :src="user.img" :alt="user.name" :title="user.name">
         </div>
     </div>
 </template>

@@ -5,14 +5,14 @@ import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { updateDoc, doc, arrayUnion, getDoc, DocumentReference, DocumentData } from 'firebase/firestore';
 import { useRoute } from 'vue-router';
-import { NumberedList } from '@/helpers/types/types';
+import { NumberedList, User } from '@/helpers/types/types';
 
 type AddItemProps = {
     type : string
 }
 
 type UserInput = {
-    [key: string]: string | number;
+    [key: string]: string | number | boolean | User[]
 }
 
 const props = defineProps<AddItemProps>()
@@ -62,13 +62,13 @@ const handleDefaultAmount: (name : string) => void = (name) => {
 }
 
 const handleAddItem: () => Promise<void> = async () => {
-  const newItem = props.type == 'Shopping' || props.type == 'ToDO' ? 
+  const newItem : UserInput = props.type == 'Shopping' || props.type == 'ToDO' ? 
     {...userInput, done : false, id : crypto.randomUUID()} 
     : {...userInput, id : crypto.randomUUID()}
 
   const listId : string = route.params.id as string
   const listRef = doc(db, "lists", listId);
-
+ newItem.assigned = []
   if(props.type == 'Numbered') {
     handleAddNumberedItem(listRef, newItem as NumberedList)
   } else {
@@ -77,12 +77,12 @@ const handleAddItem: () => Promise<void> = async () => {
     });
   }
 
-    // Clear input fields
-    for (const key in userInput) {      
-        userInput[key] = '';
-    }
+  // Clear input fields
+  for (const key in userInput) {      
+      userInput[key] = '';
+  }
 
-    props.type == 'Shopping' ? userInput.amount = 1 : null
+  props.type == 'Shopping' ? userInput.amount = 1 : null
 }
 
 const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem : NumberedList) => Promise<void> = async (listRef, newItem) => {
@@ -104,8 +104,6 @@ const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem
   await updateDoc(listRef, {
     list: updatedItems
   });
-
-
 }
 
 </script>

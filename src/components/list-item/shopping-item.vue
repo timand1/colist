@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist } from '@/helpers/types/types';
+import { Shoppinglist, User } from '@/helpers/types/types';
 
 type ShoppingItemProps = {
     item : Shoppinglist
     delete : boolean
+    users: User[]
+    showAssign : boolean
 }
 
 const props = defineProps<ShoppingItemProps>()
-const emit = defineEmits(['updateAmount', 'handleDeletItem', 'handleCheckedItem']);
+const emit = defineEmits(['updateAmount', 'handleDeletItem', 'handleCheckedItem', 'handleShowAssign']);
 
 const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
 
@@ -20,7 +22,7 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
 </script>
 
 <template>
-    <div class="draggable item" :key="props.item.id" >
+    <div class="draggable item" :key="props.item.id" @click="emit('handleShowAssign', props.item.id)">
         <div class="item__info--left">
             <p class="item__name">{{ props?.item.item }}</p>
             <p class="item__comment" v-if="props?.item.comment">{{ props?.item.comment }}</p>
@@ -45,6 +47,9 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
                 >
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
             </div>
+        </div>
+        <div class="assigned-users" >
+            <img v-for="user in item.assigned" :src="user.img" :alt="user.name" :title="user.name">
         </div>
     </div>
 </template>

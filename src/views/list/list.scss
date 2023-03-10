@@ -3,7 +3,7 @@
 @use '@/styles/variables';
 
 .list {
-    margin: 5em;
+    margin: 5em 0;
     .user-container {
         margin-left: 1em;
         display: flex;
@@ -31,6 +31,7 @@
                 height: 30px;
                 border-radius: variables.$radius-round;
                 @include mixins.grid-center();
+                cursor: pointer;
             }
             .check {
                 background-color: colors.$success;
@@ -86,9 +87,49 @@
             }
         }
     }
-    &:focus-within {
-        .delete__menu {
+
+    .checkbox-container {
+        position: fixed;
+        right: 2em;
+        bottom: 2em;
+        @include mixins.flexbox();
+        gap: 8px;
+        z-index: 10;
+        p {
+            font-size: 12px;
+        }
+        input {
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            border-radius: variables.$radius-round;
+            background-color: colors.$gray-font;
+            appearance: none;
+            padding: 0;
+            margin: 0;
+            &:checked {
+                background-color: colors.$success;
+            }
+            
+        }
+        label {
             display: none;
+            position: absolute;
+            pointer-events: none;
+            bottom: 3px;
+            right: 3px;
+            svg {
+                font-size: 18px;
+                color: colors.$secondary-bg;
+                pointer-events: none;
+            }
+        }
+        input:checked ~ label {
+            display: block;
+        }
+
+        .checkbox-container--check {
+            display: flex;
         }
     }
 }
@@ -113,8 +154,29 @@ body.dark {
                 }
             }
         }
+        .checkbox-container {
+            label {
+                svg {
+                    color: colors.$secondary-bg-dark;
+                }
+            }
+        }
     }
 }
+
+@media screen and (max-height: 500px) {
+    .list {
+        &:focus-within {
+            .delete__menu {
+                display: none;
+            }
+            .checkbox-container {
+                display: none;
+            }
+        }
+    }
+}
+
 @media screen and (min-width: 786px) {
     .list {
         .delete__menu {
@@ -127,6 +189,9 @@ body.dark {
             .delete__menu {
                 display: grid;
             }
+        }
+        .checkbox-container {
+            right: calc(50vw - clamp(100px, 45vw, 550px))
         }
     }
 }

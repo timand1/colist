@@ -7,6 +7,7 @@ import ShoppingItem from '@/components/list-item/shopping-item.vue';
 import TodoItem from '@/components/list-item/todo-item.vue';
 import TimeItem from '@/components/list-item/time-item.vue';
 import NumberedItem from '@/components/list-item/numbered-item.vue';
+import AssignUser from '@/components/assign-user/assign-user.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
@@ -32,6 +33,8 @@ const prevListId = ref<string>(route.params.id as string)
 const itemList = ref<ListItem[]>([])
 const deleteArr = ref<ListItem[]>([])
 const sortable = ref<InstanceType<typeof Sortable> | null>(null);
+const showAssign = ref(false)
+const assignableItem = ref<number>(0)
 
 onBeforeMount(async () => {
   getList()    
@@ -227,11 +230,32 @@ const moveItem = async (evt: any) => {
   }
 };
 
+const handleShowAssign: (id : string) => void = (id) => {
+  assignableItem.value = list.value.list.findIndex((item : ListItem) => item.id == id)
+  showAssign.value = true;
+}
+
+const closeShowAssign: () => void = () => {
+  showAssign.value = false;
+}
+
+const assignedOnly = ref<boolean>(false)
+const assignedItems = ref<ListItem[]>([])
+const showAssignedItems: () => void = () => {
+  assignedOnly.value = !assignedOnly.value;
+  assignedOnly.value ? 
+    assignedItems.value = itemList.value.filter(item => {
+    const assignedIds = item.assigned.map(user => user.id);
+    return assignedIds.includes(auth.currentUser!.uid);
+  })
+  : null
+}
 </script>
 
 <template>
   <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
   <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
+  <AssignUser v-if="showAssign" :item="list.list[assignableItem]" :users="list.users" @closeShowAssign="closeShowAssign"/>
   <section v-if="loader" class="loader"></section>
   <div class="list" v-else>
     <div class="user-container" @click="handleShareList">
@@ -258,7 +282,7 @@ const moveItem = async (evt: any) => {
     <Sortable
       :key="JSON.stringify(itemList)"
       :item-key="list.id"
-      :list="itemList"
+      :list="assignedOnly ? assignedItems : itemList"
       :options="options"
       class="item-container"
       ref="sortable"
@@ -269,28 +293,40 @@ const moveItem = async (evt: any) => {
           v-if="list.type == 'Shopping'"
           :delete="deleteMode"
           :item="element"
+          :users="list.users"
+          :showAssign="showAssign"
           @updateAmount="updateAmount"
           @handleDeletItem="handleDeletItem"
           @handleCheckedItem="handleCheckedItem"
+          @handleShowAssign="handleShowAssign"
         />
         <TodoItem
           v-else-if="list.type == 'ToDo'"
           :delete="deleteMode"
           :item="element"
+          :users="list.users"
+          :showAssign="showAssign"
           @handleDeletItem="handleDeletItem"
           @handleCheckedItem="handleCheckedItem"
+          @handleShowAssign="handleShowAssign"
         />
         <TimeItem
           v-else-if="list.type == 'Time'"
           :delete="deleteMode"
           :item="element"
+          :users="list.users"
+          :showAssign="showAssign"
           @handleDeletItem="handleDeletItem"
+          @handleShowAssign="handleShowAssign"
         />
         <NumberedItem
           v-else-if="list.type == 'Numbered'"
           :delete="deleteMode"
           :item="element"
+          :users="list.users"
+          :showAssign="showAssign"
           @handleDeletItem="handleDeletItem"
+          @handleShowAssign="handleShowAssign"
         />
       </template>
     </Sortable>
@@ -301,6 +337,16 @@ const moveItem = async (evt: any) => {
           <p >|</p>
           <p class="delete__option" @click="handleDeleteAll">Delete All</p>
         </div>
+    </div>
+    <div>
+      <div class="checkbox-container">
+      <p>Only assigned</p>
+        <input type="checkbox" name="check" 
+            :checked="assignedOnly" 
+            @click="showAssignedItems"
+          >
+          <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
+      </div>
     </div>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </div>

@@ -4,6 +4,7 @@ export type Shoppinglist = {
     comment? : string
     done: boolean
     id: string
+    assigned : User[]
 }
 
 export type ToDoList = {
@@ -11,12 +12,14 @@ export type ToDoList = {
     comment? : string
     done: boolean
     id: string
+    assigned : User[]
 }
 
 export type NumberedList = {
     item : string
     placement : number
     id: string
+    assigned : User[]
 }
 
 export type TimeList = {
@@ -24,6 +27,7 @@ export type TimeList = {
     time: string
     date? : number
     id: string
+    assigned : User[]
 }
 
 export type User = {
