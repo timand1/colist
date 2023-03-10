@@ -32,7 +32,7 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
             <div class="checkbox-container checkbox-container--check" v-else>
                 <input type="checkbox" name="check" 
                     :checked="props.item?.done" 
-                    @change.stopPropagation="emit('handleCheckedItem', props.item)"
+                    @click.stopPropagation="emit('handleCheckedItem', props.item)"
                     @touchstart="preventSortableTouch($event)"
                 >
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
