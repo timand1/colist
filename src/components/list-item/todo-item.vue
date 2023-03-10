@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ToDoList, User } from '@/helpers/types/types';
-import AssignUser from '@/components/assign-user/assign-user.vue';
 
 type ToDoItemProps = {
     item : ToDoList

@@ -8,7 +8,6 @@ import { db } from '@/firebase';
 import { doc, onSnapshot, collection, query, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { User, type List } from '@/helpers/types/types'
 import router from '@/router';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const auth = getAuth()
 const addOverlay = ref<boolean>(false)

@@ -274,7 +274,13 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
 
 <template>
   <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
-  <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
+  <ShareList 
+    v-if="displayShareList" 
+    :users="list?.users" 
+    :display-share-list="displayShareList" 
+    :author="list.author" 
+    @click="handleShareList" 
+  />
   <AssignUser v-if="showAssign" :id="list.id" :type="list.type" :item="list.list[assignableItem]" :users="list.users" @closeShowAssign="closeShowAssign" @handleUpdateItem="handleUpdateItem"/>
   <section v-if="loader" class="loader"></section>
   <div class="list" v-else>
@@ -284,11 +290,11 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
     <div class="list__header">
       <div class="list__header--title" v-if="updateName">
         <input type="text" v-model="newTitle">
-        <div class="icon check">
-          <font-awesome-icon icon="check" @click="handleUpdateName" />        
+        <div class="icon check" @click="handleUpdateName" >
+          <font-awesome-icon icon="check"/>        
         </div>
-        <div class="icon cancel">
-          <font-awesome-icon icon="xmark" @click="changeTitle" />
+        <div class="icon cancel" @click="changeTitle" >
+          <font-awesome-icon icon="xmark" />
         </div>
       </div>
       <div class="list__header--title" v-else>

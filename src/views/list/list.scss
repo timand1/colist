@@ -148,6 +148,7 @@ body.dark {
         .list__header {
             .list__header--title {
                 .change-title {
+                    cursor: pointer;
                     color: colors.$primary-font-dark;
                 }
                 input {
