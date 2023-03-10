@@ -11,6 +11,9 @@
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25); 
     height: 60px;
     position: relative;
+    p {
+        user-select: none;
+    }
     .item__info--numbered {
         display: flex;
         align-items: center;

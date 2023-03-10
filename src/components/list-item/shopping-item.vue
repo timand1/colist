@@ -15,7 +15,7 @@ const emit = defineEmits(['updateAmount', 'handleDeletItem', 'handleCheckedItem'
 
 const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
 
-const preventSortableTouch: (e : TouchEvent) => void = (e) => {
+const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
     e.stopPropagation();
 }
 
@@ -28,7 +28,7 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
             <p class="item__comment" v-if="props?.item.comment">{{ props?.item.comment }}</p>
         </div>
         <div class="item__info--right">
-            <select name="amount" @touchstart="preventSortableTouch($event)" @change="emit('updateAmount', props.item, parseInt(($event.target as HTMLSelectElement).value))">
+            <select name="amount" @touchstart="preventSortableTouch($event)" @click="preventSortableTouch($event)" @change="emit('updateAmount', props.item, parseInt(($event.target as HTMLSelectElement).value))">
                 <option v-for="amount in amountArr" :value="amount" :selected="props?.item.amount == amount">{{ amount }}</option>
             </select>
             <div class="checkbox-container checkbox-container--remove" 
