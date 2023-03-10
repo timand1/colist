@@ -3,7 +3,7 @@ import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
@@ -11,13 +11,44 @@ type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
 type AssignUserProps = {
     users : User[]
     item : ListItem
+    type: string
+    id: string
 }
 
 const props = defineProps<AssignUserProps>()
-const emit = defineEmits(['closeShowAssign']);
+const emit = defineEmits(['closeShowAssign', 'handleUpdateItem']);
 
 const route = useRoute();
 const assignedUsers = ref<User[]>([])
+const userInput = ref(Object.fromEntries(Object.entries(props.item).filter(([key]) => !['done', 'id', 'assigned'].includes(key))))
+const inputFields = computed(() => {    
+  switch (props.type) {
+    case 'Shopping':
+      return [
+        { name: 'item', label: 'Item*', type: 'text', req: true },
+        { name: 'amount', label: 'Amount', type: 'number', req: true },
+        { name: 'comment', label: 'Comment', type: 'text', req: false },
+      ]
+    case 'ToDo':
+      return [
+        { name: 'todo', label: 'Todo*', type: 'text', req: true },
+        { name: 'comment', label: 'Comment', type: 'text', req: false },
+      ]
+    case 'Numbered':
+      return [
+        { name: 'item', label: 'Item*', type: 'text', req: true },
+        { name: 'placement', label: 'Placement*', type: 'number', req: true },
+      ]
+    case 'Time':
+      return [
+        { name: 'item', label: 'Item*', type: 'text', req: true },
+        { name: 'time', label: 'Time*', type: 'time', req: true },
+        { name: 'date', label: 'Date', type: 'date', req: false },
+      ]
+    default:
+      return []
+  }
+})
 
 onMounted(() => {
     assignedUsers.value = props.users.filter(user => {
@@ -60,14 +91,33 @@ const removeAssignUser: (user : User) => Promise<void> = async (user) => {
     await updateDoc(listRef, {
         list: listData
     });
-} 
+}
+
+const updateItem: () => void = () => {
+    const updatedItem =  Object.assign({}, props.item, userInput.value);
+    emit('handleUpdateItem', updatedItem)
+}
 
 </script>
 
 <template>
     <section class="assign-user">
         <div class="assign-user__container">
-
+            <div class="item">
+                <div v-for="(input, index) in inputFields" :key="index" class="assign__item">
+                <input
+                  :type="input.type"
+                  :required="input.req"
+                  :name="input.name"
+                  v-model="userInput[input.name]"
+                  placeholder=" "
+                  autocomplete="off"
+                  :maxlength="input.name == 'comment' ? 40 : 20"
+                >
+                <label :for="input.name">{{ input.label }}</label>
+                </div>
+                <div style="display: flex;"><Button variant="primary" text="Update" @click="updateItem" /></div>
+            </div>
             <div class="users">
                 <h4>Users</h4>
                 <div v-for="user in assignedUsers" class="user">

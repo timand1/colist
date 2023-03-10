@@ -250,12 +250,32 @@ const showAssignedItems: () => void = () => {
   })
   : null
 }
+
+const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
+  loader.value = true;
+  errorRef.value ? errorRef.value = false : null;
+  const docRef = doc(db, "lists", listId.value);
+  const updatedList = list.value.list.map((oldItem : Shoppinglist) =>
+    oldItem.id === item.id ? item : oldItem
+  );
+  
+  try {
+    await updateDoc(docRef, {
+     list : updatedList
+    });
+    loader.value = false;
+  } catch (error) {
+    loader.value = false;
+    errorRef.value = !errorRef.value;
+  }
+}
+
 </script>
 
 <template>
   <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
   <ShareList v-if="displayShareList" :users="list?.users" :display-share-list="displayShareList" :author="list.author" @click="handleShareList" />
-  <AssignUser v-if="showAssign" :item="list.list[assignableItem]" :users="list.users" @closeShowAssign="closeShowAssign"/>
+  <AssignUser v-if="showAssign" :id="list.id" :type="list.type" :item="list.list[assignableItem]" :users="list.users" @closeShowAssign="closeShowAssign" @handleUpdateItem="handleUpdateItem"/>
   <section v-if="loader" class="loader"></section>
   <div class="list" v-else>
     <div class="user-container" @click="handleShareList">
@@ -338,7 +358,7 @@ const showAssignedItems: () => void = () => {
           <p class="delete__option" @click="handleDeleteAll">Delete All</p>
         </div>
     </div>
-    <div>
+    <div v-if="!deleteMode" >
       <div class="checkbox-container">
       <p>Only assigned</p>
         <input type="checkbox" name="check" 

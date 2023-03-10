@@ -93,6 +93,7 @@ body.dark {
             .input-container {
                 input, select {
                     color: colors.$primary-font-dark;
+                    color-scheme: dark;
                 }
                 input:focus ~ label, input:not(:placeholder-shown) ~ label {
                     background-color: colors.$primary-bg-dark;

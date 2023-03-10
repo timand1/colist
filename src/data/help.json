@@ -48,7 +48,43 @@
           ]
         }
     ]
-}
+  },
+  {
+    "title": "Assign",
+    "items" : [
+      {
+        "sub-title" : "Assign item",
+        "content" : [
+          "In order to assign an item to a user, click on the chosen item to open up a container.",
+          "In the container all users in the list will be shown. Click on the 'Assign' button to assign a specific user.",
+          "If a user is assigned, they will be moved to the 'Assigned users' title.",
+          "To remove the assign from a user, click on the 'Remove' button."
+        ]
+      },
+      {  
+        "sub-title" : "Show assigned",
+        "content" : [
+          "If items are assigned to user, you have the option to only show items that are assigned to you.",
+          "You can toggle this function by clicking on the gray circle in the bottom right corner.",
+          "If the 'Assigned Only' option is chosen and nothing is shown, that means no item is assigned to you."
+        ]
+      }
+
+    ]
+  },
+  {
+    "title" : "Update",
+    "items" : [
+      {
+        "sub-title" : "Update items",
+        "content" : [
+          "To update an item, click on the chosen item to open up a the update and assign container.",
+          "At the top of the container, the selected items values are in input fields, simply update the values to your desired values.",
+          "When you are done, click the 'Update' button and the item is updated."
+        ]
+      }
+    ]
+  }
 ],
 "mobile": [
   {
@@ -97,8 +133,44 @@
           "A box will open up with a search bar. Type in the name of the person you wish to share your list with.",
           "Click on the person in the search field and then click on the 'Update' button."
         ]
-    }
-]
-}
-]
+      }
+    ]
+  },
+  {
+    "title": "Assign",
+    "items" : [
+      {
+        "sub-title" : "Assign item",
+        "content" : [
+          "In order to assign an item to a user, click on the chosen item to open up a container.",
+          "In the container all users in the list will be shown. Click on the 'Assign' button to assign a specific user.",
+          "If a user is assigned, they will be moved to the 'Assigned users' title.",
+          "To remove the assign from a user, click on the 'Remove' button."
+        ]
+      },
+      {  
+        "sub-title" : "Show assigned",
+        "content" : [
+          "If items are assigned to user, you have the option to only show items that are assigned to you.",
+          "You can toggle this function by clicking on the gray circle in the bottom right corner.",
+          "If the 'Assigned Only' option is chosen and nothing is shown, that means no item is assigned to you."
+        ]
+      }
+
+    ]
+  },
+  {
+    "title" : "Update",
+    "items" : [
+      {
+        "sub-title" : "Update items",
+        "content" : [
+          "To update an item, click on the chosen item to open up a the update and assign container.",
+          "At the top of the container, the selected items values are in input fields, simply update the values to your desired values.",
+          "When you are done, click the 'Update' button and the item is updated."
+        ]
+      }
+    ]
+  }
+  ]
 }

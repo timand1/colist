@@ -15,13 +15,58 @@
     .assign-user__container {
         @include mixins.flexbox($justify : space-between);
         flex-direction: column;
-        gap: 20px;
+        gap: 30px;
         width: calc(100% - 2em);
         height: fit-content;
         min-height: 50%;
+        max-height: 90vh;
+        overflow-y: auto;
         background-color: colors.$primary-bg;
         padding: 1em;
         border-radius: 12px;
+        .item {
+            display: flex; 
+            flex-direction: column;
+            width: 100%;
+            gap: 15px;
+            .button {
+                flex: 1;
+            }
+        }
+        .assign__item {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: 100%;
+            input {
+                all: unset;
+                outline: 1px solid colors.$gray-font;
+                outline-offset: -1px;
+                border-radius: 4px;
+                padding: 8px 10px;
+                font-family: variables.$primary-font;
+                font-size: 14px;
+                &:focus {
+                    outline-color: colors.$primary;
+                }
+            }
+            label {
+                pointer-events: none;
+                position: absolute;
+                top: calc(50% - 7px);
+                left: 10px;
+                font-size: 14px;
+                transition: all 150ms;
+            }
+        
+            input:focus ~ label, input:not(:placeholder-shown) ~ label {
+                font-size: 14px;
+                padding: 4px 4px 0 4px;
+                background-color: colors.$primary-bg;
+                top: -12px;
+                z-index: 1;
+            }
+        }
         .users, .users__assigned {
             display: flex;
             flex-direction: column;
@@ -50,36 +95,39 @@
         .assign-btn {
             padding: 6px 7px;
         }
-    }   
+    }
 }
 
 body.dark {
     .assign-user {
-
         .assign-user__container {
-
             background-color: colors.$primary-bg-dark;
-
-            .users, .users__assigned {
-  
-                .user {
-
-                    .user__info {
-
-                        .user__info--name {
-                            p {
-                                color : colors.$primary-font-dark;
-                            }
-                            .email {
-                                color: colors.$hover-light;
-                            }
+            input {
+                outline: 1px solid colors.$hover-dark;
+                color: colors.$primary-font-dark;
+                color-scheme: dark;
+            }            
+            input:focus ~ label, input:not(:placeholder-shown) ~ label {
+                background-color: colors.$primary-bg-dark;
+            }
+        }
+        .users, .users__assigned {
+            .user {
+                .user__info {
+                    .user__info--name {
+                        p {
+                            color : colors.$primary-font-dark;
+                        }
+                        .email {
+                            color: colors.$hover-light;
                         }
                     }
                 }
             }
-        }   
-    }
+        }
+    }   
 }
+
 
 @media screen and (max-width: 340px) {
     .assign-user {
