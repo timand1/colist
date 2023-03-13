@@ -54,14 +54,17 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!isAuthenticated) {
+      // If not logged in
       next({
         path: '/login',
         query: { redirect: to.fullPath }
       })
     } else {
+      // If logged in
       next()
     }
   } else {
+    // Accessible without logging in
     next()
   }
 })

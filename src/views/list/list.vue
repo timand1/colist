@@ -55,8 +55,8 @@ const getList: () => void = () => {
   }
 
   const docRef = doc(db, "lists", listId.value);
-  onSnapshot(docRef, (docSnap) => {
-    if (docSnap.exists() && docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid) != -1) {
+  onSnapshot(docRef, (docSnap) => {    
+    if (docSnap.exists() && docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid).length != 0) {
       list.value = docSnap.data();
       newTitle.value = list.value.name
       itemList.value = list.value.list
