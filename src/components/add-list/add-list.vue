@@ -46,7 +46,7 @@ const createNewList: () => Promise<void> = async () => {
 </script>
 
 <template>
-  <section class="add-list__overlay">
+  <section class="add-list__overlay" @click="emit('click')">
     <section class="add-list" ref="addItemRef">
       <h2>New list</h2>
       <div class="input-container" :class="createError ? 'input-error' : null">

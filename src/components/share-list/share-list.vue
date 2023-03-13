@@ -147,7 +147,7 @@ const removeAdded: (user : User) => void = (user) => {
 </script>
 
 <template>
-    <section class="share__container">
+    <section class="share__container" @click="emit('click')">
         <section class="share">
             <div class="search">
                 <input type="text" name="search" placeholder=" " :value="userInput" @input="searchUser($event.target)" @keyup.enter="searchUser($event)" @keydown.escape="clearSearch">

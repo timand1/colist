@@ -101,7 +101,7 @@ const updateItem: () => void = () => {
 </script>
 
 <template>
-    <section class="assign-user">
+    <section class="assign-user" @click="emit('closeShowAssign')">
         <div class="assign-user__container">
             <div class="item">
                 <div v-for="(input, index) in inputFields" :key="index" class="assign__item">
