@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
-import { User } from '@/helpers/types/types';
+import { NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
 import { getAuth } from 'firebase/auth';
 import { doc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
 import { computed, ref, watch } from 'vue';
@@ -10,10 +10,13 @@ import { createPopper } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { debounce } from 'lodash';
 
+type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
+
 type ShareListProps = {
     users: User[]
     author : User
     displayShareList : boolean
+    list : ListItem[]
 }
 
 const props = defineProps<ShareListProps>()
@@ -52,10 +55,16 @@ const removeUser: (user: User) => Promise<void> = async (user) => {
     const listId : string = route.params.id as string
     errorRef.value ? errorRef.value = false : null;
     const updatedUsers = props.users.filter(del => del.id != user.id)
-    
+    let updatedAssignedList = [...props.list]
+    updatedAssignedList.forEach(function(obj) {
+     obj.assigned = obj.assigned.filter(function(u) {
+      return u.id !== user.id;
+    });
+  });
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
+        list : updatedAssignedList,
         users: updatedUsers,
     });
 

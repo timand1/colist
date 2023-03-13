@@ -35,6 +35,8 @@ const deleteArr = ref<ListItem[]>([])
 const sortable = ref<InstanceType<typeof Sortable> | null>(null);
 const showAssign = ref(false)
 const assignableItem = ref<number>(0)
+const assignedOnly = ref<boolean>(false)
+const assignedItems = ref<ListItem[]>([])
 
 onBeforeMount(async () => {
   getList()    
@@ -239,8 +241,6 @@ const closeShowAssign: () => void = () => {
   showAssign.value = false;
 }
 
-const assignedOnly = ref<boolean>(false)
-const assignedItems = ref<ListItem[]>([])
 const showAssignedItems: () => void = () => {
   assignedOnly.value = !assignedOnly.value;
   assignedOnly.value ? 
@@ -276,6 +276,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
   <Navbar param="list" @toggleShare="handleShareList" @click="handleOverlay"/>
   <ShareList 
     v-if="displayShareList" 
+    :list="list?.list"
     :users="list?.users" 
     :display-share-list="displayShareList" 
     :author="list.author" 
