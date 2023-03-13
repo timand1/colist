@@ -346,7 +346,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
           @handleShowAssign="handleShowAssign"
         />
         <NumberedItem
-          v-else-if="list.type == 'Numbered'"
+          v-else-if="list.type == 'Numbered'" 
           :delete="deleteMode"
           :item="element"
           :users="list.users"

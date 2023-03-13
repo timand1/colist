@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, onMounted, computed, reactive } from 'vue';
+import useDetectOutsideClick from '@/composables/clickOutsideComponent';
 import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { updateDoc, doc, arrayUnion, getDoc, DocumentReference, DocumentData } from 'firebase/firestore';
@@ -20,6 +21,7 @@ const props = defineProps<AddItemProps>()
 const route = useRoute();
 let userInput: UserInput = reactive({});
 const addItem = ref(false)
+const addRef = ref()
 
 const inputFields = computed(() => {    
   switch (props.type) {
@@ -56,6 +58,11 @@ onMounted(() => {
 const toggleAddItem: () => void = () => {
     addItem.value = !addItem.value
 }
+
+useDetectOutsideClick(addRef, () => {
+  addItem.value = false
+});
+
 
 const handleDefaultAmount: (name : string) => void = (name) => {
   name == 'amount' ? userInput.amount = '' : null
@@ -109,7 +116,7 @@ const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem
 </script>
 
 <template>
-    <section class="add-item">
+    <section class="add-item" ref="addRef">
     <div class="add-item__headline" @click="toggleAddItem">
         <h2>Add item</h2>
         <font-awesome-icon icon="chevron-down" :class="addItem ? 'add-item--active' : ''" />
