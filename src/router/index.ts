@@ -4,6 +4,7 @@ import Login from '@/views/login/login.vue'
 import List from '@/views/list/list.vue'
 import Help from '@/views/help/help.vue'
 import Errorpage from '@/views/errorpage/errorpage.vue'
+import { getAuth } from 'firebase/auth'
 
 const router = createRouter({
   history: createWebHashHistory (import.meta.env.BASE_URL),
@@ -11,7 +12,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: { requiresAuth: true }
     },
     {
       path: '/login',
@@ -21,12 +23,14 @@ const router = createRouter({
     {
       path: '/list/:id',
       name: 'list',
-      component: List
+      component: List,
+      meta: { requiresAuth: true }
     },
     {
       path: '/help',
       name: 'help',
-      component: Help
+      component: Help,
+      meta: { requiresAuth: true }
     },
     {
       path: '/:pathMatch(.*)',
@@ -34,6 +38,32 @@ const router = createRouter({
       component : Errorpage
     }
   ]
+})
+
+let isAuthenticated = false
+
+async function checkAuth() {
+  const auth = getAuth()
+  await new Promise(resolve => auth.onAuthStateChanged(resolve))
+  isAuthenticated = auth.currentUser !== null
+  
+}
+
+router.beforeEach(async (to, from, next) => {
+  await checkAuth()
+
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

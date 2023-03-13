@@ -31,6 +31,7 @@ const toggleUserMenu: () => void = () => {
 const handleSignOut = () => {
   toggleUserMenu()
   signOut(auth).then(() => {
+    router.push('/login')
   }).catch((error) => {
 
   });
