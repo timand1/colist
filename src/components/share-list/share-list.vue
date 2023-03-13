@@ -144,11 +144,15 @@ const removeAdded: (user : User) => void = (user) => {
     addedUsers.value = addedUsers.value.filter(x => x.id != user.id)
 }
 
+const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
+    e.stopPropagation();
+}
+
 </script>
 
 <template>
     <section class="share__container" @click="emit('click')">
-        <section class="share">
+        <section class="share" @click="preventSortableTouch">
             <div class="search">
                 <input type="text" name="search" placeholder=" " :value="userInput" @input="searchUser($event.target)" @keyup.enter="searchUser($event)" @keydown.escape="clearSearch">
                 <font-awesome-icon class="search__clear" icon="xmark" v-if="userInput.length > 0" @click="clearSearch" />

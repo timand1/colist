@@ -98,11 +98,15 @@ const updateItem: () => void = () => {
     emit('handleUpdateItem', updatedItem)
 }
 
+const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
+    e.stopPropagation();
+}
+
 </script>
 
 <template>
     <section class="assign-user" @click="emit('closeShowAssign')">
-        <div class="assign-user__container">
+        <div class="assign-user__container" @click="preventSortableTouch">
             <div class="item">
                 <div v-for="(input, index) in inputFields" :key="index" class="assign__item">
                 <input

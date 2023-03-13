@@ -43,11 +43,15 @@ const createNewList: () => Promise<void> = async () => {
   }
 }
 
+const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
+    e.stopPropagation();
+}
+
 </script>
 
 <template>
   <section class="add-list__overlay" @click="emit('click')">
-    <section class="add-list" ref="addItemRef">
+    <section class="add-list" ref="addItemRef" @click="preventSortableTouch">
       <h2>New list</h2>
       <div class="input-container" :class="createError ? 'input-error' : null">
         <input type="text" name="listname" placeholder=' ' required v-model="listname" @focus="createError = false">
