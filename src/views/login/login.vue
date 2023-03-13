@@ -37,9 +37,8 @@ const signInWithGoogle = () => {
           email: user.email
         });
       }
-      const redirect = router.currentRoute.value.query.redirect || '/'
-      console.log(redirect);
-      router.push(redirect as string)
+    const redirect = router.currentRoute.value.query.redirect || '/'
+    router.push(redirect as string)
   })
   .catch((error) => {
     errorRef.value = !errorRef.value
@@ -72,11 +71,8 @@ const signInWithGitHub = () => {
           email: user.email
         });
       }
-      const redirect = router.currentRoute.value.query.redirect || '/'
-      console.log(redirect);
-      
-// redirect the user to the stored path
-router.push(redirect as string)
+    const redirect = router.currentRoute.value.query.redirect || '/'
+    router.push(redirect as string)
   })
   .catch((error) => {
     errorRef.value = !errorRef.value
