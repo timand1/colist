@@ -1,5 +1,6 @@
 @use '@/styles/colors';
 @use "@/styles/variables.scss";
+@use '@/styles/mixins.scss';
 
 .add-item {
     width: 100%;
@@ -33,38 +34,7 @@
         outline-offset: -1px;
         border-radius: 8px;
         .input-container {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            width: 100%;
-            input {
-                all: unset;
-                outline: 1px solid colors.$gray-font;
-                outline-offset: -1px;
-                border-radius: 4px;
-                padding: 10px 12px;
-                font-family: variables.$primary-font;
-                font-size: 16px;
-                &:focus {
-                    outline-color: colors.$primary;
-                }
-            }
-            label {
-                pointer-events: none;
-                position: absolute;
-                top: calc(50% - 7px);
-                left: 10px;
-                font-size: 14px;
-                transition: all 150ms;
-            }
-        
-            input:focus ~ label, input:not(:placeholder-shown) ~ label {
-                font-size: 14px;
-                padding: 4px 4px 0 4px;
-                background-color: colors.$primary-bg;
-                top: -12px;
-                z-index: 1;
-            }
+            @include mixins.inputContainer();
         }
     }
     .add-item__form--active {

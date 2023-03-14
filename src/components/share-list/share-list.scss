@@ -24,38 +24,8 @@
         border-radius: variables.$radius-l;
         overflow: auto;
         .search {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            width: 100%;
+            @include mixins.inputContainer();
             height: 40px;
-            input {
-                all: unset;
-                outline: 1px solid colors.$gray-font;
-                outline-offset: -1px;
-                border-radius: variables.$radius-s;
-                padding: 10px 12px;
-                font-size: 18px;
-                &:focus {
-                    outline-color: colors.$primary;
-                }
-            }
-            label {
-                pointer-events: none;
-                position: absolute;
-                top: calc(50% - 7px);
-                left: 10px;
-                font-size: 14px;
-                transition: all 150ms;
-            }
-            
-            input:focus ~ label, input:not(:placeholder-shown) ~label {
-                font-size: 14px;
-                padding: 4px 4px 0 4px;
-                background-color: colors.$primary-bg;
-                top: -12px;
-                z-index: 1;
-            }
             .search__clear {
                 position: absolute;
                 right: 10px;
@@ -64,7 +34,6 @@
                 color: colors.$primary-font;
                 cursor: pointer;
             }
-
         }
         .search__found {
             border: 1px solid colors.$gray-font;

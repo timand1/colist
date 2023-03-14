@@ -1,4 +1,5 @@
 @use '@/styles/colors';
+@use '@/styles/variables';
 
 @mixin flexbox($justify: center, $align: center) {
     display: flex;
@@ -12,36 +13,74 @@
 }
 
 @mixin loader() {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-    width: 80px;
-    height: 80px;
-    z-index: 10000;
-    &:after {
-      content: " ";
-      position: absolute;
-      top: -0.5em;
-      left: -0.5em;
-      bottom: -0.5em;
-      right: -0.5em;
-      width: 64px;
-      height: 64px;
-      margin: 8px;
-      border-radius: 50%;
-      border: 6px solid colors.$primary-accent;
-      border-color: colors.$primary-accent transparent colors.$primary-accent transparent;
-      animation: lds-dual-ring 1.2s linear infinite;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  width: 80px;
+  height: 80px;
+  z-index: 10000;
+  &:after {
+    content: " ";
+    position: absolute;
+    top: -0.5em;
+    left: -0.5em;
+    bottom: -0.5em;
+    right: -0.5em;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 6px solid colors.$primary-accent;
+    border-color: colors.$primary-accent transparent colors.$primary-accent transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+    0% {
+    transform: rotate(0deg);
     }
-    @keyframes lds-dual-ring {
-      0% {
-      transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+    100% {
+      transform: rotate(360deg);
     }
   }
+}
+
+@mixin inputContainer() {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  input, select {
+      all: unset;                
+      font-family: variables.$primary-font;
+      font-size: 14px;
+      outline: 1px solid colors.$gray-font;
+      outline-offset: -1;
+      border-radius: variables.$radius-s;
+      padding: 10px 12px;
+      &:focus {
+          outline-color: colors.$primary;
+      }
+      option {
+          font-size: 14px;
+      }
+  }
+  label {
+      pointer-events: none;
+      position: absolute;
+      top: calc(50% - 7px);
+      left: 10px;
+      font-size: 14px;
+      transition: all 150ms;
+  }
+  
+  input:focus ~ label, input:not(:placeholder-shown) ~label, select:focus ~ label, select:valid ~ label {
+      font-size: 14px;
+      padding: 4px 4px 0 4px;
+      background-color: colors.$primary-bg;
+      top: -12px;
+      z-index: 1;
+  }
+}

@@ -34,38 +34,7 @@
             }
         }
         .assign__item {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            width: 100%;
-            input {
-                all: unset;
-                outline: 1px solid colors.$gray-font;
-                outline-offset: -1px;
-                border-radius: 4px;
-                padding: 8px 10px;
-                font-family: variables.$primary-font;
-                font-size: 14px;
-                &:focus {
-                    outline-color: colors.$primary;
-                }
-            }
-            label {
-                pointer-events: none;
-                position: absolute;
-                top: calc(50% - 7px);
-                left: 10px;
-                font-size: 14px;
-                transition: all 150ms;
-            }
-        
-            input:focus ~ label, input:not(:placeholder-shown) ~ label {
-                font-size: 14px;
-                padding: 4px 4px 0 4px;
-                background-color: colors.$primary-bg;
-                top: -12px;
-                z-index: 1;
-            }
+            @include mixins.inputContainer();
         }
         .users, .users__assigned {
             display: flex;
