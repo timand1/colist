@@ -36,6 +36,9 @@ const showAssign = ref(false)
 const assignableItem = ref<number>(0)
 const assignedOnly = ref<boolean>(false)
 const assignedItems = ref<ListItem[]>([])
+const unassignedOnly = ref(false)
+const assignMode = ref(false)
+const unassignedItems = ref()
 
 onBeforeMount(async () => {
   getList()    
@@ -241,9 +244,6 @@ const showAssignedItems: () => void = () => {
   })
   : null
 }
-const unassignedOnly = ref(false)
-const assignMode = ref(false)
-const unassignedItems = ref()
 const showUnassignedItems: () => void = () => {
   assignedOnly.value = false;
   unassignedOnly.value = !unassignedOnly.value;
@@ -264,21 +264,32 @@ const showAll: () => void = () => {
 const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
   loader.value = true;
   errorRef.value ? errorRef.value = false : null;
-  console.log(list.value.type);
 
   const docRef = doc(db, "lists", listId.value);
-  let updatedList = list.value.list.map((oldItem : ListItem) =>
-    oldItem.id === item.id ? item : oldItem
-  );
+  let updatedList = [...list.value.list];
 
-  if(list.value.type == 'Numbered') {
-    updatedList = updatedList.sort((a : NumberedList, b : NumberedList) => a.placement - b.placement);
+  if(list.value.type == 'Numbered') {   
+    const oldIndex : number = list.value.list.findIndex((i : NumberedList) => i.id == item.id)
+    if((item as NumberedList).placement > oldIndex + 1) {
+      (item as NumberedList).placement = (item as NumberedList).placement + 1
+    } else {
+      (item as NumberedList).placement = (item as NumberedList).placement - 1
+    }
+        
+    updatedList = updatedList.map((oldItem : ListItem) =>
+      oldItem.id === item.id ? item : oldItem
+    );
+    updatedList = updatedList.sort((a : NumberedList, b : NumberedList) => a.placement - b.placement);   
     updatedList =  updatedList.map((item : NumberedList, index : number) => {
       return {
         ...item,
         placement: index + 1
       };
     });
+  } else {
+    updatedList = list.value.list.map((oldItem : ListItem) =>
+      oldItem.id === item.id ? item : oldItem
+    );
   }
 
   try {
@@ -290,6 +301,8 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
     loader.value = false;
     errorRef.value = !errorRef.value;
   }
+
+  showAssign.value = false
 }
 
 </script>

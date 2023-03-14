@@ -37,7 +37,7 @@ const inputFields = computed(() => {
     case 'Numbered':
       return [
         { name: 'item', label: 'Item*', type: 'text', req: true },
-        { name: 'placement', label: 'Placement*', type: 'number', req: true },
+        { name: 'placement', label: 'Placement*', min : 1, type: 'number', req: true },
       ]
     case 'Time':
       return [
@@ -94,7 +94,11 @@ const removeAssignUser: (user : User) => Promise<void> = async (user) => {
 }
 
 const updateItem: () => void = () => {
-    const updatedItem =  Object.assign({}, props.item, userInput.value);
+    const updatedItem =  Object.assign({}, props.item, userInput.value);    
+    if(props.type == 'Numbered') {        
+        if((updatedItem as NumberedList).placement < 1) { updatedItem.placement = 0 }
+    }
+    
     emit('handleUpdateItem', updatedItem)
 }
 
