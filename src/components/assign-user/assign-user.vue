@@ -149,7 +149,7 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
                     <Button class="assign-btn" variant="ghost" text="Remove" @click="removeAssignUser(user)" />
                 </div>
             </div>
-            <Button variant="danger" outline text="Close" @click="emit('closeShowAssign')" />
+            <Button class="close-btn" variant="danger" outline text="Close" @click="emit('closeShowAssign')" />
         </div>
     </section>
 </template>

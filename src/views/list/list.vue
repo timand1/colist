@@ -31,7 +31,6 @@ const addOverlay = ref<boolean>(false)
 const errorRef = ref<boolean>(false)
 const prevListId = ref<string>(route.params.id as string)
 const itemList = ref<ListItem[]>([])
-const deleteArr = ref<ListItem[]>([])
 const sortable = ref<InstanceType<typeof Sortable> | null>(null);
 const showAssign = ref(false)
 const assignableItem = ref<number>(0)
@@ -95,11 +94,6 @@ const handleDeleteMode: () => void = () => {
   deleteMode.value = !deleteMode.value;
 }
 
-const closeDeleteMode: () => void = () => {
-  deleteMode.value = !deleteMode.value;
-  clearDeleteList()
-}
-
 const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = async (item) => {
   loader.value = true;
   errorRef.value ? errorRef.value = false : null;
@@ -131,7 +125,6 @@ const handleDeleteAll: () => Promise<void> = async () => {
     loader.value = false;
     errorRef.value = !errorRef.value;
   }
-  closeDeleteMode()
 }
 
 const handleDeletItem: (item : ListItem ) => Promise<void> = async (item) => {
@@ -158,10 +151,6 @@ const handleDeletItem: (item : ListItem ) => Promise<void> = async (item) => {
     loader.value = false;
     errorRef.value = !errorRef.value;
   }
-}
-
-const clearDeleteList: () => void = () => {
-  deleteArr.value = []
 }
 
 const changeTitle: () => void = () => {
@@ -233,7 +222,9 @@ const moveItem = async (evt: any) => {
 };
 
 const handleShowAssign: (id : string) => void = (id) => {
+  unassignedOnly.value = false;
   assignableItem.value = list.value.list.findIndex((item : ListItem) => item.id == id)
+
   showAssign.value = true;
 }
 
@@ -250,15 +241,46 @@ const showAssignedItems: () => void = () => {
   })
   : null
 }
+const unassignedOnly = ref(false)
+const assignMode = ref(false)
+const unassignedItems = ref()
+const showUnassignedItems: () => void = () => {
+  assignedOnly.value = false;
+  unassignedOnly.value = !unassignedOnly.value;
+  unassignedOnly.value 
+  ? unassignedItems.value = itemList.value.filter(item => item.assigned.length === 0)
+  : null;
+}
+
+const handleAssignMode: () => void = () => {
+  assignMode.value = !assignMode.value;
+}
+
+const showAll: () => void = () => {
+  assignedOnly.value = false;
+  unassignedOnly.value = false;
+}
 
 const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
   loader.value = true;
   errorRef.value ? errorRef.value = false : null;
+  console.log(list.value.type);
+
   const docRef = doc(db, "lists", listId.value);
-  const updatedList = list.value.list.map((oldItem : ListItem) =>
+  let updatedList = list.value.list.map((oldItem : ListItem) =>
     oldItem.id === item.id ? item : oldItem
   );
-  
+
+  if(list.value.type == 'Numbered') {
+    updatedList = updatedList.sort((a : NumberedList, b : NumberedList) => a.placement - b.placement);
+    updatedList =  updatedList.map((item : NumberedList, index : number) => {
+      return {
+        ...item,
+        placement: index + 1
+      };
+    });
+  }
+
   try {
     await updateDoc(docRef, {
      list : updatedList
@@ -309,7 +331,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
     <Sortable
       :key="JSON.stringify(itemList)"
       :item-key="list.id"
-      :list="assignedOnly ? assignedItems : itemList"
+      :list="assignedOnly ? assignedItems : unassignedOnly ? unassignedItems : itemList"
       :options="options"
       class="item-container"
       ref="sortable"
@@ -357,23 +379,26 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
         />
       </template>
     </Sortable>
-    <div class="delete__menu" :class="deleteMode ? 'delete__menu--open' : 'delete__menu--closed'">
+    <div  v-if="!assignMode" class="delete__menu" :class="deleteMode ? 'delete__menu--open' : 'delete__menu--closed'">
         <font-awesome-icon icon="trash-can"  v-if="!deleteMode"  @click="handleDeleteMode" />
         <div class="delete__menu--options" v-else>
-          <p class="delete__option" @click="closeDeleteMode">Cancel</p>
+          <p class="delete__option" @click="handleDeleteMode">Close</p>
           <p >|</p>
           <p class="delete__option" @click="handleDeleteAll">Delete All</p>
         </div>
     </div>
-    <div v-if="!deleteMode" >
-      <div class="checkbox-container">
-      <p>Only assigned</p>
-        <input type="checkbox" name="check" 
-            :checked="assignedOnly" 
-            @click="showAssignedItems"
-          >
-          <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
-      </div>
+
+    <div v-if="!deleteMode" class="assign__menu" :class="assignMode ? 'assign__menu--open' : 'assign__menu--closed'">
+        <font-awesome-icon icon="list-ul"  v-if="!assignMode"  @click="handleAssignMode" />
+        <div class="assign__menu--options" v-else>
+          <p class="assign__option" @click="handleAssignMode">Close</p>
+          <p >|</p>
+          <p class="assign__option" @click="showAll">All</p>
+          <p >|</p>
+          <p class="assign__option" @click="showAssignedItems">Set</p>
+          <p >|</p>
+          <p class="assign__option" @click="showUnassignedItems">Unset</p>
+        </div>
     </div>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </div>

@@ -8,7 +8,7 @@
         display: flex;
         cursor: pointer;
         justify-content: space-between;
-        padding: 14px 10vw;
+        margin: 1em 1em 0 1em;
         h2 {
             font-size: 18px;
         }
@@ -20,6 +20,7 @@
         .add-item--active {
             transform: rotate(180deg);
         }
+        border-bottom: 1px solid colors.$primary-font;
     }
 
     .add-item__form {
@@ -32,7 +33,8 @@
         gap: 14px;
         outline: 1px solid colors.$primary-font;
         outline-offset: -1px;
-        border-radius: 8px;
+        border-bottom-left-radius: variables.$radius-m;
+        border-bottom-right-radius: variables.$radius-m;
         .input-container {
             @include mixins.inputContainer();
         }
@@ -57,6 +59,7 @@ body.dark {
             svg {
                 color: colors.$primary-font-dark;
             }
+            border-color: colors.$primary-font-dark;
         }
         .add-item__form {
             outline: 1px solid colors.$gray-font;
@@ -77,8 +80,5 @@ body.dark {
     .add-item {
         margin: 0 auto;
         width: clamp(300px, 30vw, 400px);
-        .add-item__headline {
-            padding: 1em;
-        }
     }
 }

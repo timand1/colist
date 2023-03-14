@@ -49,15 +49,17 @@
         flex-direction: column;
         gap: 12px;
     }
-    .delete__menu {
+    .delete__menu, .assign__menu {
         position: fixed;
-        left: 2em;
         bottom: 2em;
         width: 40px;
         transition: width 0.3s;
         background-color: colors.$primary-accent;
     }
-    .delete__menu--closed {
+    .delete__menu {
+        left: 2em;
+    }
+    .delete__menu--closed, .assign__menu--closed {
         border-radius: variables.$radius-round;
 
         cursor: pointer;
@@ -67,18 +69,19 @@
             color: colors.$secondary-bg;
         }
     }
-    .delete__menu--open {
+    .delete__menu--open, .assign__menu--open {
         width: calc(100% - 4em);
         padding: 8px 14px;
+        font-size: 14px;
         border-radius: variables.$radius-l;
 
-        .delete__menu--options {
+        .delete__menu--options, .assign__menu--options {
             overflow: hidden;
             white-space: nowrap;
             display: flex;
             justify-content: space-evenly;
             gap: 4px;
-            .delete__option {
+            .delete__option, .assign__option {
                 flex: 1;
                 text-align: center;
                 cursor: pointer;
@@ -88,7 +91,9 @@
             }
         }
     }
-
+    .assign__menu {
+        right: 2em;
+    }
     .checkbox-container {
         position: fixed;
         right: 2em;
@@ -187,12 +192,15 @@ body.dark {
         .delete__menu--open {
             width: 300px;
         }
+        .assign__menu--open {
+            width: 400px;
+        }
         &:focus-within {
             .delete__menu {
                 display: grid;
             }
         }
-        .checkbox-container {
+        .assign__menu {
             right: calc(50vw - clamp(100px, 45vw, 480px))
         }
     }
