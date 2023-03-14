@@ -3,7 +3,7 @@
 @use '@/styles/variables';
 
 .error {
-    max-width: 1000px;
+    width: 90vw;
     margin: 100px auto;
     @include mixins.flexbox($justify : space-between);
     flex-direction: column;
@@ -20,4 +20,10 @@ body.dark {
     .error {
         background-color: colors.$secondary-bg-dark;
     } 
+}
+
+@media screen and (min-width: 786px) {
+    .error {
+        max-width: 1000px;
+    }
 }
