@@ -177,7 +177,6 @@ const preventClose: (e : TouchEvent | MouseEvent) => void = (e) => {
                 </div>
             </div>
             <div class="share__users">
-                <p class="users--headline" v-if="listUsers.length > 0 && auth.currentUser?.uid != props.author.id">Current users</p>
                 <div class="active-users">
                     <h4 class="share__added--headline">Current users</h4>
                     <div class="share__current" v-for="user in listUsers">

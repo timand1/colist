@@ -15,14 +15,9 @@
         background-color: colors.$primary-accent;
         transition: all variables.$transition-time;
         z-index: 10;
-        svg, p {
+        border-radius: variables.$radius-round; 
+        svg {
             color: colors.$secondary-bg;
-        }
-        &:has(svg) {
-            border-radius: variables.$radius-round; 
-        }
-        &:has(p) {
-            border-radius: variables.$radius-l;
         }
         &:hover {
             background-color: colors.$danger;
@@ -31,37 +26,20 @@
             padding: 6px 7px;
             font-size: 12px;
         }
-        p {
-            padding: 8px;
-            font-size: 14px;
-        }
+    }
+    .button {
+        padding: 4px 6px;
     }
 
 
 body.dark {
-
-        .list--remove {
-            background-color: colors.$primary-accent;
-            svg, p {
-                color: colors.$secondary-bg;
-            }
-            &:has(svg) {
-                border-radius: variables.$radius-round; 
-            }
-            &:has(p) {
-                border-radius: variables.$radius-l;
-            }
-            &:hover {
-                background-color: colors.$danger;
-            }
-            svg {
-                padding: 6px 7px;
-                font-size: 12px;
-            }
-            p {
-                padding: 8px;
-                font-size: 14px;
-            }
+    .list--remove {
+        background-color: colors.$primary-accent;
+        svg {
+            color: colors.$secondary-bg;
         }
-    
+        &:hover {
+            background-color: colors.$danger;
+        }
+    }    
 }

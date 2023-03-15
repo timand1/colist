@@ -11,13 +11,14 @@
     display: grid;
     place-items: center;
     background-color: colors.$overlay;
-    z-index: 99999;
+    z-index: 999999;
     .add-list {
         @include mixins.flexbox($justify : space-between);
         flex-direction: column;
         gap: 20px;
         width: calc(100% - 2em);
         height: fit-content;
+        max-height: calc(100vh - 2em);
         min-height: 50%;
         background-color: colors.$primary-bg;
         padding: 2em;

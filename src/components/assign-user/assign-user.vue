@@ -126,7 +126,7 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
                 </div>
                 <div style="display: flex;"><Button variant="primary" text="Update" @click="updateItem" /></div>
             </div>
-            <div class="users">
+            <div class="users" v-if="users.length > item.assigned.length">
                 <h4>Users</h4>
                 <div v-for="user in assignedUsers" class="user">
                     <div class="user__info">
@@ -140,7 +140,7 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
                 </div>
             </div>
 
-            <div class="users__assigned">
+            <div class="users__assigned" v-if="item.assigned.length > 0">
                 <h4>Assigned</h4>
                 <div v-for="user in item.assigned" class="user">
                     <div class="user__info">

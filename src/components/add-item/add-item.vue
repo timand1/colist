@@ -40,7 +40,7 @@ const inputFields = computed(() => {
     case 'Numbered':
       return [
         { name: 'item', label: 'Item*', type: 'text', req: true },
-        { name: 'placement', label: 'Placement*', type: 'number', req: false },
+        { name: 'placement', label: 'Placement', type: 'number', req: false },
       ]
     case 'Time':
       return [

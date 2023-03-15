@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getAuth } from 'firebase/auth';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Button from '@/components/button/button.vue';
 import { List } from '@/helpers/types/types';
 
 type UserListProps = {
@@ -21,9 +22,10 @@ const auth = getAuth();
     <div class="list--remove" v-if="props.list.author.id == auth.currentUser?.uid" @click.stopPropagation="emit('deleteList', props.list.id, $event)" >
         <font-awesome-icon icon="trash-can"/>
     </div>
-        <div class="list--remove" v-else @click.stopPropagation="emit('removeUser', props.list.id, props.list.users, $event)" >
+    <Button v-else text="Leave" variant="ghost" outline @click.stopPropagation="emit('removeUser', props.list.id, props.list.users, $event)" />
+        <!-- <div class="list--remove" v-else @click.stopPropagation="emit('removeUser', props.list.id, props.list.users, $event)" >
         <p>Leave</p>
-    </div>
+    </div> -->
 </template>
 
 <style lang="scss" scoped>

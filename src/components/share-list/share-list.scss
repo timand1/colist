@@ -11,7 +11,7 @@
     height: 100%;
     @include mixins.grid-center();
     background-color: colors.$overlay;
-    z-index: 99999;
+    z-index: 999999;
     .share {
         @include mixins.flexbox($justify : space-between);
         flex-direction: column;
@@ -19,6 +19,7 @@
         width: calc(100% - 2em);
         height: fit-content;
         min-height: 50%;
+        max-height: calc(100vh - 2em);
         background-color: colors.$primary-bg;
         padding: 1em;
         border-radius: variables.$radius-l;
