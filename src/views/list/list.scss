@@ -188,7 +188,7 @@ body.dark {
 @media screen and (min-width: 786px) {
     .list {
         .delete__menu {
-            left: calc(50vw - clamp(100px, 45vw, 480px))
+            left: calc(50vw - clamp(100px, 45vw, 560px))
         }
         .delete__menu--open {
             width: 300px;
@@ -202,7 +202,7 @@ body.dark {
             }
         }
         .assign__menu {
-            right: calc(50vw - clamp(100px, 45vw, 480px))
+            right: calc(50vw - clamp(100px, 45vw, 560px))
         }
     }
 }
