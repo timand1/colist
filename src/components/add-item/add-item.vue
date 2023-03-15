@@ -9,11 +9,12 @@ import { useRoute } from 'vue-router';
 import { NumberedList, User } from '@/helpers/types/types';
 
 type AddItemProps = {
-    type : string
+  type : string
+  listLength : number
 }
 
 type UserInput = {
-    [key: string]: string | number | boolean | User[]
+  [key: string]: string | number | boolean | User[]
 }
 
 const props = defineProps<AddItemProps>()
@@ -39,7 +40,7 @@ const inputFields = computed(() => {
     case 'Numbered':
       return [
         { name: 'item', label: 'Item*', type: 'text', req: true },
-        { name: 'placement', label: 'Placement*', type: 'number', req: true },
+        { name: 'placement', label: 'Placement*', type: 'number', req: false },
       ]
     case 'Time':
       return [
@@ -94,7 +95,7 @@ const handleAddItem: () => Promise<void> = async () => {
 
 const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem : NumberedList) => Promise<void> = async (listRef, newItem) => {
   const docSnap = await getDoc(listRef);
-
+  !newItem.placement ? newItem.placement = props.listLength : null
   newItem.placement = newItem.placement - 1
   
   let updatedList: NumberedList[] = [...docSnap.data()?.list]

@@ -339,7 +339,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
       </div>
       <p>Author - {{ list?.author.name }}</p>
     </div>
-    <AddItem :type="list?.type" />
+    <AddItem :list-length="list?.list.length" :type="list?.type" />
     <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
     <Sortable
       :key="JSON.stringify(itemList)"
