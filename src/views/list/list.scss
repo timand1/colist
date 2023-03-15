@@ -14,10 +14,6 @@
             width: 25px;
             height: 25px;
             border-radius: variables.$radius-round;
-            transform: translateX(-6px);
-            &:first-child {
-                transform: translateX(0);
-            }
         }
     }
     .list__header {

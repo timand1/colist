@@ -22,7 +22,13 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
     <div class="draggable item" :key="props.item.id" @click="emit('handleShowAssign', props.item.id)">
         <div class="item__info--left">
             <p class="item__name">{{ props.item?.todo }}</p>
-            <p class="item__comment" v-if="props.item?.comment">{{ props.item?.comment }}</p>
+            <div class="item__comment--container" v-if="item.assigned.length > 0 || props.item.comment">
+                <div class="assigned-users" v-if="item.assigned.length > 0" >
+                    <img v-if="item.assigned.length == 1" :src="item.assigned[0].img" :alt="item.assigned[0].name" :title="item.assigned[0].name">
+                    <span class="assigned-container" v-if="item.assigned.length > 1" :title="`${item.assigned.length} users assigned`">{{ item.assigned.length }}</span>
+                </div>
+                <p class="item__comment" v-if="props?.item.comment">{{ props?.item.comment }}</p>
+            </div>
         </div>
         <div class="item__info--right">
             <div class="checkbox-container checkbox-container--remove" v-if="props.delete" @touchstart="preventSortableTouch($event)" @click.stopPropagation="emit('handleDeletItem', props.item)">
@@ -37,9 +43,6 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
                 >
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
             </div>
-        </div>
-        <div class="assigned-users" >
-            <img v-for="user in item.assigned" :src="user.img" :alt="user.name" :title="user.name">
         </div>
     </div>
 </template>

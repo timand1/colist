@@ -29,7 +29,7 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
                 <font-awesome-icon icon="trash-can" />
             </div>
         </div>
-        <div class="assigned-users" >
+        <div class="assigned-users" v-if="item.assigned.length > 0" >
             <img v-for="user in item.assigned" :src="user.img" :alt="user.name" :title="user.name">
         </div>
     </div>

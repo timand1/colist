@@ -319,7 +319,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
   />
   <AssignUser v-if="showAssign" :id="list.id" :type="list.type" :item="list.list[assignableItem]" :users="list.users" @closeShowAssign="closeShowAssign" @handleUpdateItem="handleUpdateItem"/>
   <section v-if="loader" class="loader"></section>
-  <div class="list" v-else>
+  <div class="list" v-if="list">
     <div class="user-container" @click="handleShareList">
       <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`" :title="user.name">
     </div>
