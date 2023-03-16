@@ -12,7 +12,7 @@ type TimeItemProps = {
 const props = defineProps<TimeItemProps>()
 const emit = defineEmits(['handleDeletItem', 'handleShowAssign']);
 
-const preventSortableTouch: (e : TouchEvent) => void = (e) => {
+const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
     e.stopPropagation();
 }
 
@@ -30,7 +30,7 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
                 <p class="item__comment" v-if="props?.item.date">{{ props?.item.date }}</p>
             </div>
         </div>
-        <div class="item__info--right">
+        <div class="item__info--right" @click="preventSortableTouch($event)">
             <p class="item__comment" v-if="props.item?.time">at {{ props.item?.time }}</p>
             <div class="checkbox-container checkbox-container--remove" 
                 v-if="props.delete" 

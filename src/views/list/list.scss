@@ -4,7 +4,6 @@
 
 .list {
     margin: 5em 0;
-    padding-bottom: 6em;
     .user-container {
         margin-left: 1em;
         display: flex;
@@ -45,10 +44,11 @@
         display: flex;
         flex-direction: column;
         gap: 12px;
+        padding-bottom: 5em;
     }
     .delete__menu, .assign__menu {
         position: fixed;
-        bottom: 2em;
+        bottom: 1em;
         width: 40px;
         transition: width 0.3s;
         background-color: colors.$primary-accent;

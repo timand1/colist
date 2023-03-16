@@ -4,6 +4,8 @@
 
 .add-item {
     width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
     .add-item__headline {
         display: flex;
         cursor: pointer;
@@ -78,7 +80,6 @@ body.dark {
 
 @media screen and (min-width: 786px) {
     .add-item {
-        margin: 0 auto;
-        width: clamp(300px, 30vw, 400px);
+        width: 400px;
     }
 }

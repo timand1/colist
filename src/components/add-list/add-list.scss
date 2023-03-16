@@ -34,9 +34,9 @@
                 outline-color: colors.$danger;
             }
         }
-        .error-text {
+        .name__error-text, .type__error-text {
             position: absolute;
-            bottom: -34px;
+            bottom: -18px;
             left: 0;
             font-size: 12px;
             color: colors.$danger;

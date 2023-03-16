@@ -30,7 +30,7 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
                 <p class="item__comment" v-if="props?.item.comment">{{ props?.item.comment }}</p>
             </div>
         </div>
-        <div class="item__info--right"  @click="preventSortableTouch($event)">
+        <div class="item__info--right" @click="preventSortableTouch($event)">
             <div class="checkbox-container checkbox-container--remove" 
                 v-if="props.delete" 
                 @click.stopPropagation="emit('handleDeletItem', props.item)" 

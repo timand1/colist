@@ -97,7 +97,7 @@ const handleOverlay: () => void = () => {
 <template>
   <section class="home">
     <Navbar param="home" @click="handleOverlay" />
-    <div class="lists--container" v-if="!loader">
+    <div class="lists--container">
         <div class="home__header">
           <h2>All lists</h2>
           <h3>{{ auth.currentUser?.displayName }}<img :src="auth.currentUser?.photoURL!" alt=""></h3>
@@ -109,7 +109,7 @@ const handleOverlay: () => void = () => {
         </div> 
       </section>
     </div>
-    <section v-else class="loader"></section>
+    <section v-if="loader" class="loader"></section>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </section>
 </template>

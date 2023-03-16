@@ -12,7 +12,7 @@ type NumberedItemProps = {
 const props = defineProps<NumberedItemProps>()
 const emit = defineEmits(['handleDeletItem', 'handleShowAssign']);
 
-const preventSortableTouch: (e : TouchEvent) => void = (e) => {
+const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
     e.stopPropagation();
 }
 
@@ -24,7 +24,7 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
             <p class="item__placement">{{ props.item?.placement }}</p>
             <p class="item__name">{{ props.item?.item }}</p>
         </div>
-        <div class="item__info--right">
+        <div class="item__info--right" @click="preventSortableTouch($event)">
             <div class="checkbox-container checkbox-container--remove" v-if="props.delete" @touchstart="preventSortableTouch($event)" @click.stopPropagation="emit('handleDeletItem', props.item)">
                 <font-awesome-icon icon="trash-can" />
             </div>
