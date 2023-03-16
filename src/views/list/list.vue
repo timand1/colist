@@ -408,7 +408,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
           <p >|</p>
           <p class="assign__option" @click="showAll">All</p>
           <p >|</p>
-          <p class="assign__option" @click="showAssignedItems">Set</p>
+          <p class="assign__option" @click="showAssignedItems">Mine</p>
           <p >|</p>
           <p class="assign__option" @click="showUnassignedItems">Unset</p>
         </div>
