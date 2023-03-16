@@ -33,13 +33,13 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
                 <p class="item__comment" v-if="props?.item.comment">{{ props?.item.comment }}</p>
             </div>
         </div>
-        <div class="item__info--right">
+        <div class="item__info--right"  @click="preventSortableTouch($event)">
             <select name="amount" @touchstart="preventSortableTouch($event)" @click="preventSortableTouch($event)" @change="emit('updateAmount', props.item, parseInt(($event.target as HTMLSelectElement).value))">
                 <option v-for="amount in amountArr" :value="amount" :selected="props?.item.amount == amount">{{ amount }}</option>
             </select>
             <div class="checkbox-container checkbox-container--remove" 
                 v-if="props.delete" 
-                @click="emit('handleDeletItem', props.item)" 
+                @click.stopPropagation="emit('handleDeletItem', props.item)" 
                 @touchstart="preventSortableTouch($event)"
             >
                 <font-awesome-icon icon="trash-can" />

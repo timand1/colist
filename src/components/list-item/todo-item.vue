@@ -12,7 +12,7 @@ type ToDoItemProps = {
 const props = defineProps<ToDoItemProps>()
 const emit = defineEmits(['handleDeletItem', 'handleCheckedItem', 'handleShowAssign']);
 
-const preventSortableTouch: (e : TouchEvent) => void = (e) => {
+const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
     e.stopPropagation();
 }
 
@@ -30,15 +30,20 @@ const preventSortableTouch: (e : TouchEvent) => void = (e) => {
                 <p class="item__comment" v-if="props?.item.comment">{{ props?.item.comment }}</p>
             </div>
         </div>
-        <div class="item__info--right">
-            <div class="checkbox-container checkbox-container--remove" v-if="props.delete" @touchstart="preventSortableTouch($event)" @click.stopPropagation="emit('handleDeletItem', props.item)">
+        <div class="item__info--right"  @click="preventSortableTouch($event)">
+            <div class="checkbox-container checkbox-container--remove" 
+                v-if="props.delete" 
+                @click.stopPropagation="emit('handleDeletItem', props.item)" 
+                @touchstart="preventSortableTouch($event)"
+            >
                 <font-awesome-icon icon="trash-can" />
             </div>
 
             <div class="checkbox-container checkbox-container--check" v-else>
                 <input type="checkbox" name="check" 
-                    :checked="props.item?.done" 
-                    @click.stopPropagation="emit('handleCheckedItem', props.item)"
+                    :checked="props?.item.done" 
+                    @click.stopPropagation="emit('handleCheckedItem', (props.item))" 
+                    @click="preventSortableTouch($event)"
                     @touchstart="preventSortableTouch($event)"
                 >
                 <label for="check"><font-awesome-icon class="checkbox-container--check" icon="check" /></label>
