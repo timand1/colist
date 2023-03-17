@@ -4,7 +4,7 @@ import { ref, onMounted, computed, reactive } from 'vue';
 import useDetectOutsideClick from '@/composables/clickOutsideComponent';
 import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
-import { updateDoc, doc, arrayUnion, getDoc, DocumentReference, DocumentData } from 'firebase/firestore';
+import { updateDoc, doc, arrayUnion, getDoc, DocumentReference, DocumentData, Timestamp } from 'firebase/firestore';
 import { useRoute } from 'vue-router';
 import { NumberedList, User } from '@/helpers/types/types';
 
@@ -81,6 +81,7 @@ const handleAddItem: () => Promise<void> = async () => {
     handleAddNumberedItem(listRef, newItem as NumberedList)
   } else {
     await updateDoc(listRef, {
+      updated : Timestamp.now(),
       list: arrayUnion(newItem)
     });
   }
@@ -110,6 +111,7 @@ const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem
   });
 
   await updateDoc(listRef, {
+    updated : Timestamp.now(),
     list: updatedItems
   });
 }

@@ -86,7 +86,7 @@ const checkDarkmode: (dark : boolean) => void = (dark) => {
       <font-awesome-icon v-if="props.param == 'home'" icon="plus" @click="emit('click')" title="Create new list" />
       <div>      
       <div class="navbar__user" ref="userMenuRef">
-        <font-awesome-icon icon="circle-user" class="user" @click="toggleUserMenu" title="User menu" />
+        <img class="navbar__user--image" :src="auth.currentUser!.photoURL!" :alt="auth.currentUser!.displayName!" title="User menu" @click="toggleUserMenu" >
         <div class="navbar__user--menu" v-if="displayUserMenu">
           <p @click="handleList">Lists</p>
           <div class="divider"></div>

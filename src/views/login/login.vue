@@ -45,10 +45,6 @@ const signInWithGoogle = () => {
   });
 }
 
-const signInWithApple = () => {
-
-}
-
 const signInWithGitHub = () => {
   const provider = new GithubAuthProvider();
   errorRef.value ? errorRef.value = false : null
@@ -113,7 +109,6 @@ const checkDarkmode: (dark : boolean) => void = (dark) => {
       </div>
           <div class="btn-container">
             <button class="btn btn--google" @click="signInWithGoogle"><font-awesome-icon icon="fa-brands fa-google" /> Continue with Google</button>
-            <!-- <button class="btn btn--apple" @click="signInWithApple"><font-awesome-icon icon="fa-brands fa-apple" /> Continue with Apple</button> -->
             <button class="btn btn--github" @click="signInWithGitHub"><font-awesome-icon icon="fa-brands fa-github" /> Continue with GitHub</button>
             <p v-if="errorRef">Something went wrong... Try again</p>
         </div>

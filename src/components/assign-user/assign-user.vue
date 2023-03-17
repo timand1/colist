@@ -2,7 +2,7 @@
 import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -74,6 +74,7 @@ const handleAssignUser: (user : User) => Promise<void> = async (user) => {
     
   
     await updateDoc(listRef, {
+        updated: Timestamp.now(),
         list: listData
     });
 } 
@@ -89,6 +90,7 @@ const removeAssignUser: (user : User) => Promise<void> = async (user) => {
     listData[itemIndex].assigned = assigned;
     
     await updateDoc(listRef, {
+        updated: Timestamp.now(),
         list: listData
     });
 }

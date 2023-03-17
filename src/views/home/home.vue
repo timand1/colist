@@ -46,7 +46,7 @@ watchEffect(() => {
       querySnapshot.forEach((doc) => {
         getLists.push(doc.data() as List);
       });
-      lists.value = getLists  
+      lists.value = getLists.sort((a, b) => (a.updated < b.updated) ? 1 : ((b.updated < a.updated) ? -1 : 0));
     });
       
     } else {

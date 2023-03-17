@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { listTypes } from '@/helpers/mixins/jsMixins';
 import Button from '@/components/button/button.vue';
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, setDoc, Timestamp } from "firebase/firestore"; 
 import { auth, db } from '@/firebase';
 import { useRouter } from "vue-router";
 
@@ -36,7 +36,8 @@ const createNewList: () => Promise<void> = async () => {
         img : auth.currentUser?.photoURL,
         email : auth.currentUser?.email
       }],
-      type: listtype.value
+      type: listtype.value,
+      updated : Timestamp.now()
     })
     emit('click')
     router.push(`/list/${uniqueId}`)

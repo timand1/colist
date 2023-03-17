@@ -10,7 +10,7 @@ import NumberedItem from '@/components/list-item/numbered-item.vue';
 import AssignUser from '@/components/assign-user/assign-user.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, Timestamp } from "firebase/firestore";
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Shoppinglist, ToDoList, User, TimeList, NumberedList } from '@/helpers/types/types';
@@ -85,6 +85,7 @@ const updateAmount = async (item : Shoppinglist, newAmount : number) => {
   );
   try {
     await updateDoc(docRef, {
+      updated: Timestamp.now(),
       list : updatedList
     });
     loader.value = false;
@@ -107,6 +108,7 @@ const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = asy
   );
   try {
     await updateDoc(docRef, {
+      updated: Timestamp.now(),
       list : updatedList
     });
     loader.value = false;
@@ -121,6 +123,7 @@ const handleDeleteAll: () => Promise<void> = async () => {
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
+      updated : Timestamp.now(),
       list : []
     });
     loader.value = false;
@@ -147,6 +150,7 @@ const handleDeletItem: (item : ListItem ) => Promise<void> = async (item) => {
 
   try {
     await updateDoc(docRef, {
+      updated : Timestamp.now(),
       list: updatedList
     });
     loader.value = false;
@@ -167,7 +171,8 @@ const handleUpdateName: () => Promise<void> = async () => {
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
-     name : newTitle.value
+      updated: Timestamp.now(),
+      name : newTitle.value
     });
     loader.value = false;
   } catch (error) {
@@ -215,7 +220,8 @@ const moveItem = async (evt: any) => {
   const docRef = doc(db, "lists", listId.value);
   try {
     await updateDoc(docRef, {
-     list : itemList.value
+      updated : Timestamp.now(),
+      list : itemList.value
     });    
     loader.value = false;
   } catch (error) {
@@ -294,7 +300,8 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
 
   try {
     await updateDoc(docRef, {
-     list : updatedList
+      list : updatedList,
+      updated : Timestamp.now(),
     });
     loader.value = false;
   } catch (error) {

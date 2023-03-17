@@ -23,9 +23,6 @@ const auth = getAuth();
         <font-awesome-icon icon="trash-can"/>
     </div>
     <Button v-else text="Leave" variant="ghost" outline @click.stopPropagation="emit('removeUser', props.list.id, props.list.users, $event)" />
-        <!-- <div class="list--remove" v-else @click.stopPropagation="emit('removeUser', props.list.id, props.list.users, $event)" >
-        <p>Leave</p>
-    </div> -->
 </template>
 
 <style lang="scss" scoped>

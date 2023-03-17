@@ -3,7 +3,7 @@ import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
 import { getAuth } from 'firebase/auth';
-import { doc, updateDoc, query, collection, where, getDocs } from 'firebase/firestore';
+import { doc, updateDoc, query, collection, where, getDocs, Timestamp } from 'firebase/firestore';
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { createPopper } from '@popperjs/core';
@@ -41,6 +41,7 @@ const updateUsers: () => Promise<void> = async () => {
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
+        updated : Timestamp.now(),
         users:  [...listUsers.value, ...addedUsers.value],
     });
 
@@ -64,6 +65,7 @@ const removeUser: (user: User) => Promise<void> = async (user) => {
     const docRef = doc(db, "lists", listId);
     try {
     await updateDoc(docRef, {
+        updated : Timestamp.now(),
         list : updatedAssignedList,
         users: updatedUsers,
     });

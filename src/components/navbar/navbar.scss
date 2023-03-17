@@ -44,25 +44,37 @@
         }
         .navbar__user {
             position: relative;
+            display: flex;
+            align-items: center;
+            .navbar__user--image {
+                border-radius: variables.$radius-round;
+                height: 25px;
+                width: 25px;
+            }
         }
         .navbar__user--menu {
             position: absolute;
-            bottom: calc((-14px * 5) + (-1px * 3) + (-4px * 8) + (-4px * 6) - 4px);
-            left: -24px;
+            // bottom: calc((-18px * 5) + (-1px * 3) + (-4px * 8) + (-4px * 6) - 4px);
+            bottom: calc(
+                ((-16px - (8px * 2)) * 4) + 
+                ((-1px - (4px * 2)) * 3 ) + 
+                -2px
+                );
+            right: -28px;
             width: max-content;
             border-radius: variables.$radius-m;
             display: flex;
             flex-direction: column;
             gap: 4px;
             background-color: colors.$primary-bg;
-            box-shadow: 7px 14px 12px rgba(0, 0, 0, 0.4);
+            box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.4);
             border: 1px solid colors.$primary-font;
             z-index: 9999;
             p {
                 text-align: center;
                 cursor: pointer;
-                font-size: 12px;
-                padding: 6px 12px;
+                font-size: 14px;
+                padding: 8px 14px;
                 color: colors.$primary-font;                
                 &:hover {
                     background-color: colors.$hover-light;

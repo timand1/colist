@@ -43,5 +43,6 @@ export type List = {
     type: string
     id : string
     list : Shoppinglist[] | ToDoList[] | NumberedList[] | TimeList[] | []
-    users : User[]
+    users : User[],
+    updated : string
 }
