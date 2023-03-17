@@ -6,7 +6,7 @@ import Logo from "@/assets/logo.vue";
   <div class="login-sidepanel">
     <h2>Ever had a situation like this?</h2>
     <div class="thoughtbubble thoughtbubble--left"><p>What ingredients did I have to buy?</p></div>
-    <div class="thoughtbubble thoughtbubble--right"><p>What were I suppose bring to the party?</p></div>
+    <div class="thoughtbubble thoughtbubble--right"><p>What was I supposed to bring to the party?</p></div>
     <div class="tagline">
       <h1>Simplify your days</h1>
       <h1>with easy list-making </h1>
