@@ -4,6 +4,7 @@ import { ref, watch, watchEffect } from 'vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import UserList from '@/components/user-list/user-list.vue';
+import DeleteList from '@/components/delete-list/delete-list.vue';
 import { db } from '@/firebase';
 import { doc, onSnapshot, collection, query, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { User, type List } from '@/helpers/types/types'
@@ -61,8 +62,8 @@ const goToList: (listId: string) => void = (listId) => {
   router.push(`/list/${listId}`)
 }
 
-const deleteList: (listId: string, e:Event) => Promise<void> = async (listId, e) => {
-  e.stopPropagation()
+const deleteList: (listId: string, e: MouseEvent | TouchEvent) => Promise<void> = async (listId, e) => {
+  // e.stopPropagation()
   loader.value = true;
   errorRef.value ? errorRef.value = false : null;
   try {
@@ -73,8 +74,8 @@ const deleteList: (listId: string, e:Event) => Promise<void> = async (listId, e)
   loader.value = false;
 }
 
-const removeUser: (listId: string, users: string[], e : Event) => Promise<void> = async (listId, users, e) => {
-  e.stopPropagation()
+const removeUser: (listId: string, users: string[], e : MouseEvent | TouchEvent) => Promise<void> = async (listId, users, e) => {
+  // e.stopPropagation()
   errorRef.value ? errorRef.value = false : null;
   loader.value = true;
   const listRef = doc(db, "lists", listId);  
@@ -104,8 +105,8 @@ const handleOverlay: () => void = () => {
         </div>
       <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
       <section class="list--container">
-        <div v-for="list in lists" @click="goToList(list.id)" class="list">
-          <UserList :list="list" @deleteList="deleteList" @removeUser="removeUser" />
+        <div v-for="list in lists" class="list">
+          <UserList :list="list" @deleteList="deleteList" @removeUser="removeUser" @goToList="goToList" />
         </div> 
       </section>
     </div>

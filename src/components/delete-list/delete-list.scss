@@ -1,0 +1,52 @@
+@use '@/styles/colors';
+@use '@/styles/variables';
+@use '@/styles/mixins';
+
+.delete__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background-color: colors.$overlay;
+    z-index: 999999;
+    .delete__modal {
+        @include mixins.flexbox($justify : space-between);
+        flex-direction: column;
+        gap: 30px;
+        width: calc(100% - 2em);
+        height: fit-content;
+        max-height: calc(100vh - 2em);
+        overflow-y: auto;
+        background-color: colors.$primary-bg;
+        padding: 1em;
+        border-radius: 12px;
+        .list-name {
+            font-weight: 700;
+        }
+        .btn-container {
+            width: 100%;
+            @include mixins.flexbox($justify : space-between);
+            gap: 1em;
+            .button {
+                flex: 1;
+            }
+        }
+    }
+}
+
+body.dark {
+    .delete__overlay {
+        .delete__modal {
+            background-color: colors.$primary-bg-dark;
+        }
+    } 
+}
+
+@media screen and (min-width: 786px) {
+    .delete__modal {
+        max-width: 500px;       
+    }
+}
