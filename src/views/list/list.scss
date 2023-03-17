@@ -23,9 +23,29 @@
         .list__header--title {
             @include mixins.flexbox();
             gap: 10px;
+            position: relative;
+            input {
+                all: unset;                
+                font-family: variables.$primary-font;
+                font-size: 14px;
+                outline: 1px solid colors.$gray-font;
+                border-radius: variables.$radius-s;
+                padding: 6px 12px;
+                &:focus {
+                    outline-color: colors.$primary;
+                }
+            }
+            .title-error {
+                position: absolute;
+                left: 0;
+                bottom: -16px;
+                font-size: 12px;
+                color: colors.$danger;
+                text-align: center;
+            }
             .icon {
-                width: 30px;
-                height: 30px;
+                width: 29px;
+                height: 29px;
                 border-radius: variables.$radius-round;
                 @include mixins.grid-center();
                 cursor: pointer;
@@ -35,6 +55,16 @@
             }
             .cancel {
                 background-color: colors.$danger;
+            }
+        }
+        .error-input {
+            margin-bottom: 1em;
+            input {
+                outline-color: colors.$danger;
+                &:focus {
+                    outline-color: colors.$danger;
+                }
+
             }
         }
     }
@@ -149,6 +179,9 @@
 body.dark {
     .list {
         .list__header {
+            input {
+                color: colors.$primary-font-dark;
+            }
             .list__header--title {
                 .change-title {
                     cursor: pointer;

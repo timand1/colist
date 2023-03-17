@@ -39,6 +39,7 @@ const assignedItems = ref<ListItem[]>([])
 const unassignedOnly = ref(false)
 const assignMode = ref(false)
 const unassignedItems = ref()
+const titleError = ref(false)
 
 onBeforeMount(async () => {
   getList()    
@@ -166,6 +167,11 @@ const changeTitle: () => void = () => {
 }
 
 const handleUpdateName: () => Promise<void> = async () => {
+  if(newTitle.value.length < 2) {
+    titleError.value = true;
+    return
+  }
+  titleError.value = false;
   loader.value = true;
   errorRef.value ? errorRef.value = false : null;
   const docRef = doc(db, "lists", listId.value);
@@ -331,8 +337,9 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
       <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`" :title="user.name">
     </div>
     <div class="list__header">
-      <div class="list__header--title" v-if="updateName">
-        <input type="text" v-model="newTitle">
+      <div class="list__header--title" :class="{'error-input' : titleError}" v-if="updateName">
+        <input type="text"  v-model="newTitle">
+        <p class="title-error" v-if="titleError">Min. 2 characters</p>
         <div class="icon check" @click="handleUpdateName" >
           <font-awesome-icon icon="check"/>        
         </div>
