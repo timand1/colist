@@ -29,7 +29,7 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
                 <font-awesome-icon icon="trash-can" />
             </div>
         </div>
-        <div class="assigned-users" v-if="item.assigned.length > 0" >
+        <div class="assigned-users" v-if="item.assigned.length > 0 && !props.delete" >
             <img :src="item.assigned[0].img" :alt="item.assigned[0].name" :title="item.assigned[0].name">
             <img v-if="item.assigned.length > 1" :src="item.assigned[1].img" :alt="item.assigned[1].name" :title="item.assigned[1].name">
             <span v-if="item.assigned.length > 2">+{{ item.assigned.length - 2 }}</span>
