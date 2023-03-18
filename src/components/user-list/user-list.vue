@@ -22,12 +22,14 @@ const handleDeleteModal = (type : string) => {
   showDeleteModal.value = !showDeleteModal.value
 }
 
-const handleDeleteList = (id : string) => {
-    emit('deleteList', id)
+const handleDeleteList = (id : string, e : MouseEvent | TouchEvent) => {
+    showDeleteModal.value = false
+    emit('deleteList', id, e)
 }
 
-const handleLeaveList = (id : string, users : User[]) => {
-    emit('removeUser', id, users)
+const handleLeaveList = (id : string, e : MouseEvent | TouchEvent) => {
+    showDeleteModal.value = false
+    emit('removeUser', id, e)
 }
 </script>
 

@@ -23,7 +23,7 @@ const emit = defineEmits(['handleDeleteModal', 'handleDeleteList', 'handleLeaveL
                     @click="emit('handleDeleteList', list.id)"
                 />
                 <Button v-else variant="primary" :text="'Leave'"
-                    @click="emit('handleLeaveList', list.id, list.users)"
+                    @click="emit('handleLeaveList', list.id)"
                 />
             </div>
 

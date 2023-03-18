@@ -62,8 +62,7 @@ const goToList: (listId: string) => void = (listId) => {
   router.push(`/list/${listId}`)
 }
 
-const deleteList: (listId: string, e: MouseEvent | TouchEvent) => Promise<void> = async (listId, e) => {
-  // e.stopPropagation()
+const deleteList: (listId: string) => Promise<void> = async (listId) => {  
   loader.value = true;
   errorRef.value ? errorRef.value = false : null;
   try {
@@ -74,8 +73,7 @@ const deleteList: (listId: string, e: MouseEvent | TouchEvent) => Promise<void> 
   loader.value = false;
 }
 
-const removeUser: (listId: string, users: string[], e : MouseEvent | TouchEvent) => Promise<void> = async (listId, users, e) => {
-  // e.stopPropagation()
+const removeUser: (listId: string) => Promise<void> = async (listId) => {
   errorRef.value ? errorRef.value = false : null;
   loader.value = true;
   const listRef = doc(db, "lists", listId);  
