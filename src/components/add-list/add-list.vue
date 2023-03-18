@@ -58,7 +58,7 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
     <section class="add-list" ref="addItemRef" @click="preventSortableTouch">
       <h2>New list</h2>
       <div class="input-container" :class="nameError ? 'input-error' : null">
-        <input type="text" name="listname" placeholder=' ' required v-model="listname" @focus="nameError = false">
+        <input type="text" name="listname" placeholder=' ' required v-model="listname" @focus="nameError = false" autocomplete="off" >
         <label for="listname">Name</label>
         <p v-if="nameError" class="name__error-text">Min. 2 characters</p>
       </div>

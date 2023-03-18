@@ -165,7 +165,16 @@ const preventClose: (e : TouchEvent | MouseEvent) => void = (e) => {
     <section class="share__container" @click="emit('click')">
         <section class="share" @click="preventClose($event)">
             <div class="search">
-                <input type="text" name="search" placeholder=" " :value="userInput" @input="searchUser($event.target)" @keyup.enter="searchUser($event)" @keydown.escape="clearSearch">
+                <input 
+                    type="text"
+                    name="search"
+                    placeholder=" "
+                    :value="userInput"
+                    @input="searchUser($event.target)"
+                    @keyup.enter="searchUser($event)"
+                    @keydown.escape="clearSearch"
+                    autocomplete="off"
+                >
                 <font-awesome-icon class="search__clear" icon="xmark" v-if="userInput.length > 0" @click="clearSearch" />
                 <label for="search">Search user</label>
                 <div class="search__found" :style="{ display : foundUsers.length <= 0 ? 'none' : 'flex'}" >
