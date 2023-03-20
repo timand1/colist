@@ -67,6 +67,9 @@ const getList: () => void = () => {
       newTitle.value = list.value.name
       itemList.value = list.value.list
       loader.value = false;
+      list.value.list.forEach((item : Shoppinglist | ToDoList) => {
+      item.done ? itemDone.value = true : null
+    })
     } else {
       // Redirect / if the list doesnt exist or if the user does not have access to the list
       router.push('/')
