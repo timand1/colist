@@ -318,6 +318,29 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
   showAssign.value = false
 }
 
+const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
+  
+  loader.value = true;
+  errorRef.value ? errorRef.value = false : null;
+  const itemsArr = [...items]
+
+  itemsArr.forEach(item => {
+    item.done = false
+  })
+  
+  const docRef = doc(db, "lists", listId.value);
+  try {
+    await updateDoc(docRef, {
+      updated : Timestamp.now(),
+      list : itemsArr
+    });
+    loader.value = false;
+  } catch (error) {
+    loader.value = false;
+    errorRef.value = !errorRef.value;
+  }
+}
+
 </script>
 
 <template>
@@ -333,8 +356,12 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
   <AssignUser v-if="showAssign" :id="list.id" :type="list.type" :item="list.list[assignableItem]" :users="list.users" @closeShowAssign="closeShowAssign" @handleUpdateItem="handleUpdateItem"/>
   <section v-if="loader" class="loader"></section>
   <div class="list" v-if="list">
-    <div class="user-container" @click="handleShareList">
-      <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`" :title="user.name">
+    <div class="list__top">
+      <div class="user-container" @click="handleShareList">
+        <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`" :title="user.name">
+      </div>
+      <p class="clear-done" @click="handleAllNotDone(list?.list)" v-if="list?.type == 'Shopping' || list?.type == 'ToDo'">All undone</p>
+
     </div>
     <div class="list__header">
       <div class="list__header--title" :class="{'error-input' : titleError}" v-if="updateName">
@@ -352,6 +379,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
         <font-awesome-icon class="change-title" icon="pen" @click="changeTitle" />
       </div>
       <p>Author - {{ list?.author.name }}</p>
+      <p class="update-date">Updated - {{ new Date(list?.updated.seconds * 1000).toDateString() }}</p>
     </div>
     <AddItem :list-length="list?.list.length" :type="list?.type" />
     <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>

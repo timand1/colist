@@ -9,7 +9,6 @@ import { useRoute } from 'vue-router';
 import { createPopper } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { debounce } from 'lodash';
-const mouseDown = ref(false)
 
 type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
 
@@ -30,6 +29,7 @@ const foundUsers = ref<User[]>([])
 const listUsers = ref(props.users)
 const addedUsers = ref<User[]>([])
 const errorRef = ref<boolean>(false)
+const mouseDown = ref(false)
 
 watch(() => props.users, (newVal) => {  
     listUsers.value = newVal
@@ -195,7 +195,7 @@ const closeModal = () => {
             </div>
             <div class="share__users">
                 <div class="active-users">
-                    <h4 class="share__added--headline">Current users <span>(Author excluded)</span></h4>
+                    <h4 class="share__added--headline">Current users <span v-if="auth.currentUser?.uid == author.id">(Author excluded)</span></h4>
                     <div class="share__current" v-for="user in listUsers">
                         <div class="share__user" v-if="auth.currentUser?.uid != props.author.id || user.id != props.author.id">
                             <img :src="user.img" alt="">

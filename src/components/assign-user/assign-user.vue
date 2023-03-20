@@ -21,6 +21,8 @@ const emit = defineEmits(['closeShowAssign', 'handleUpdateItem']);
 const route = useRoute();
 const assignedUsers = ref<User[]>([])
 const userInput = ref(Object.fromEntries(Object.entries(props.item).filter(([key]) => !['done', 'id', 'assigned'].includes(key))))
+const mouseDown = ref(false)
+
 const inputFields = computed(() => {    
   switch (props.type) {
     case 'Shopping':
@@ -108,11 +110,16 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
     e.stopPropagation();
 }
 
+const closeModal = () => {
+    mouseDown.value ? null : emit('closeShowAssign')
+    mouseDown.value = false
+}
+
 </script>
 
 <template>
-    <section class="assign-user" @click="emit('closeShowAssign')">
-        <div class="assign-user__container" @click="preventSortableTouch">
+    <section class="assign-user" @click="closeModal">
+        <div class="assign-user__container" @click="preventSortableTouch" @mousedown="mouseDown = true" @mouseup="mouseDown = false">
             <div class="item">
                 <div v-for="(input, index) in inputFields" :key="index" class="assign__item">
                 <input

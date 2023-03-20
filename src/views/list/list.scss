@@ -4,16 +4,28 @@
 
 .list {
     margin: 5em 0;
-    .user-container {
-        margin-left: 1em;
+    .list__top {
         display: flex;
-        flex-wrap: wrap;
-        width: fit-content;
-        cursor: pointer;
-        .user-image {
-            width: 25px;
-            height: 25px;
-            border-radius: variables.$radius-round;
+        gap: 2em;
+        align-items: center;
+        margin: 0 1em;
+        .user-container {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            width: fit-content;
+            cursor: pointer;
+            .user-image {
+                width: 25px;
+                height: 25px;
+                border-radius: variables.$radius-round;
+            }
+        }
+        .clear-done {
+            font-size: 12px;
+            text-decoration: underline;
+            text-align: end;
+            cursor: pointer;
         }
     }
     .list__header {
@@ -67,6 +79,11 @@
                 }
 
             }
+        }
+
+        .update-date {
+            font-size: 14px;
+
         }
     }
     .item-container {

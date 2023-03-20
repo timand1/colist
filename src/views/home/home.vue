@@ -110,6 +110,7 @@ const handleOverlay: () => void = () => {
       <div v-if="lists?.length == 0" class="empty">
         <h4>Empty</h4>
         <p>You have no list at this moment</p>
+        <p>Create a list by clicking the + icon in the top right</p>
       </div>
     </div>
     <section v-if="loader" class="loader"></section>
