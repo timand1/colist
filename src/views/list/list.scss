@@ -6,11 +6,10 @@
     margin: 5em 0;
     .list__top {
         display: flex;
-        gap: 2em;
-        align-items: center;
+        gap: 1em;
         margin: 0 1em;
+        justify-content: space-between;
         .user-container {
-            flex: 1;
             display: flex;
             flex-wrap: wrap;
             width: fit-content;
@@ -22,6 +21,7 @@
             }
         }
         .clear-done {
+            white-space: nowrap;
             font-size: 12px;
             text-decoration: underline;
             text-align: end;
