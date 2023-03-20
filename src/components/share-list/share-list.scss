@@ -67,6 +67,12 @@
         
         .share__added--headline {
             margin-bottom: 12px;
+            span {
+                font-size: 14px;
+                font-weight: 400;
+                font-style: italic;
+
+            }
         }
         .active-users, .share__added {
             overflow-y: auto;

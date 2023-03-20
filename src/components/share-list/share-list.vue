@@ -189,7 +189,7 @@ const preventClose: (e : TouchEvent | MouseEvent) => void = (e) => {
             </div>
             <div class="share__users">
                 <div class="active-users">
-                    <h4 class="share__added--headline">Current users</h4>
+                    <h4 class="share__added--headline">Current users <span>(Author excluded)</span></h4>
                     <div class="share__current" v-for="user in listUsers">
                         <div class="share__user" v-if="auth.currentUser?.uid != props.author.id || user.id != props.author.id">
                             <img :src="user.img" alt="">
