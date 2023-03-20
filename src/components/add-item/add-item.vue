@@ -96,7 +96,7 @@ const handleAddItem: () => Promise<void> = async () => {
 
 const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem : NumberedList) => Promise<void> = async (listRef, newItem) => {
   const docSnap = await getDoc(listRef);
-  !newItem.placement ? newItem.placement = props.listLength : null
+  !newItem.placement ? newItem.placement = props.listLength + 1 : null
   newItem.placement = newItem.placement - 1
   
   let updatedList: NumberedList[] = [...docSnap.data()?.list]
