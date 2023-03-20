@@ -78,6 +78,7 @@
         padding-bottom: 5em;
     }
     .empty {
+        user-select: none;
         opacity: 40%;
         margin: 0 1em;
         font-style: italic;
