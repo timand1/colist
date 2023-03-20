@@ -107,6 +107,10 @@ const handleOverlay: () => void = () => {
           <UserList :list="list" @deleteList="deleteList" @removeUser="removeUser" @goToList="goToList" />
         </div> 
       </section>
+      <div v-if="lists?.length == 0" class="empty">
+        <h4>Empty</h4>
+        <p>You have no list at this moment</p>
+      </div>
     </div>
     <section v-if="loader" class="loader"></section>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />

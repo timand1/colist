@@ -38,6 +38,14 @@
             }
         }
     }
+
+    .empty {
+        opacity: 40%;
+        margin: 0 1em;
+        font-style: italic;
+        text-align: center;
+        @include mixins.grid-center();
+    }
 }
 
 body.dark {

@@ -406,6 +406,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
         />
       </template>
     </Sortable>
+    <div class="empty" v-if="list?.list.length == 0"><h4>Empty list</h4><p>You have no items at this momemt</p></div>
     <div  v-if="!assignMode" class="delete__menu" :class="deleteMode ? 'delete__menu--open' : 'delete__menu--closed'">
         <font-awesome-icon icon="trash-can"  v-if="!deleteMode"  @click="handleDeleteMode" />
         <div class="delete__menu--options" v-else>

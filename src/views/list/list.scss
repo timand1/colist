@@ -77,6 +77,13 @@
         gap: 12px;
         padding-bottom: 5em;
     }
+    .empty {
+        opacity: 40%;
+        margin: 0 1em;
+        font-style: italic;
+        text-align: center;
+        @include mixins.grid-center();
+    }
     .delete__menu, .assign__menu {
         position: fixed;
         bottom: 1em;
