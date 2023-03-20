@@ -4,7 +4,6 @@ import { ref, watch, watchEffect } from 'vue';
 import AddList from '@/components/add-list/add-list.vue';
 import Navbar from '@/components/navbar/navbar.vue';
 import UserList from '@/components/user-list/user-list.vue';
-import DeleteList from '@/components/delete-list/delete-list.vue';
 import { db } from '@/firebase';
 import { doc, onSnapshot, collection, query, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { User, type List } from '@/helpers/types/types'

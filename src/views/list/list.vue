@@ -40,6 +40,7 @@ const unassignedOnly = ref(false)
 const assignMode = ref(false)
 const unassignedItems = ref()
 const titleError = ref(false)
+const itemDone = ref(false)
 
 onBeforeMount(async () => {
   getList()    
@@ -113,6 +114,10 @@ const handleCheckedItem: (item : Shoppinglist | ToDoList) => Promise<void> = asy
       list : updatedList
     });
     loader.value = false;
+    itemDone.value = false
+    list.value.list.forEach((item : Shoppinglist | ToDoList) => {
+      item.done ? itemDone.value = true : null
+    })
   } catch (error) {
     errorRef.value = !errorRef.value;
   }
@@ -335,6 +340,7 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
       list : itemsArr
     });
     loader.value = false;
+    itemDone.value = false;
   } catch (error) {
     loader.value = false;
     errorRef.value = !errorRef.value;
@@ -360,7 +366,7 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
       <div class="user-container" @click="handleShareList">
         <img class="user-image" v-for="user in list.users" :src="user.img" :alt="`${user.name}'s profile image`" :title="user.name">
       </div>
-      <p class="clear-done" @click="handleAllNotDone(list?.list)" v-if="list?.type == 'Shopping' || list?.type == 'ToDo'">All undone</p>
+      <p class="clear-done" @click="handleAllNotDone(list?.list)" v-if="list?.type == 'Shopping' || list?.type == 'ToDo' && itemDone">All undone</p>
 
     </div>
     <div class="list__header">
