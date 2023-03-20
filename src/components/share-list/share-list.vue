@@ -9,6 +9,7 @@ import { useRoute } from 'vue-router';
 import { createPopper } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { debounce } from 'lodash';
+const mouseDown = ref(false)
 
 type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
 
@@ -159,11 +160,16 @@ const preventClose: (e : TouchEvent | MouseEvent) => void = (e) => {
     e.stopPropagation();
 }
 
+const closeModal = () => {
+    mouseDown.value ? null : emit('click')
+    mouseDown.value = false
+}
+
 </script>
 
 <template>
-    <section class="share__container" @click="emit('click')">
-        <section class="share" @click="preventClose($event)">
+    <section class="share__container" @click="closeModal">
+        <section class="share" @click="preventClose($event)" @mousedown="mouseDown = true" @mouseup="mouseDown = false">
             <div class="search">
                 <input 
                     type="text"

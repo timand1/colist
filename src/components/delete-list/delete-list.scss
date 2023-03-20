@@ -12,6 +12,7 @@
     place-items: center;
     background-color: colors.$overlay;
     z-index: 999999;
+    cursor: auto;
     .delete__modal {
         @include mixins.flexbox($justify : space-between);
         flex-direction: column;

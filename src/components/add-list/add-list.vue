@@ -14,6 +14,7 @@ const addItemRef = ref()
 const nameError = ref(false)
 const listTypeError = ref(false)
 const router = useRouter()
+const mouseDown = ref(false)
 
 const createNewList: () => Promise<void> = async () => {  
   const uniqueId = crypto.randomUUID()
@@ -48,14 +49,19 @@ const createNewList: () => Promise<void> = async () => {
 }
 
 const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
-    e.stopPropagation();
+  e.stopPropagation();
+}
+
+const closeModal = () => {
+  mouseDown.value ? null : emit('click')
+  mouseDown.value = false
 }
 
 </script>
 
 <template>
-  <section class="add-list__overlay" @click="emit('click')">
-    <section class="add-list" ref="addItemRef" @click="preventSortableTouch">
+  <section class="add-list__overlay" @click="closeModal">
+    <section class="add-list" ref="addItemRef" @click="preventSortableTouch" @mousedown="mouseDown = true" @mouseup="mouseDown = false">
       <h2>New list</h2>
       <div class="input-container" :class="nameError ? 'input-error' : null">
         <input type="text" name="listname" placeholder=' ' required v-model="listname" @focus="nameError = false" autocomplete="off" >
