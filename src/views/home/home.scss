@@ -54,10 +54,16 @@
     }
     .create-icon {
         cursor: pointer;
-        font-size: 28px;
+        color: colors.$primary-font-dark;
+        background-color: colors.$primary-accent;
+        padding: 12px;
+        border-radius: variables.$radius-round;
+        box-shadow: 1px 1px 4px colors.$primary-font;
+        font-size: 20px;
         position: fixed;
         bottom: 1em;
         right: 1em;
+        z-index: 9999;
     }
 }
 
@@ -69,9 +75,6 @@ body.dark {
                     background-color: colors.$secondary-bg-dark;
                 }
             }
-        }
-        .create-icon {
-            color: colors.$primary-font-dark;
         }
     }
 }
