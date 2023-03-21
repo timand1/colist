@@ -18,8 +18,8 @@ const emit = defineEmits(['handleDeleteModal', 'handleDeleteList', 'handleLeaveL
             <h3>Confirm</h3>
             <p>Are you sure that you want to {{ type }} <span class="list-name">{{ list.name }}</span>?</p>
             <div class="btn-container">
-                <Button variant="danger" outline text="Cancel" @click.stopPropagation="emit('handleDeleteModal')" />
-                <Button v-if="type == 'delete'" variant="primary" :text="'Delete'"
+                <Button variant="primary" outline text="Cancel" @click.stopPropagation="emit('handleDeleteModal')" />
+                <Button v-if="type == 'delete'" variant="danger" :text="'Delete'"
                     @click="emit('handleDeleteList', list.id)"
                 />
                 <Button v-else variant="primary" :text="'Leave'"
