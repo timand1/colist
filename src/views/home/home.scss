@@ -52,6 +52,13 @@
             opacity: 100%;
         }
     }
+    .create-icon {
+        cursor: pointer;
+        font-size: 28px;
+        position: fixed;
+        bottom: 1em;
+        right: 1em;
+    }
 }
 
 body.dark {
@@ -62,6 +69,9 @@ body.dark {
                     background-color: colors.$secondary-bg-dark;
                 }
             }
+        }
+        .create-icon {
+            color: colors.$primary-font-dark;
         }
     }
 }
@@ -79,6 +89,9 @@ body.dark {
                     margin: 0;
                 }
             }
+        }
+        .create-icon {
+            right: calc(50vw - clamp(100px, 45vw, 560px));
         }
     }
 }

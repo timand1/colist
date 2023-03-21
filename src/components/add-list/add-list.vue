@@ -76,7 +76,7 @@ const closeModal = () => {
         <p v-if="listTypeError" class="type__error-text">List type needs to be chosen</p>
       </div>
     <div class="button-container">
-      <Button variant="danger" text="Cancel" @click="emit('click')" />
+      <Button variant="danger" outline text="Cancel" @click="emit('click')" />
       <Button variant="primary" text="Create" @click="createNewList" />
     </div>
   </section>

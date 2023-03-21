@@ -125,9 +125,14 @@
             color: colors.$secondary-bg;
         }
     }
+    .delete__menu--open {
+        padding: 8px 14px;
+    }
+    .assign__menu--open {
+        padding: 4px 14px;
+    }
     .delete__menu--open, .assign__menu--open {
         width: calc(100% - 4em);
-        padding: 8px 14px;
         font-size: 14px;
         border-radius: variables.$radius-l;
 
@@ -135,6 +140,7 @@
             overflow: hidden;
             white-space: nowrap;
             display: flex;
+            align-items: center;
             justify-content: space-evenly;
             gap: 4px;
             .delete__option, .assign__option {
@@ -144,6 +150,7 @@
                 &[active=true] {
                     background-color: color.scale(colors.$primary-accent, $lightness: 20%);
                     border-radius: variables.$radius-s;
+                    padding: 4px 0;
                 }
             }
             p {
@@ -250,7 +257,7 @@ body.dark {
 @media screen and (min-width: 786px) {
     .list {
         .delete__menu {
-            left: calc(50vw - clamp(100px, 45vw, 560px))
+            left: calc(50vw - clamp(100px, 45vw, 560px));
         }
         .delete__menu--open {
             width: 300px;
@@ -264,7 +271,7 @@ body.dark {
             }
         }
         .assign__menu {
-            right: calc(50vw - clamp(100px, 45vw, 560px))
+            right: calc(50vw - clamp(100px, 45vw, 560px));
         }
     }
 }

@@ -8,6 +8,7 @@ import { db } from '@/firebase';
 import { doc, onSnapshot, collection, query, where, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { User, type List } from '@/helpers/types/types'
 import router from '@/router';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const auth = getAuth()
 const addOverlay = ref<boolean>(false)
@@ -109,11 +110,11 @@ const handleOverlay: () => void = () => {
       <div v-if="lists?.length == 0" class="empty">
         <h4>Empty</h4>
         <p>You have no list at this moment</p>
-        <p>Create a list by clicking the + icon in the top right</p>
       </div>
     </div>
     <section v-if="loader" class="loader"></section>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
+    <font-awesome-icon class="create-icon" icon="pen-to-square" @click="addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </section>
 </template>
 
