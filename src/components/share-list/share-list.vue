@@ -3,12 +3,13 @@ import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
 import { getAuth } from 'firebase/auth';
-import { doc, updateDoc, query, collection, where, getDocs, Timestamp } from 'firebase/firestore';
-import { computed, ref, watch } from 'vue';
+import { doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { createPopper } from '@popperjs/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { debounce } from 'lodash';
+import { setUsers, findUser } from '@/composables/setUsers';
 
 type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
 
@@ -30,6 +31,10 @@ const listUsers = ref(props.users)
 const addedUsers = ref<User[]>([])
 const errorRef = ref<boolean>(false)
 const mouseDown = ref(false)
+
+onMounted(() => {
+    setUsers()
+})
 
 watch(() => props.users, (newVal) => {  
     listUsers.value = newVal
@@ -86,27 +91,7 @@ const searchUser: (input : any) => Promise<void> = async (input) => {
 
 const searchDatabase = debounce(async () => {    
     errorRef.value ? errorRef.value = false : null;
-    let words : string | string[] = userInput.value.split(' ');
-    const capitalizedWords = words.map(word => {
-        const firstLetter = word.charAt(0);
-        const restOfWord = word.slice(1);
-        return `${firstLetter.toUpperCase()}${restOfWord}`;
-    });
-    words = capitalizedWords.join(' ')   
-
-    const q = query(collection(db, "users"),where("name", "==", words));
-
-    try {
-      const querySnapshot = await getDocs(q);      
-      querySnapshot.forEach((doc) => {
-        foundUsers.value.push(doc.data() as User) 
-      })
-
-      popperInstance.value.update()
-
-    } catch (err) {
-        errorRef.value = !errorRef.value;
-    }
+    foundUsers.value = userInput.value.length >= 2 ? findUser(userInput.value) : []
 }, 500);
 
 const popperInstance = computed(() => {
