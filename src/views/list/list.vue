@@ -208,7 +208,7 @@ const options = computed(() => {
   return {
     draggable: ".draggable",
     animation: 250,
-    delay: 100,
+    delay: 1,
     delayOnTouchOnly: false
   };
 });
