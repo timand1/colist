@@ -1,6 +1,7 @@
 @use '@/styles/colors';
 @use '@/styles/mixins';
 @use '@/styles/variables';
+@use 'sass:color';
 
 .list {
     margin: 5em 0;
@@ -140,6 +141,10 @@
                 flex: 1;
                 text-align: center;
                 cursor: pointer;
+                &[active=true] {
+                    background-color: color.scale(colors.$primary-accent, $lightness: 20%);
+                    border-radius: variables.$radius-s;
+                }
             }
             p {
                 color: colors.$primary-font-dark;

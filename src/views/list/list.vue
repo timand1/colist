@@ -41,6 +41,7 @@ const assignMode = ref(false)
 const unassignedItems = ref()
 const titleError = ref(false)
 const itemDone = ref(false)
+const assignType = ref('all')
 
 onBeforeMount(async () => {
   getList()    
@@ -256,6 +257,7 @@ const closeShowAssign: () => void = () => {
 }
 
 const showAssignedItems: () => void = () => {
+  assignType.value = 'self'
   assignedOnly.value = !assignedOnly.value;
   assignedOnly.value ? 
     assignedItems.value = itemList.value.filter(item => {
@@ -265,6 +267,7 @@ const showAssignedItems: () => void = () => {
   : null
 }
 const showUnassignedItems: () => void = () => {
+  assignType.value = 'unset'
   assignedOnly.value = false;
   unassignedOnly.value = !unassignedOnly.value;
   unassignedOnly.value 
@@ -277,6 +280,7 @@ const handleAssignMode: () => void = () => {
 }
 
 const showAll: () => void = () => {
+  assignType.value = 'all'
   assignedOnly.value = false;
   unassignedOnly.value = false;
 }
@@ -458,11 +462,11 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
         <div class="assign__menu--options" v-else>
           <p class="assign__option" @click="handleAssignMode">Close</p>
           <p >|</p>
-          <p class="assign__option" @click="showAll">All</p>
+          <p class="assign__option" :active="assignType == 'all'" @click="showAll">All</p>
           <p >|</p>
-          <p class="assign__option" @click="showAssignedItems">Mine</p>
+          <p class="assign__option" :active="assignType == 'self'" @click="showAssignedItems">Mine</p>
           <p >|</p>
-          <p class="assign__option" @click="showUnassignedItems">Unset</p>
+          <p class="assign__option" :active="assignType == 'unset'" @click="showUnassignedItems">Unset</p>
         </div>
     </div>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
