@@ -38,7 +38,8 @@ const createNewList: () => Promise<void> = async () => {
         email : auth.currentUser?.email
       }],
       type: listtype.value,
-      updated : Timestamp.now()
+      updated : Timestamp.now(),
+      invited: []
     })
     emit('click')
     router.push(`/list/${uniqueId}`)
