@@ -55,6 +55,14 @@ watch(() => route.params.id, (newVal) => {
   }
 })
 
+watch(() => list.value, (newVal) => {
+        userInvited.value = list.value.invited.filter((user : User) => user.id == auth.currentUser?.uid)
+      if(userInvited.value.length > 0) {
+        acceptInvite(list.value.id, userInvited.value)
+      }
+  
+})
+
 const getList: () => void = () => {
   listId.value = route.params.id as string
   if (!listId) {
