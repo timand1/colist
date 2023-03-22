@@ -72,15 +72,13 @@ const getList: () => void = () => {
       list.value.list.forEach((item : Shoppinglist | ToDoList) => {
         item.done ? itemDone.value = true : null
       })
-      userInvited.value = list.value.invited.filter((user : User) => user.id == auth.currentUser?.uid)
-      if(userInvited.value) {
-        acceptInvite(list.value.id, userInvited.value)
-      }
+      
     } else {
       // Redirect / if the list doesnt exist or if the user does not have access to the list
       router.push('/')
     }
   });
+  
   return { list };
 }
 
