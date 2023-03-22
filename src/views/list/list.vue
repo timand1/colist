@@ -10,7 +10,7 @@ import NumberedItem from '@/components/list-item/numbered-item.vue';
 import AssignUser from '@/components/assign-user/assign-user.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
-import { doc, onSnapshot, updateDoc, Timestamp } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, Timestamp, getDoc, arrayUnion } from "firebase/firestore";
 import { computed, onBeforeMount, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Shoppinglist, ToDoList, User, TimeList, NumberedList } from '@/helpers/types/types';
@@ -42,6 +42,7 @@ const unassignedItems = ref()
 const titleError = ref(false)
 const itemDone = ref(false)
 const assignType = ref('all')
+const userInvited = ref<User[]>([])
 
 onBeforeMount(async () => {
   getList()    
@@ -63,14 +64,18 @@ const getList: () => void = () => {
 
   const docRef = doc(db, "lists", listId.value);
   onSnapshot(docRef, (docSnap) => {    
-    if (docSnap.exists() && docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid).length != 0) {
+    if (docSnap.exists() && (docSnap.data().users.filter((user : User) => user.id == auth.currentUser?.uid).length != 0 || docSnap.data().invited.filter((user : User) => user.id == auth.currentUser?.uid).length != 0 )) {
       list.value = docSnap.data();
       newTitle.value = list.value.name
       itemList.value = list.value.list
       loader.value = false;
       list.value.list.forEach((item : Shoppinglist | ToDoList) => {
-      item.done ? itemDone.value = true : null
-    })
+        item.done ? itemDone.value = true : null
+      })
+      userInvited.value = list.value.invited.filter((user : User) => user.id == auth.currentUser?.uid)
+      if(userInvited.value) {
+        acceptInvite(list.value.id, userInvited.value)
+      }
     } else {
       // Redirect / if the list doesnt exist or if the user does not have access to the list
       router.push('/')
@@ -79,6 +84,18 @@ const getList: () => void = () => {
   return { list };
 }
 
+const acceptInvite = async (listId: string, user : User[]) => {
+  errorRef.value ? errorRef.value = false : null;
+  const listRef = doc(db, "lists", listId);  
+  const listDoc = await getDoc(listRef);
+  if (listDoc.exists()) {    
+    const currentInvited = listDoc.data().invited;
+    const updatedInvited = currentInvited.filter((user : User) => user.id !== auth.currentUser?.uid);
+    await updateDoc(listRef, { invited: updatedInvited, updated : Timestamp.now(), users : arrayUnion(...user) });
+  } else {
+    errorRef.value = !errorRef.value;
+  }
+}
   
 const updateAmount = async (item : Shoppinglist, newAmount : number) => {
   loader.value = true;
@@ -209,7 +226,7 @@ const options = computed(() => {
   return {
     draggable: ".draggable",
     animation: 250,
-    delay: 100,
+    delay:  window.matchMedia("(max-width: 480px)").matches ? 100 : 1,
     delayOnTouchOnly: false
   };
 });
@@ -361,6 +378,7 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
   <ShareList 
     v-if="displayShareList" 
     :list="list?.list"
+    :invited="list?.invited"
     :users="list?.users" 
     :display-share-list="displayShareList" 
     :author="list.author" 

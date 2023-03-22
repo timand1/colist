@@ -45,4 +45,5 @@ export type List = {
     list : Shoppinglist[] | ToDoList[] | NumberedList[] | TimeList[] | []
     users : User[],
     updated : string
+    invited: User[]
 }

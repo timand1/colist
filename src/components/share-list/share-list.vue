@@ -3,7 +3,7 @@ import Button from '@/components/button/button.vue';
 import { db } from '@/firebase';
 import { NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
 import { getAuth } from 'firebase/auth';
-import { doc, updateDoc, Timestamp } from 'firebase/firestore';
+import { doc, updateDoc, Timestamp, arrayUnion } from 'firebase/firestore';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { createPopper } from '@popperjs/core';
@@ -15,6 +15,7 @@ type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
 
 type ShareListProps = {
     users: User[]
+    invited: User[]
     author : User
     displayShareList : boolean
     list : ListItem[]
@@ -48,7 +49,8 @@ const updateUsers: () => Promise<void> = async () => {
     try {
     await updateDoc(docRef, {
         updated : Timestamp.now(),
-        users:  [...listUsers.value, ...addedUsers.value],
+        // users:  [...listUsers.value, ...addedUsers.value],
+        invited : arrayUnion(...addedUsers.value)
     });
 
     handleCloseShare();
@@ -205,6 +207,18 @@ const closeModal = () => {
                         </div>
                         <div class="user-remove" @click="removeAdded(user)" ><Button variant="ghost" text="Remove" /></div>
                     </div>
+                </div>
+                <div class="share__added" v-if="invited?.length > 0">
+                    <h4 class="share__added--headline">Invited users</h4>
+                    <div class="share__current" v-for="user in invited">
+                        <div class="share__user">
+                            <img :src="user.img" alt="">
+                            <div class="share__user--info">
+                                <p>{{ user.name }}</p>
+                                <p class="email">{{ user.email }}</p>
+                            </div>
+                        </div>
+                        </div>
                 </div>
             </div>
             <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
