@@ -22,7 +22,6 @@ const route = useRoute();
 const assignedUsers = ref<User[]>([])
 const userInput = ref(Object.fromEntries(Object.entries(props.item).filter(([key]) => !['done', 'id', 'assigned'].includes(key))))
 const mouseDown = ref(false)
-const isfavorite = ref(false)
 
 const inputFields = computed(() => {    
   switch (props.type) {
@@ -71,9 +70,16 @@ const handleAssignUser: (user : User) => Promise<void> = async (user) => {
     const listRef = doc(db, "lists", listId);
     const listDoc = await getDoc(listRef);
     const listData = [...listDoc.data()?.list];
+
+    const newUser = {
+        name : user.name,
+        email : user.email,
+        id : user.id,
+        img : user.img
+    }
   
     const itemIndex = listData.findIndex((item : ListItem ) => item.id == props.item.id)
-    listData[itemIndex].assigned.push(user)
+    listData[itemIndex].assigned.push(newUser)
     
   
     await updateDoc(listRef, {

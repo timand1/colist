@@ -65,8 +65,7 @@ watchEffect(() => {
         { name : auth.currentUser?.displayName, 
           id: auth.currentUser?.uid, 
           img: auth.currentUser?.photoURL,
-          email: auth.currentUser?.email,
-          favorites : []
+          email: auth.currentUser?.email
         }
     ));
     const unsubscribe = onSnapshot(userQuery, (querySnapshot) => {

@@ -125,8 +125,15 @@ const addUser: (user : User) => void = (user) => {
     userInput.value = ''  
     
     const userExist = listUsers.value.findIndex(currentUser => currentUser.id == user.id)
+
+    const newUser = {
+        name : user.name,
+        email : user.email,
+        id : user.id,
+        img : user.img
+    }
     
-    userExist == -1 ? addedUsers.value.push(user) : null
+    userExist == -1 ? addedUsers.value.push(newUser) : null
 }
 
 const clearSearch: () => void = () => {
