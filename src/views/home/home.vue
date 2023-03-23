@@ -65,7 +65,8 @@ watchEffect(() => {
         { name : auth.currentUser?.displayName, 
           id: auth.currentUser?.uid, 
           img: auth.currentUser?.photoURL,
-          email: auth.currentUser?.email
+          email: auth.currentUser?.email,
+          favorites : []
         }
     ));
     const unsubscribe = onSnapshot(userQuery, (querySnapshot) => {
@@ -74,6 +75,7 @@ watchEffect(() => {
         invitedLists.value.push(doc.data() as List);
       });
     });
+    
 })
 
 const goToList: (listId: string) => void = (listId) => {
