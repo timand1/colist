@@ -213,7 +213,9 @@
 .loader {
     @include mixins.loader();
 }
-
+.sortable-chosen {
+    background: color.scale(colors.$secondary-bg, $blackness: 10%);
+}
 .error-text {
     text-align: center;
     margin-bottom: 2em;
@@ -242,6 +244,9 @@ body.dark {
                 }
             }
         }
+    }
+    .sortable-chosen {
+        background: color.scale(colors.$secondary-bg-dark, $lightness: 10%);
     }
 }
 

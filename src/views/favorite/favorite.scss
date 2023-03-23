@@ -1,6 +1,7 @@
 @use '@/styles/colors';
 @use '@/styles/mixins';
 @use '@/styles/variables';
+@use 'sass:color';
 
 .favorite {
     h2 {
@@ -61,6 +62,9 @@
         }
     }
 }
+.sortable-chosen {
+    background: color.scale(colors.$secondary-bg, $blackness: 10%);
+}
 
 .loader {
     @include mixins.loader();
@@ -79,6 +83,9 @@ body.dark {
                 }
             }
         }
+    }
+    .sortable-chosen {
+        background: color.scale(colors.$secondary-bg-dark, $lightness: 10%);
     }
 }
 
