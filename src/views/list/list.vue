@@ -72,7 +72,16 @@ watch(() => list.value, (newVal) => {
       if(userInvited.value.length > 0) {
         acceptInvite(list.value.id, userInvited.value)
       }
-  
+    assignedOnly.value ? 
+    assignedItems.value = itemList.value.filter(item => {
+    const assignedIds = item.assigned.map(user => user.id);
+    return assignedIds.includes(auth.currentUser!.uid);
+    })
+    : null
+
+    unassignedOnly.value 
+  ? unassignedItems.value = itemList.value.filter(item => item.assigned.length === 0)
+  : null;
 })
 
 const getList: () => void = () => {
