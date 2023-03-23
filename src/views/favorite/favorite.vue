@@ -87,14 +87,14 @@ const moveItem = async (evt: any) => {
         <Navbar param="favorite" />
         <section v-if="loader" class="loader"></section>
         <h2>Favorites</h2>
-        <div class="favorite__add">
+        <form class="favorite__add" @submit.prevent="handleAddFavorite">
             <div class="input-container" :class="{'input-error' : inputError}">
                 <input type="text" name="favorite" placeholder=" " v-model="userInput" :maxlength="30"  @focus="inputError = false">
                 <label for="favorite">Favorite</label>
                 <p v-if="inputError" class="input-error__text">Min. 2 characters</p>
             </div>
-            <Button variant="primary" text="Add" @click="handleAddFavorite" />
-        </div>
+            <Button type="submit" variant="primary" text="Add" />
+        </form>
         <Sortable
         :key="JSON.stringify(favoriteList)"
         :item-key="auth.currentUser?.uid"
