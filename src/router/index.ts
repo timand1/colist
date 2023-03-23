@@ -3,6 +3,7 @@ import Home from '@/views/home/home.vue'
 import Login from '@/views/login/login.vue'
 import List from '@/views/list/list.vue'
 import Help from '@/views/help/help.vue'
+import Favorite from '@/views/favorite/favorite.vue'
 import Errorpage from '@/views/errorpage/errorpage.vue'
 import { getAuth } from 'firebase/auth'
 
@@ -24,6 +25,12 @@ const router = createRouter({
       path: '/list/:id',
       name: 'list',
       component: List,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/favorite',
+      name: 'favorite',
+      component: Favorite,
       meta: { requiresAuth: true }
     },
     {

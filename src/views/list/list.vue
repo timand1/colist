@@ -8,12 +8,14 @@ import TodoItem from '@/components/list-item/todo-item.vue';
 import TimeItem from '@/components/list-item/time-item.vue';
 import NumberedItem from '@/components/list-item/numbered-item.vue';
 import AssignUser from '@/components/assign-user/assign-user.vue';
+import Favorites from '@/components/favorites/favorites.vue';
+import Button from '@/components/button/button.vue';
 import { auth, db } from '@/firebase';
 import router from '@/router';
 import { doc, onSnapshot, updateDoc, Timestamp, getDoc, arrayUnion } from "firebase/firestore";
-import { computed, onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist, ToDoList, User, TimeList, NumberedList } from '@/helpers/types/types';
+import { Shoppinglist, ToDoList, User, TimeList, NumberedList, FavoriteItems } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
 import { Sortable } from "sortablejs-vue3"
 
@@ -43,6 +45,16 @@ const titleError = ref(false)
 const itemDone = ref(false)
 const assignType = ref('all')
 const userInvited = ref<User[]>([])
+
+const userInfo = ref<FavoriteItems[]>([])
+onMounted(() => { 
+  const userRef = doc(db, "users", auth.currentUser?.uid!);
+  onSnapshot(userRef, (docSnap) => {    
+    if (docSnap.exists()) {      
+      userInfo.value = docSnap.data().favorites;      
+    } 
+  })
+})
 
 onBeforeMount(async () => {
   getList()    
@@ -376,6 +388,11 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
     errorRef.value = !errorRef.value;
   }
 }
+const displayFavorites = ref(false)
+
+const handleFavoriteModal = () => {
+  displayFavorites.value = !displayFavorites.value
+}
 
 </script>
 
@@ -390,6 +407,7 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
     :author="list.author" 
     @click="handleShareList" 
   />
+  <Favorites v-if="displayFavorites" :list="list" :favorites="userInfo" @handleFavoriteModal="handleFavoriteModal"/>
   <AssignUser v-if="showAssign" :id="list.id" :type="list.type" :item="list.list[assignableItem]" :users="list.users" @closeShowAssign="closeShowAssign" @handleUpdateItem="handleUpdateItem"/>
   <section v-if="loader" class="loader"></section>
   <div class="list" v-if="list">
@@ -419,6 +437,7 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
       <p class="update-date">Updated - {{ new Date(list?.updated.seconds * 1000).toDateString() }}</p>
     </div>
     <AddItem :list-length="list?.list.length" :type="list?.type" />
+    <Button class="btn__favorite" v-if="list?.type == 'Shopping' && userInfo.length > 0" variant="primary" outline text="Add Favorite" @click="handleFavoriteModal" />
     <p v-if="errorRef" class="error-text">Something went wrong... Try again</p>
     <Sortable
       :key="JSON.stringify(itemList)"
@@ -436,6 +455,7 @@ const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
           :item="element"
           :users="list.users"
           :showAssign="showAssign"
+          :favorites="userInfo"
           @updateAmount="updateAmount"
           @handleDeletItem="handleDeletItem"
           @handleCheckedItem="handleCheckedItem"

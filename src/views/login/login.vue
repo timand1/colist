@@ -34,7 +34,8 @@ const signInWithGoogle = () => {
           id: user.uid,
           name : user.displayName,
           img: user.photoURL,
-          email: user.email
+          email: user.email,
+          favorites : []
         });
       }
     const redirect = router.currentRoute.value.query.redirect || '/'

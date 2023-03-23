@@ -35,6 +35,7 @@ export type User = {
     id : string
     img : string
     email : string
+    favorites : Shoppinglist[] | []
 }
 
 export type List = {
@@ -46,4 +47,10 @@ export type List = {
     users : User[],
     updated : string
     invited: User[]
+}
+
+export type FavoriteItems = {
+    item: string
+    comment : string
+    amount : number
 }

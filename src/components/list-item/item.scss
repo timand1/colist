@@ -1,6 +1,7 @@
 @use '@/styles/colors';
 @use '@/styles/variables';
 @use '@/styles/mixins';
+@use 'sass:color';
 
 .item {
     margin: 0 10px;
@@ -49,6 +50,13 @@
                 place-content: center;
             }
         }
+    }
+    .shop__left {
+        cursor: pointer;
+        display: flex;
+        gap: 4px;
+        flex-direction: row;
+        align-items: center;
     }
     .item__info--right {
         display: flex;
@@ -131,6 +139,14 @@
             font-size: 12px;
         }
     }
+}
+
+.favorite {
+    color: colors.$hover-light;
+}
+.favorite-item {
+    color: color.scale(colors.$primary-accent, $lightness: 20%);
+    
 }
 
 body.dark {

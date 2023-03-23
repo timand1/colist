@@ -1,22 +1,69 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist, User } from '@/helpers/types/types';
+import { FavoriteItems, Shoppinglist, User } from '@/helpers/types/types';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { auth, db } from '@/firebase';
 
 type ShoppingItemProps = {
     item : Shoppinglist
     delete : boolean
     users: User[]
     showAssign : boolean
+    favorites : FavoriteItems[]
 }
 
 const props = defineProps<ShoppingItemProps>()
 const emit = defineEmits(['updateAmount', 'handleDeletItem', 'handleCheckedItem', 'handleShowAssign']);
 
 const amountArr = ref([1, 2, 3, 4, 5, 6, 7, 8])
+const isfavorite = ref(false)
+onMounted(() => {
+    if(props.favorites.filter(favorite => favorite.item == (props.item as Shoppinglist).item).length > 0) {
+        isfavorite.value = true
+    } else {
+        isfavorite.value = false
+    }
+})
+
+watch(() => props.favorites, (newVal) => {      
+    if(props.favorites.filter(favorite => favorite.item == (props.item as Shoppinglist).item).length > 0) {
+        isfavorite.value = true
+    } else {
+        isfavorite.value = false
+    }
+})
 
 const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
     e.stopPropagation();
+}
+
+const handleFavorite = () => {
+    if(isfavorite.value) {
+        handleRemoveFavorite()
+    } else {
+        handleAddFavorite()
+    }
+}
+
+const handleAddFavorite = async () => {
+    const newFavorite = {
+        item : (props.item as Shoppinglist).item,
+        amount : 1,
+        comment: "",
+    }
+    const userRef = doc(db, "users", auth.currentUser?.uid!);
+    await updateDoc(userRef, {
+        favorites: arrayUnion(newFavorite)
+    });
+}
+
+const handleRemoveFavorite = async () => {
+    const updatedFavorites = [...props.favorites].filter(fav => fav.item != (props.item as FavoriteItems).item)
+    const userRef = doc(db, "users", auth.currentUser?.uid!);
+    await updateDoc(userRef, {
+        favorites: updatedFavorites
+    });
 }
 
 </script>
@@ -24,7 +71,12 @@ const preventSortableTouch: (e : TouchEvent | MouseEvent) => void = (e) => {
 <template>
     <div class="draggable item" :key="props.item.id" @click="emit('handleShowAssign', props.item.id)">
         <div class="item__info--left">
-                <p class="item__name">{{ props?.item.item }}</p>
+            <div class="shop__left">
+                <div class="favorite__icon" @click="preventSortableTouch($event)">
+                    <font-awesome-icon class="favorite" :class="{'favorite-item' : isfavorite}" icon="heart" @click.stopPropagation="handleFavorite" />
+                </div>
+                    <p class="item__name">{{ props?.item.item }}</p>
+            </div>
             <div class="item__comment--container" v-if="item.assigned.length > 0 || props.item.comment">
                 <div class="assigned-users" v-if="item.assigned.length > 0" >
                     <img v-if="item.assigned.length == 1" :src="item.assigned[0].img" :alt="item.assigned[0].name" :title="item.assigned[0].name">

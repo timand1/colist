@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import Button from '@/components/button/button.vue';
-import { db } from '@/firebase';
-import { NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
-import { doc, getDoc, Timestamp, updateDoc } from 'firebase/firestore';
+import { auth, db } from '@/firebase';
+import { FavoriteItems, NumberedList, Shoppinglist, TimeList, ToDoList, User } from '@/helpers/types/types';
+import { arrayRemove, arrayUnion, doc, getDoc, Timestamp, updateDoc } from 'firebase/firestore';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -22,6 +22,7 @@ const route = useRoute();
 const assignedUsers = ref<User[]>([])
 const userInput = ref(Object.fromEntries(Object.entries(props.item).filter(([key]) => !['done', 'id', 'assigned'].includes(key))))
 const mouseDown = ref(false)
+const isfavorite = ref(false)
 
 const inputFields = computed(() => {    
   switch (props.type) {

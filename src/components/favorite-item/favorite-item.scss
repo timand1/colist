@@ -1,0 +1,18 @@
+@use '@/styles/colors';
+@use '@/styles/variables';
+@use '@/styles/mixins';
+
+.favorite-item {
+    padding: 10px;
+    border-radius: variables.$radius-m;
+    width: 100%;
+    @include mixins.flexbox($justify : space-between);
+    gap: 10px;
+    background-color: colors.$secondary-bg;
+}
+
+body.dark {
+    .favorite-item {
+        background-color: colors.$secondary-bg-dark;
+    }
+}

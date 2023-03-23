@@ -47,6 +47,11 @@ const handleNewList: () => void = () => {
   emit('click')
 }
 
+const handleFavorite: () => void = () => { 
+  toggleUserMenu()
+  router.push('/favorite')
+}
+
 const handleHelp: () => void = () => { 
   toggleUserMenu()
   router.push('/help')
@@ -91,6 +96,8 @@ const checkDarkmode: (dark : boolean) => void = (dark) => {
           <p @click="handleList">Lists</p>
           <div class="divider"></div>
           <p @click="handleNewList">New List</p>
+          <div class="divider"></div>
+          <p @click="handleFavorite">Favorites</p>
           <div class="divider"></div>
           <p @click="handleHelp">Help</p>
           <div class="divider"></div>
