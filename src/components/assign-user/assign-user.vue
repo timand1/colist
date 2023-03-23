@@ -136,7 +136,7 @@ const closeModal = () => {
                   v-model="userInput[input.name]"
                   placeholder=" "
                   autocomplete="off"
-                  :maxlength="input.name == 'comment' ? 40 : 20"
+                  :maxlength="input.name == 'comment' ? 50 : 30"
                 >
                 <label :for="input.name">{{ input.label }}</label>
                 </div>

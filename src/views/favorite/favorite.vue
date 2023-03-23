@@ -111,6 +111,10 @@ const moveItem = async (evt: any) => {
             />
         </template>
         </Sortable>
+        <div v-if="favoriteList?.length == 0" class="empty">
+        <h4>Empty</h4>
+        <p>You have no favorites at this moment</p>
+      </div>
     </section>
 </template>
 

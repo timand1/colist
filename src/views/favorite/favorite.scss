@@ -47,6 +47,19 @@
         gap: 1em;
         padding-bottom: 5em;
     }
+    .empty {
+        user-select: none;
+        opacity: 40%;
+        margin: 0 1em;
+        font-style: italic;
+        text-align: center;
+        @include mixins.grid-center();
+        .create-list {
+            cursor: pointer;
+            color: red;
+            opacity: 100%;
+        }
+    }
 }
 
 .loader {
