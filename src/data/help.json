@@ -84,6 +84,44 @@
         ]
       }
     ]
+  },
+  {
+    "title" : "Favorites",
+    "items" : [
+      {
+        "sub-title" : "Favorite item",
+        "content" : [
+          "Favorite items are items that the user can save in a favorites list to be added into a Shopping list.",
+          "This is so the user can save time adding regular bought items.",
+          "And also a functions as a reminder to see what could be needed to buy.",
+          "The Favorite list can be viewed and maintained in the favorited page. Found in the user menu under 'Favorites'."
+        ]        
+      },
+      {
+        "sub-title" : "Add new favorite",
+        "content" : [
+          "There are two ways to add an item to your favorites list",
+          "1) In the 'Favorite' page, type in chosen item into the input field and click 'Add'.",
+          "2) In a Shopping list. Click on a gray heart to add that item to your favorite list."
+        ]        
+      },
+      {
+        "sub-title" : "Remove favorite",
+        "content" : [
+          "There are two ways to add an item to your favorites list",
+          "In the 'Favorite' page, click on the white trash can icon to remove a favorite."
+        ]        
+      },
+      {
+        "sub-title" : "Add favorite to a list",
+        "content" : [
+          "If you have favorite items, a button 'Add Favorites', will appear in a Shopping list.",
+          "Click on said button and an container with all your favorites will appear.",
+          "To add a favorite item to your list, click the 'Add' button on the right side.",
+          "If the 'Add' button is gray. That means that the item is already in your list"
+        ]        
+      }
+    ]
   }
 ],
 "mobile": [
@@ -169,6 +207,44 @@
           "At the top of the container, the selected items values are in input fields, simply update the values to your desired values.",
           "When you are done, click the 'Update' button and the item is updated."
         ]
+      }
+    ]
+  },
+  {
+    "title" : "Favorites",
+    "items" : [
+      {
+        "sub-title" : "Favorite item",
+        "content" : [
+          "Favorite items are items that the user can save in a favorites list to be added into a Shopping list.",
+          "This is so the user can save time adding regular bought items.",
+          "And also a functions as a reminder to see what could be needed to buy.",
+          "The Favorite list can be viewed and maintained in the favorited page. Found in the user menu under 'Favorites'."
+        ]        
+      },
+      {
+        "sub-title" : "Add new favorite",
+        "content" : [
+          "There are two ways to add an item to your favorites list",
+          "1) In the 'Favorite' page, type in chosen item into the input field and click 'Add'.",
+          "2) In a Shopping list. Click on a gray heart to add that item to your favorite list."
+        ]        
+      },
+      {
+        "sub-title" : "Remove favorite",
+        "content" : [
+          "There are two ways to add an item to your favorites list",
+          "In the 'Favorite' page, click on the white trash can icon to remove a favorite."
+        ]        
+      },
+      {
+        "sub-title" : "Add favorite to a list",
+        "content" : [
+          "If you have favorite items, a button 'Add Favorites', will appear in a Shopping list.",
+          "Click on said button and an container with all your favorites will appear.",
+          "To add a favorite item to your list, click the 'Add' button on the right side.",
+          "If the 'Add' button is gray. That means that the item is already in your list"
+        ]        
       }
     ]
   }
