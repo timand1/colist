@@ -57,8 +57,16 @@ $bg in colors.$button-bg-colors {
         }
     }
     body.dark {
+        .button--#{$name} {
+            @if (str-index($name, "ghost")) {
+                outline: 1px solid colors.$primary-font-dark;
+            }
+        }
         .button--#{$name}__outline {
             color: colors.$primary-font-dark;
+            @if (str-index($name, "ghost")) {
+                outline: 1px solid colors.$primary-font-dark;
+            }
         }
     }
 }
