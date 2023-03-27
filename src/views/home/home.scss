@@ -10,7 +10,7 @@
             @include mixins.flexbox();
             gap: 8px;
             img {
-                max-width: 20px;
+                max-width: 30px;
                 border-radius: variables.$radius-round;
             }
         }
