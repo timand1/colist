@@ -159,6 +159,28 @@ const closeModal = () => {
     mouseDown.value = false
 }
 
+const removeInvited = async (user : User) => {
+    const listId : string = route.params.id as string
+    errorRef.value ? errorRef.value = false : null;
+    const updateInvited = props.users.filter(del => del.id != user.id)
+    let updatedAssignedList = [...props.list]
+    updatedAssignedList.forEach(function(obj) {
+     obj.assigned = obj.assigned.filter(function(u) {
+      return u.id !== user.id;
+    });
+  });
+    const docRef = doc(db, "lists", listId);
+    try {
+    await updateDoc(docRef, {
+        updated : Timestamp.now(),
+        invited : updateInvited,
+    });
+
+    } catch (error) {
+        errorRef.value = !errorRef.value;
+    }
+}
+
 </script>
 
 <template>
@@ -225,6 +247,8 @@ const closeModal = () => {
                                 <p class="email">{{ user.email }}</p>
                             </div>
                         </div>
+                        <div class="user-remove" @click="removeInvited(user)"><Button variant="ghost" text="Remove" /></div>
+
                         </div>
                 </div>
             </div>
