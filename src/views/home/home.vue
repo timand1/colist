@@ -170,7 +170,7 @@ const declineInvite = async (listId: string) => {
     </div>
     <section v-if="loader" class="loader"></section>
     <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
-    <font-awesome-icon class="create-icon" icon="pen-to-square" @click="addOverlay = !addOverlay" :displayOverlay="addOverlay" />
+    <font-awesome-icon class="create-icon" icon="plus" @click="addOverlay = !addOverlay" :displayOverlay="addOverlay" />
   </section>
 </template>
 
