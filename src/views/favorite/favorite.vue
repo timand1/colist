@@ -12,6 +12,7 @@ const userInput = ref()
 const favoriteList = ref<FavoriteItems[]>([])
 const loader = ref(false)
 const inputError = ref(false)
+const addOverlay = ref<boolean>(false)
 
 onMounted(() => { 
   const userRef = doc(db, "users", auth.currentUser?.uid!);
@@ -116,6 +117,7 @@ const moveItem = async (evt: any) => {
         <p>You have no favorites at this moment</p>
       </div>
     </section>
+    <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
 </template>
 
 <style lang="scss" scoped>
