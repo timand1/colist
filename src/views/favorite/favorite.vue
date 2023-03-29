@@ -2,6 +2,7 @@
 import Button from '@/components/button/button.vue';
 import UserFavorite from '@/components/user-favorite/user-favorite.vue';
 import Navbar from '@/components/navbar/navbar.vue';
+import AddList from '@/components/add-list/add-list.vue';
 import { auth, db } from '@/firebase';
 import { FavoriteItems } from '@/helpers/types/types';
 import { arrayUnion, doc, onSnapshot, updateDoc } from 'firebase/firestore';
@@ -81,11 +82,15 @@ const moveItem = async (evt: any) => {
   }
 };
 
+const handleOverlay: () => void = () => { 
+  addOverlay.value = !addOverlay.value
+}
+
 </script>
 
 <template>
     <section class="favorite">
-        <Navbar param="favorite" />
+        <Navbar param="favorite" @click="handleOverlay" />
         <section v-if="loader" class="loader"></section>
         <h2>Favorites</h2>
         <form class="favorite__add" @submit.prevent="handleAddFavorite">
@@ -116,8 +121,8 @@ const moveItem = async (evt: any) => {
         <h4>Empty</h4>
         <p>You have no favorites at this moment</p>
       </div>
+      <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
     </section>
-    <AddList v-if="addOverlay" @click=" addOverlay = !addOverlay" :displayOverlay="addOverlay" />
 </template>
 
 <style lang="scss" scoped>
