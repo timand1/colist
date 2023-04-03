@@ -95,7 +95,7 @@ const handleOverlay: () => void = () => {
         <h2>Favorites</h2>
         <form class="favorite__add" @submit.prevent="handleAddFavorite">
             <div class="input-container" :class="{'input-error' : inputError}">
-                <input type="text" name="favorite" placeholder=" " v-model="userInput" :maxlength="30"  @focus="inputError = false">
+                <input type="text" name="favorite" placeholder=" " v-model="userInput" :maxlength="30" autocomplete="off"  @focus="inputError = false">
                 <label for="favorite">Favorite</label>
                 <p v-if="inputError" class="input-error__text">Min. 2 characters</p>
             </div>
