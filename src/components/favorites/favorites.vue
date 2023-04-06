@@ -50,7 +50,7 @@ watch(() => props.list, (newVal) => {
 
 <template>
     <section class="favorites">
-        <section class="favorites__container" >
+        <section class="favorites__container" @scroll="$event.stopPropagation()"  >
             <h4>Favorites</h4>
             <FavoriteItem v-for="favorite in favorites" :key="favorite.item" :favorite="favorite" :itemList="itemList" @handleRemoveFavorite="handleRemoveFavorite" @handleAddFavorite="handleAddFavorite" />
             <Button variant="danger" outline text="Close" @click="emit('handleFavoriteModal')" />
