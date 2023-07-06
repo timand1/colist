@@ -30,6 +30,13 @@ export type TimeList = {
     assigned : User[]
 }
 
+export type NoteList = {
+    title: string
+    text: string
+    id: string
+    assigned : User[]
+}
+
 export type User = {
     name : string
     id : string

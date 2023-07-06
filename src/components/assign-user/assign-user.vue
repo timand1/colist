@@ -47,6 +47,10 @@ const inputFields = computed(() => {
         { name: 'time', label: 'Time*', type: 'time', req: true },
         { name: 'date', label: 'Date', type: 'date', req: false },
       ]
+    case 'Note':
+        return [
+            { name: 'title', label: 'Title*', type: 'text', req: true }, 
+        ]
     default:
       return []
   }

@@ -6,6 +6,7 @@ import ShareList from '@/components/share-list/share-list.vue';
 import ShoppingItem from '@/components/list-item/shopping-item.vue';
 import TodoItem from '@/components/list-item/todo-item.vue';
 import TimeItem from '@/components/list-item/time-item.vue';
+import NoteItem from '@/components/list-item/note-item.vue';
 import NumberedItem from '@/components/list-item/numbered-item.vue';
 import AssignUser from '@/components/assign-user/assign-user.vue';
 import Favorites from '@/components/favorites/favorites.vue';
@@ -15,11 +16,11 @@ import router from '@/router';
 import { doc, onSnapshot, updateDoc, Timestamp, getDoc, arrayUnion } from "firebase/firestore";
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { Shoppinglist, ToDoList, User, TimeList, NumberedList, FavoriteItems } from '@/helpers/types/types';
+import { Shoppinglist, ToDoList, User, TimeList, NumberedList, FavoriteItems, NoteList } from '@/helpers/types/types';
 import { useRoute } from 'vue-router';
 import { Sortable } from "sortablejs-vue3"
 
-type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList;
+type ListItem = Shoppinglist | ToDoList | TimeList | NumberedList | NoteList;
 
 const route = useRoute();
 const list = ref()
@@ -371,7 +372,7 @@ const handleUpdateItem: (item : ListItem) => Promise<void> = async (item) => {
     errorRef.value = !errorRef.value;
   }
 
-  showAssign.value = false
+  // showAssign.value = false
 }
 
 const handleAllNotDone = async (items : Shoppinglist[] | ToDoList[]) => {
@@ -495,6 +496,16 @@ const handleFavoriteModal = () => {
           :item="element"
           :users="list.users"
           :showAssign="showAssign"
+          @handleDeletItem="handleDeletItem"
+          @handleShowAssign="handleShowAssign"
+        />
+        <NoteItem
+          v-else-if="list.type == 'Note'" 
+          :delete="deleteMode"
+          :item="element"
+          :users="list.users"
+          :showAssign="showAssign"
+          @handleUpdateText="handleUpdateItem"
           @handleDeletItem="handleDeletItem"
           @handleShowAssign="handleShowAssign"
         />

@@ -48,6 +48,10 @@ const inputFields = computed(() => {
         { name: 'time', label: 'Time*', type: 'time', req: true },
         { name: 'date', label: 'Date', type: 'date', req: false },
       ]
+    case 'Note':
+      return [
+        { name: 'title', label: 'Title*', type: 'text', req: true },
+      ]
     default:
       return []
   }
@@ -70,19 +74,27 @@ const handleDefaultAmount: (name : string) => void = (name) => {
 }
 
 const handleAddItem: () => Promise<void> = async () => {
-  const newItem : UserInput = props.type == 'Shopping' || props.type == 'ToDO' ? 
-    {...userInput, done : false, id : crypto.randomUUID()} 
-    : {...userInput, id : crypto.randomUUID()}
+  const newItem = ref<UserInput>()
+  if(props.type == 'Shopping' || props.type == 'ToDO') {
+    newItem.value = {...userInput, done : false, id : crypto.randomUUID()} 
+  } else if(props.type === 'Note') {
+    newItem.value =  {...userInput, text : '', id : crypto.randomUUID()} 
+  } else {
+    newItem.value =  {...userInput, id : crypto.randomUUID()} 
+  }
+  // const newItem : UserInput = props.type == 'Shopping' || props.type == 'ToDO' ? 
+  //   {...userInput, done : false, id : crypto.randomUUID()} 
+  //   : {...userInput, id : crypto.randomUUID()}
 
   const listId : string = route.params.id as string
   const listRef = doc(db, "lists", listId);
- newItem.assigned = []
+  newItem.value.assigned = []
   if(props.type == 'Numbered') {
-    handleAddNumberedItem(listRef, newItem as NumberedList)
+    handleAddNumberedItem(listRef, newItem.value as NumberedList)
   } else {
     await updateDoc(listRef, {
       updated : Timestamp.now(),
-      list: arrayUnion(newItem)
+      list: arrayUnion(newItem.value)
     });
   }
 
@@ -121,7 +133,7 @@ const handleAddNumberedItem: (listRef : DocumentReference<DocumentData>, newItem
 <template>
     <section class="add-item" ref="addRef">
     <div class="add-item__headline" @click="toggleAddItem">
-        <h2>Add item</h2>
+        <h2>{{ $props.type === 'Note' ? 'Add note' : 'Add item' }}</h2>
         <font-awesome-icon icon="chevron-down" :class="addItem ? 'add-item--active' : ''" />
     </div>
     <form @submit.prevent="handleAddItem" class="add-item__form" :class="addItem ? 'add-item__form--active' : ''" >

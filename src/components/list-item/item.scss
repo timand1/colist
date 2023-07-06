@@ -149,6 +149,38 @@
     
 }
 
+.edit-note {
+    display: flex;
+    max-width: 1000px;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    position: absolute;
+    top: 5em;
+    left: 5%;
+    width: 90%;
+    height: 86%;
+    z-index: 999000;
+    padding: 12px;
+    border-radius: variables.$radius-m;
+    background-color: colors.$secondary-bg;
+    textarea {
+        width: 100%;
+        height: 100%;
+        font-size: 1.5em;
+    }
+    .btn-container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    svg {
+        font-size: 15px;
+        color: colors.$primary-font;
+        cursor: pointer;
+    }
+}
+
 body.dark {
     .item {
         background-color: colors.$secondary-bg-dark;     
@@ -165,6 +197,12 @@ body.dark {
                 background-color: colors.$secondary-bg-dark;
             }
         } 
+    }
+    .edit-note {
+        background-color: colors.$secondary-bg-dark;
+    }
+    svg {
+        color: colors.$primary-font-dark;
     }
 }
 
@@ -185,5 +223,8 @@ body.dark {
                 font-size: 16px;
             }
         }
+    }
+    .edit-note {
+        left: calc(50vw - 500px);
     }
 }
